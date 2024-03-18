@@ -1,5 +1,0 @@
-[all]
-
-# enable RTC backup battery charge voltage
-dtparam=rtc_bbat_vchg=3000000
-

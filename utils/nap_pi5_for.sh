@@ -11,6 +11,7 @@ fi
 echo "WaLiPi5 is going to nap for $1 hours"
 ~/GoPi5Go/utils/logMaintenance.py 'WaLiPi5 is going to nap for '$1' hours'
 # ~/GoPi5Go/utils/say.sh "I'm going to take a nap for "$1" hours"
+espeak-ng -a 200 "I'm going to take a nap for "$1" hours"
 
 # Convert hours to seconds to set alarm - "/ 1" converts to integer
 napsecs=`(echo "scale=0; ($1 * 3600) / 1" | bc)`
