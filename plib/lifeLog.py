@@ -28,7 +28,7 @@ HOME="GoPi5Go"
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-loghandler = logging.FileHandler('/home/pi/"+HOME+"/logs/life.log')
+loghandler = logging.FileHandler('/home/pi/'+HOME+'/logs/life.log')
 
 logformatter = logging.Formatter('%(asctime)s|[%(filename)s.%(funcName)s]%(message)s',"%Y-%m-%d %H:%M")
 loghandler.setFormatter(logformatter)
