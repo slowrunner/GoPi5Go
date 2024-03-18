@@ -23,4 +23,12 @@ POWER_OFF_ON_HALT=1
  
 WAKE_ON_GPIO=0
 
+* Finished eeprom configuration:
+
+[all]
+BOOT_UART=1
+POWER_OFF_ON_HALT=1
+BOOT_ORDER=0xf41
+WAKE_ON_GPIO=0
+
 ```
