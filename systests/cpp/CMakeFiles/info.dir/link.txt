@@ -1,0 +1,1 @@
+/usr/bin/c++ -rdynamic CMakeFiles/info.dir/Examples/info.cpp.o -o info  -Wl,-rpath,/home/pi/GoPi5Go/systests/cpp libgopigo3.so 

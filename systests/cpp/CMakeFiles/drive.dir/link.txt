@@ -1,0 +1,1 @@
+/usr/bin/c++ -rdynamic CMakeFiles/drive.dir/Examples/drive.cpp.o -o drive  -Wl,-rpath,/home/pi/GoPi5Go/systests/cpp libgopigo3.so 

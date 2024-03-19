@@ -1,0 +1,1 @@
+/usr/bin/c++ -rdynamic CMakeFiles/grove_led.dir/Examples/grove_led.cpp.o -o grove_led  -Wl,-rpath,/home/pi/GoPi5Go/systests/cpp libgopigo3.so 

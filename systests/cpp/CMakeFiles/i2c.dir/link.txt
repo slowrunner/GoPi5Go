@@ -1,0 +1,1 @@
+/usr/bin/c++ -rdynamic CMakeFiles/i2c.dir/Examples/i2c.cpp.o -o i2c  -Wl,-rpath,/home/pi/GoPi5Go/systests/cpp libgopigo3.so 

@@ -1,0 +1,35 @@
+Setting up to compile C++ programs for GoPiGo3
+
+1) mkdir for the cpp stuff:
+  mkdir  /home/pi/Carl/Examples/cpp
+  mkdir  /home/pi/Carl/Examples/cpp/out
+  
+2) copy the Dexter cpp examples:
+  cp -r /home/pi/Dexter/GoPiGo3/Software/C/* cpp
+3) install cmake:
+  sudo apt-get install cmake
+4) run cmake to build make files
+  /home/pi/Carl/Examples/cpp$  cmake CMakeLists.txt
+5) run make to build the examples and the libgopigo3.so link library
+  make
+6) try out the motors executable:
+  ./motors
+7) If it works, copy the executable to ./out (folder added to .gitignore)   
+8) Clean up the folder
+  make clean
+  
+  
+9) to compile a new file e.g. robot.cpp, put it in Examples/cpp/robots/
+  mkdir /home/pi/Carl/Examples/cpp/robots
+10) add to CMakeLists.txt
+   # robot
+   add_executable(robot robots/robot.cpp)
+   target_link_libraries(robot gopigo3)
+11)  create a make file for the new program
+    cmake CMakeLists.txt
+12) compile and link the new executable
+    make
+13) run the executable
+    ./robot
+        
+
