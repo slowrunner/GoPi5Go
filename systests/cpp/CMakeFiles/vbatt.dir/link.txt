@@ -1,1 +1,0 @@
-/usr/bin/c++ -rdynamic CMakeFiles/vbatt.dir/Examples/vbatt.cpp.o -o vbatt  -Wl,-rpath,/home/pi/GoPi5Go/systests/cpp libgopigo3.so 

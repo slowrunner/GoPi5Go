@@ -1,0 +1,9 @@
+ [Unit]
+ Description=GoPi5Go Power Service
+
+ [Service]
+ Type=idle
+ ExecStart=/usr/bin/env bash  /home/pi/GoPi5Go/config/gp5g_power.sh
+
+ [Install]
+ WantedBy=multi-user.target

@@ -1,1 +1,0 @@
-/usr/bin/c++ -fPIC -shared -Wl,-soname,libgopigo3.so -o libgopigo3.so CMakeFiles/gopigo3.dir/GoPiGo3.cpp.o 

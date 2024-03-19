@@ -1,1 +1,0 @@
-/usr/bin/c++ -rdynamic CMakeFiles/leds.dir/Examples/leds.cpp.o -o leds  -Wl,-rpath,/home/pi/GoPi5Go/systests/cpp libgopigo3.so 

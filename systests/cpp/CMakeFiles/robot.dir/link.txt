@@ -1,1 +1,0 @@
-/usr/bin/c++ -rdynamic CMakeFiles/robot.dir/robots/robot.cpp.o -o robot  -Wl,-rpath,/home/pi/GoPi5Go/systests/cpp libgopigo3.so 

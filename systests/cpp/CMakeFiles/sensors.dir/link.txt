@@ -1,1 +1,0 @@
-/usr/bin/c++ -rdynamic CMakeFiles/sensors.dir/Examples/sensors.cpp.o -o sensors  -Wl,-rpath,/home/pi/GoPi5Go/systests/cpp libgopigo3.so 

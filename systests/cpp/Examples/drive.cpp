@@ -62,10 +62,10 @@ int main(){
 
 	GPG.reset_motor_encoder(MOTOR_LEFT + MOTOR_RIGHT);
 
-	// GPG.set_motor_limits(MOTOR_LEFT,0,300);
-	// GPG.set_motor_limits(MOTOR_RIGHT,0,300);
-	GPG.set_motor_limits(MOTOR_LEFT,0,0);
-	GPG.set_motor_limits(MOTOR_RIGHT,0,0);
+	GPG.set_motor_limits(MOTOR_LEFT,100,300);
+	GPG.set_motor_limits(MOTOR_RIGHT,100,300);
+	// GPG.set_motor_limits(MOTOR_LEFT,0,0);
+	// GPG.set_motor_limits(MOTOR_RIGHT,0,0);
 
 	do{
 
@@ -83,6 +83,7 @@ int main(){
 		switch(c){
 			case 'w':  // forward
 				GPG.set_motor_dps(MOTOR_LEFT + MOTOR_RIGHT, NO_LIMIT_SPEED);
+                                // GPG.set_motor_power(MOTOR_LEFT + MOTOR_RIGHT, 10);
 				break;
 			case 'x' :    // backward
 				GPG.set_motor_dps(MOTOR_LEFT + MOTOR_RIGHT, NO_LIMIT_SPEED * -1);
