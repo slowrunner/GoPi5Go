@@ -1,0 +1,27 @@
+# ******  GoPi5Go life.log  ******* 
+# ** First "life" 2024-03-17 
+2024-03-17 20:28|------------ boot ------------
+2024-03-17 20:40|lifelogger.dEmain execution: 0.20
+2024-03-17 20:40|[logMaintenance.py.main]** reboot to test crontab setup of life logging **
+2024-03-17 20:43|------------ boot ------------
+2024-03-17 20:52|[logMaintenance.py.main]** WaLiPi5 is going to nap for 0.05 hours **
+2024-03-17 20:52|lifelogger.dEmain execution: 0.15
+2024-03-17 20:56|------------ boot ------------
+2024-03-18 08:34|[logMaintenance.py.main]** WaLiPi5 is going to nap for 1 hours **
+2024-03-18 08:35|lifelogger.dEmain execution: 11.65
+2024-03-18 09:36|------------ boot ------------
+2024-03-18 10:57|lifelogger.dEmain execution: 1.35
+2024-03-18 10:57|[logMaintenance.py.main]** WaLiPi5 is going to nap for 4 hours **
+2024-03-18 14:59|------------ boot ------------
+2024-03-18 23:50|lifelogger.dEmain execution: 8.85
+2024-03-18 23:51|[logMaintenance.py.main]** WaLiPi5 is going to nap for 8 hours **
+2024-03-19 07:53|------------ boot ------------
+2024-03-19 12:20|lifelogger.dEmain execution: 4.45
+2024-03-19 12:38|------------ boot ------------
+2024-03-19 13:01|[logMaintenance.py.main]** going down for backup before installing gopi5go power service **
+2024-03-19 13:02|lifelogger.dEmain execution: 0.40
+2024-03-19 14:10|------------ boot ------------
+2024-03-19 14:16|lifelogger.dEmain execution: 0.10
+2024-03-19 14:36|------------ boot ------------
+2024-03-19 15:00|lifelogger.dEmain execution: 0.40
+2024-03-19 15:02|[logMaintenance.py.main]** 32-bit PiOS GoPiGo3 with Raspberry Pi 5 working with GoPiGo3 C++ API **
