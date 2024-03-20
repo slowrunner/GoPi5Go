@@ -27,6 +27,8 @@ int main(){
 
   GPG.detect(); // Make sure that the GoPiGo3 is communicating and that the firmware is compatible with the drivers.
 
+  printf("\nReseting servos to center\n");
+
   // Reset the servos to center
   GPG.set_servo(SERVO_1,1500);
   // let one servo move at a time to keep load smaller
@@ -37,9 +39,10 @@ int main(){
   GPG.set_servo(SERVO_1,0);
   GPG.set_servo(SERVO_2,0);
 
-  while(true){
-    usleep(20000);
-  }
+  // while(true){
+  //   usleep(2000);
+  // }
+  GPG.reset_all();
 }
 
 // Signal handler that will be called when Ctrl+C is pressed to stop the program

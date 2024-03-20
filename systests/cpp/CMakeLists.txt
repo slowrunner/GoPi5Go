@@ -1,8 +1,10 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.0)
 project(gopigo3_cpp)
 
 ### Build
 
+set (CMAKE_BINARY_DIR ./build)
+set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 include_directories(.)
 
 ## GoPiGo3 library

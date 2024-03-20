@@ -53,3 +53,5 @@ CATKIN_IGNORE
 # All CMakefiles
 CMakeFiles/
 /CMakeFiles/
+*.cmake
+CMakeCache.txt
