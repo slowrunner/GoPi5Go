@@ -1,9 +1,9 @@
 # Setup GoPi5Go_Dave 
 
-PiOS Bookworm Desktop
+64-bit PiOS Bookworm Desktop
 
 
-As Of: 19 MAR 2024 with 32-bit PiOS  
+As Of: 20 MAR 2024 with 64-bit PiOS  
 
 ** Get Latest Raspberry Pi Imager (will list latest OS options) **  
 https://www.raspberrypi.com/software/  
@@ -36,8 +36,7 @@ $ sudo reboot
 
 ```
 sudo raspi-config
-  - turn off auto login
-  - display->headless configuration 1920x1080
+  - turn off auto login - console require login
   - Interfaces -> VNC, SPI, I2C
   - Localization->Set Locale: US
 reboot now? yes
@@ -48,6 +47,7 @@ reboot now? yes
 ```
 cd ~
 git clone https://github.com/slowrunner/GoPi5Go.git
+setup git credentials
 ```
 
 ** === Setup ip_feedback (and espeak-ng)  
