@@ -62,10 +62,9 @@ int main(){
 
 	GPG.reset_motor_encoder(MOTOR_LEFT + MOTOR_RIGHT);
 
-	GPG.set_motor_limits(MOTOR_LEFT,100,300);
-	GPG.set_motor_limits(MOTOR_RIGHT,100,300);
-	// GPG.set_motor_limits(MOTOR_LEFT,0,0);
-	// GPG.set_motor_limits(MOTOR_RIGHT,0,0);
+        // set limits to safe value that will not allow GoPiGo3 to tip over
+	GPG.set_motor_limits(MOTOR_LEFT,0,150);
+	GPG.set_motor_limits(MOTOR_RIGHT,0,150);
 
 	do{
 
