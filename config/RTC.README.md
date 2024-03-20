@@ -1,7 +1,7 @@
 # Setting up Pi5 RTC
 
 1) Enable battery charging  
-- nano /boot/firmware/config.txt  
+- sudo nano /boot/firmware/config.txt  
   add after [all]  
 ```
 [all]
