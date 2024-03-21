@@ -1,5 +1,8 @@
 # The GoPiGo3 C++ API
 
+```/home/pi/Dexter/GoPiGo3/Software/C/``` contains the current official GoPiGo3 C++ API  
+in files GoPiGo3.h and GoPiGo3.cpp (which end up as the .h and libgopigo3.so for linking)  
+
 This folder mimicks the /home/pi/Dexter/GoPiGo3/Software/C/ folder  
 of the official GoPiGo3 Github repository, with the following differences:  
 - executables are placed in ..C/build/  (CMakeLists.txt change)  
@@ -23,15 +26,15 @@ of the official GoPiGo3 Github repository, with the following differences:
 - ```build/vbatt```       - reports battery voltage reading and VCC (5v) voltage   
                             Actual battery voltage is 0.8v higher than reported  
                             due to reverse polarity protection diode drop.  
-- ```build/leds.cpp```    - cycles center "WiFi LED" through colors  
-- ```build/servos.cpp```  - centers properly attached servos  
+- ```build/leds```        - cycles center "WiFi LED" through colors  
+- ```build/servos```      - centers properly attached servos  
                             (Servo1: brown wire closest to front of robot)  
                             (Servo2: brown wire closest to back of robot)  
-- ```build/motors.cpp```  - Gently rotate robot's left wheel in a forward direction  
+- ```build/motors```      - Gently rotate robot's left wheel in a forward direction  
                             Robot's right wheel will rotate to match left wheel encoder value
-- ```build/sensors.cpp``` - Reports Grove Ultrasonic Ranger (connected to AD1) range in millimeters  
+- ```build/sensors```     - Reports Grove Ultrasonic Ranger (connected to AD1) range in millimeters  
                             Reports Infrared Remote Control (connected to AD2) code  
-- ```build/i2c.cpp```     - Toggles P0 output of PCA9570 I2C output expander connected to AD1 port ???  
+- ```build/i2c```         - Toggles P0 output of PCA9570 I2C output expander connected to AD1 port ???  
 - ```build/grove_led```   - Varies Grove LED brightness (connected to AD1)  
 - ```build/drive```       - Allows driving GoPiGo3 with key presses  
                             spacebar: stop  
