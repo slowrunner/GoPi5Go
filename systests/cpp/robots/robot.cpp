@@ -68,8 +68,6 @@ int main(){
 
 	GPG.set_motor_limits(MOTOR_LEFT,50,150);
 	GPG.set_motor_limits(MOTOR_RIGHT,50,150);
-	// GPG.set_motor_limits(MOTOR_LEFT,0,0);
-	// GPG.set_motor_limits(MOTOR_RIGHT,0,0);
 
 	do{
 
@@ -87,35 +85,25 @@ int main(){
 		switch(c){
 			case 'w':  // forward
 				GPG.set_motor_dps(MOTOR_LEFT + MOTOR_RIGHT, NO_LIMIT_SPEED);
-                                GPG.set_motor_power(MOTOR_LEFT + MOTOR_RIGHT, 100);
 				break;
 			case 'x' :    // backward
 				GPG.set_motor_dps(MOTOR_LEFT + MOTOR_RIGHT, NO_LIMIT_SPEED * -1);
-                                GPG.set_motor_power(MOTOR_LEFT + MOTOR_RIGHT, -100);
 				break;
 			case 'd' :    // right turn
 				GPG.set_motor_dps(MOTOR_LEFT, NO_LIMIT_SPEED);
 				GPG.set_motor_dps(MOTOR_RIGHT, 0);
-                                GPG.set_motor_power(MOTOR_LEFT, 100);
-                                GPG.set_motor_power(MOTOR_RIGHT, 0);
 
 				break;
 			case 'a' :     // left turn
 				GPG.set_motor_dps(MOTOR_LEFT, 0);
 				GPG.set_motor_dps(MOTOR_RIGHT, NO_LIMIT_SPEED);
-                                GPG.set_motor_power(MOTOR_LEFT, 0);
-                                GPG.set_motor_power(MOTOR_RIGHT, 100);
 				break;
 			case 'q' :     // quit
 				GPG.set_motor_dps(MOTOR_LEFT + MOTOR_RIGHT, 0);
-                                GPG.set_motor_power(MOTOR_LEFT, MOTOR_FLOAT);
-                                GPG.set_motor_power(MOTOR_RIGHT, MOTOR_FLOAT);
 				keepLooping = false;
 				break;
 			case ' ' :  // stop
 				GPG.set_motor_dps(MOTOR_LEFT + MOTOR_RIGHT, 0);
-                                GPG.set_motor_power(MOTOR_LEFT, 0);
-                                GPG.set_motor_power(MOTOR_RIGHT, 0);
 				std::cout << "stopping..";
 				std::cout.flush();
 				sleep(1); // wait for stop to finish
@@ -140,15 +128,14 @@ int main(){
                 printf("\nRIGHT: motor_state: %d,  pwr: %d,  pos: %d,  dps: %d",motor_state,motor_power,motor_position,motor_dps);
 
 	} while (keepLooping);
-	system("stty cooked");
         printf("\n");
 }
 
 // *** CTRL-C DOES NOT TRIGGER THIS WHEN stty raw, SO CALLED FROM LOOP ***
 void exit_signal_handler(int signo){
 	  if(signo == SIGINT){
-         GPG.reset_all();    // Reset everything so there are no run-away motors
          system("stty cooked");
+         GPG.reset_all();    // Reset everything so there are no run-away motors
          printf("\n");
          exit(-2);
 	  }
