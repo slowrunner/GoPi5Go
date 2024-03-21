@@ -9,6 +9,10 @@ include_directories(.)
 
 ## GoPiGo3 library
 add_library(gopigo3 SHARED GoPiGo3.cpp)
+add_library(easygopigo3 SHARED EasyGoPiGo3.cpp)
+
+
+
 
 ## Examples
 
@@ -45,12 +49,17 @@ add_executable(sensors Examples/sensors.cpp)
 target_link_libraries(sensors gopigo3)
 
 # drive
-add_executable(drive Examples/drive.cpp)
-target_link_libraries(drive gopigo3)
+add_executable(testEasyGoPiGo3 Examples/testEasyGoPiGo3.cpp)
+target_link_libraries(testEasyGoPiGo3 easygopigo3 gopigo3)
 
 # robot
 add_executable(robot robots/robot.cpp)
 target_link_libraries(robot gopigo3)
+
+
+
+
+
 ### Installation
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/
@@ -59,7 +68,7 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/
   PATTERN "Examples" EXCLUDE
 )
 
-install(TARGETS gopigo3 EXPORT gopigo3Targets
+install(TARGETS gopigo3 easygopigo3 EXPORT gopigo3Targets
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
   RUNTIME DESTINATION bin
@@ -69,6 +78,11 @@ install(TARGETS gopigo3 EXPORT gopigo3Targets
 ### Export CMake configuration
 
 set_property(TARGET gopigo3 APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/>
+  $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include/>
+)
+
+set_property(TARGET easygopigo3 APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/>
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include/>
 )

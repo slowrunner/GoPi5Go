@@ -1,4 +1,4 @@
-/* FILE: EasyGoPiGo.h
+/* FILE: EasyGoPiGo3.h
 
    Instance Vars:
      speed: default 150 DPS
@@ -38,3 +38,50 @@
      close_right_eye()
      close_eyes()
 */
+
+
+#ifndef EasyGoPiGo3_h_
+#define EasyGoPiGo3_h_
+
+
+// #include <stdint.h>
+// #include <stdlib.h>
+#include <stdio.h>            // for printf
+// #include <string.h>           // for strstr
+// #include <sys/time.h>         // for clock_gettime
+// #include <unistd.h>
+// #include <stdexcept>
+// #include <cmath>             // for pi
+// #include <string>
+// #include <iostream>
+// #include <iomanip>
+// #include <fstream>
+// #include <sstream>
+// #include <algorithm>
+
+#include <GoPiGo3.h>
+
+//  CONSTANTS
+#define LEFT                        0
+#define RIGHT                       1
+
+#define CM                          0
+#define INCH                        1
+#define DEGREE                      2
+
+class EasyGoPiGo3 : public GoPiGo3 {
+
+public:
+    EasyGoPiGo3();                  // default constructor
+
+    // Instance Variables
+    int DEFAULT_SPEED = 150;
+    int NO_LIMIT_SPEED = 1000;
+    int speed = DEFAULT_SPEED;
+
+    void set_speed(int speed_in);
+
+};  //end class EasyGoPiGo3
+
+
+#endif //ifndef EasyGoPiGo3.h
