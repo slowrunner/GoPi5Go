@@ -8,9 +8,11 @@
      right_encoder_target
 
    Implemented Methods:
+     set_speed(speed_in_DPS=150)
+     float volt()
+
 
    TODO Methods:
-     set_speed(speed_in_DPS=150)
      get_speed()
      forward(): drive forward - use set_speed() or default: 150 DPS
      backward(): drive backward
@@ -79,7 +81,8 @@ public:
     int NO_LIMIT_SPEED = 1000;
     int speed = DEFAULT_SPEED;
 
-    void set_speed(int speed_in);
+    void  set_speed(int speed_in);
+    float volt();
 
 };  //end class EasyGoPiGo3
 

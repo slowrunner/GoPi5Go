@@ -14,3 +14,7 @@ EasyGoPiGo3::EasyGoPiGo3(){
 void EasyGoPiGo3::set_speed(int speed_in){
     speed = speed_in;
 };
+
+float EasyGoPiGo3::volt(){
+    return get_voltage_battery();
+};
