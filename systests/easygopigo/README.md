@@ -7,8 +7,10 @@ This project is a rough implementation of an EasyGoPiGo3 class which includes:
 
 Implemented Methods:
 ```
-     set_speed(speed_in_DPS=150)
-     get_speed()
+     set_speed(speed_in_DPS)
+     set_speed()  // DEFAULT_SPEED
+     int get_speed()
+     get_speed(&out)
      float volt()
      forward(): drive forward - use set_speed() or default: 150 DPS
      backward(): drive backward
@@ -45,3 +47,4 @@ LIMITATIONS and DIFFERENCES:
 - i2c mutex not implemented
 - does not perform sensor discovery / sensor init
 - DEFAULT_SPEED is set to 150 DPS rather than 300 DPS for additional safety from tipping over
+- Compiler enforces speed value type
