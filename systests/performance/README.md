@@ -8,6 +8,7 @@ Raspberry Pi5 4GB sandwiched to GoPiGo3, (with Pi5 cooler)
 
 
 # GoPiGo3 Supports Raspberry Pi5 Running FULL-BORE!
+- MPU9250 I2C IMU Connected/Powered by GoPiGo3
 - No Grove Sensors Connected To GoPiGo3
 - USB Audio Speaker Connected/Powered by RPi5
 - Logitech F710 GamePad WiFi Dongle Connected/Powered by RPi5
