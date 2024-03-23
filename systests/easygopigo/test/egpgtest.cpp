@@ -32,6 +32,17 @@ void test_volt() {
     printf("  Battery Reading: %.2f Adjusted: %.2f volts \n", reading, adjusted_vBatt);
 }
 
+void test_set_speed() {
+    printf("\n*** test_set_speed() ***\n");
+    printf("  Current speed: %d  \n",EGPG.get_speed());
+    printf("  Setting set_speed(300)");
+    EGPG.set_speed(300);
+    printf("  Current speed: %d  \n",EGPG.get_speed());
+    printf("  Reetting with set_speed() default value");
+    EGPG.set_speed();
+    printf("  Current speed: %d  \n",EGPG.get_speed());
+}
+
 void test_get_speed() {
     printf("\n*** test_get_speed() ***\n");
     int ispeed;
@@ -78,6 +89,7 @@ int main(){
 
   test_volt();
   test_get_speed();
+  test_set_speed();
   test_stop();
   test_forward();
   test_backward();

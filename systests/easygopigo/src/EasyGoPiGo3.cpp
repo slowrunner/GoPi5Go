@@ -20,7 +20,14 @@ float EasyGoPiGo3::volt(){
 };
 
 void EasyGoPiGo3::set_speed(int speed_in){
+    // note compiler enforces speed_in - try/catch not implemented
     speed = speed_in;
+    set_motor_limits(MOTOR_LEFT + MOTOR_RIGHT, 0, speed);
+};
+
+void EasyGoPiGo3::set_speed(){
+    speed = DEFAULT_SPEED;
+    set_motor_limits(MOTOR_LEFT + MOTOR_RIGHT, 0, speed);
 };
 
 int EasyGoPiGo3::get_speed(){
@@ -44,7 +51,7 @@ void  EasyGoPiGo3::stop(){
 
 
 void  EasyGoPiGo3::forward(){
-    set_motor_dps(MOTOR_LEFT + MOTOR_RIGHT, speed);
+    set_motor_dps(MOTOR_LEFT + MOTOR_RIGHT, NO_LIMIT_SPEED);  // actual speed controlled by motor_limits dps
 };
 
 /*
@@ -56,7 +63,7 @@ void  EasyGoPiGo3::forward(){
 */
 
 void  EasyGoPiGo3::backward(){
-    set_motor_dps(MOTOR_LEFT + MOTOR_RIGHT, speed * -1);
+    set_motor_dps(MOTOR_LEFT + MOTOR_RIGHT, NO_LIMIT_SPEED * -1);
 };
 
 

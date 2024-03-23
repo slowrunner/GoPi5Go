@@ -97,6 +97,7 @@ public:
      */
     float volt();
     void  set_speed(int speed_in);
+    void  set_speed();
     int   get_speed();
     void  get_speed(int &out);
     void  reset_speed();

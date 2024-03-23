@@ -41,6 +41,7 @@ Implemented Methods:
      close_eyes()
 ```
 
-LIMITATIONS:
+LIMITATIONS and DIFFERENCES:
 - i2c mutex not implemented
 - does not perform sensor discovery / sensor init
+- DEFAULT_SPEED is set to 150 DPS rather than 300 DPS for additional safety from tipping over
