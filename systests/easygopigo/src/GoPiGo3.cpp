@@ -7,6 +7,13 @@
  *  For more information see https://github.com/DexterInd/GoPiGo3/blob/master/LICENSE.md
  *
  *  C++ drivers for the GoPiGo3
+ *
+ *  THIS VERSION CONTAINS ENHANCEMENTS BEYOND THE LATEST DI/ModRobotics REPOSITORY:
+ *  (Original GoPiGo3 C++ API treated encoder value as 4-byte integers - should be 4-byte unsigned integer)
+ *  - get_umotor_encoders()  returns 4-byte unsigned integer encoder in degrees with one degree precision, half degree accuracy
+ *  - get_umotor_raw_encoders()  returns actual encoder value since get_motor_encoders() returns only one degree precision
+ *  - offset_umotor_raw_encoder() works with 4-byte unsigned integer position
+ *
  */
 
 #include <GoPiGo3.h>
@@ -516,11 +523,36 @@ int GoPiGo3::offset_motor_encoder(uint8_t port, int32_t position){
   return spi_transfer_array(7, spi_array_out, spi_array_in);
 }
 
+int GoPiGo3::offset_umotor_raw_encoder(uint8_t port, uint32_t urawposition){
+  spi_array_out[0] = Address;
+  spi_array_out[1] = GPGSPI_MESSAGE_OFFSET_MOTOR_ENCODER;
+  spi_array_out[2] = port;
+  spi_array_out[3] = ((urawposition >> 24) & 0xFF);
+  spi_array_out[4] = ((urawposition >> 16) & 0xFF);
+  spi_array_out[5] = ((urawposition >> 8) & 0xFF);
+  spi_array_out[6] = (urawposition & 0xFF);
+  return spi_transfer_array(7, spi_array_out, spi_array_in);
+}
+
 int32_t GoPiGo3::get_motor_encoder(uint8_t port){
   int32_t value;
   get_motor_encoder(port, value);  // value returned is corrected for MOTOR_TICKS_PER_DEGREE
   return value;
 }
+
+
+uint32_t GoPiGo3::get_umotor_encoder(uint8_t port){
+  uint32_t uvalue;
+  get_umotor_encoder(port, uvalue);  // value returned is corrected for MOTOR_TICKS_PER_DEGREE
+  return uvalue;
+}
+
+uint32_t GoPiGo3::get_umotor_raw_encoder(uint8_t port){
+  uint32_t uvalue;
+  int rv = get_umotor_raw_encoder(port, uvalue);  // value returned is raw ticks as 4-byte unsigned integer
+  return uvalue;
+}
+
 
 int GoPiGo3::reset_motor_encoder(uint8_t port){
   if (port & MOTOR_LEFT){
@@ -547,7 +579,45 @@ int GoPiGo3::get_motor_encoder(uint8_t port, int32_t &value){
   }
   uint32_t Value;
   int res = spi_read_32(msg_type, Value);
-  value = (int)(Value / MOTOR_TICKS_PER_DEGREE);
+  value = (int)(Value / MOTOR_TICKS_PER_DEGREE);  
+  return res;
+}
+
+int GoPiGo3::get_umotor_encoder(uint8_t port, uint32_t &uvalue){
+  uint8_t msg_type;
+  switch(port){
+    case MOTOR_LEFT:
+      msg_type = GPGSPI_MESSAGE_GET_MOTOR_ENCODER_LEFT;
+    break;
+    case MOTOR_RIGHT:
+      msg_type = GPGSPI_MESSAGE_GET_MOTOR_ENCODER_RIGHT;
+    break;
+    default:
+      fatal_error("get_motor_encoder error. Must be one motor at a time. MOTOR_LEFT or MOTOR_RIGHT.");
+  }
+  uint32_t Value;
+  int res = spi_read_32(msg_type, Value);
+  // convert the unsigned int Value to floating point to scale it to degrees, round then convert back to unsigned int
+  uvalue = (uint32_t) round(static_cast<float>(Value) / MOTOR_TICKS_PER_DEGREE);  
+  return res;
+}
+
+
+int GoPiGo3::get_umotor_raw_encoder(uint8_t port, uint32_t &value){
+  uint8_t msg_type;
+  switch(port){
+    case MOTOR_LEFT:
+      msg_type = GPGSPI_MESSAGE_GET_MOTOR_ENCODER_LEFT;
+    break;
+    case MOTOR_RIGHT:
+      msg_type = GPGSPI_MESSAGE_GET_MOTOR_ENCODER_RIGHT;
+    break;
+    default:
+      fatal_error("get_motor_encoder error. Must be one motor at a time. MOTOR_LEFT or MOTOR_RIGHT.");
+  }
+  uint32_t Value;
+  int res = spi_read_32(msg_type, Value);
+  value = Value;  // returns raw encoder value in MOTOR_TICKS_PER_DEGREE precision
   return res;
 }
 

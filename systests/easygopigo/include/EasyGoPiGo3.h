@@ -51,6 +51,7 @@
 #include <stdio.h>            // for printf
 #include <chrono>             // for time durations, to use in sleep
 #include <thread>             // for sleep
+#include <array>
 // #include <string.h>           // for strstr
 // #include <sys/time.h>         // for clock_gettime
 // #include <unistd.h>
@@ -64,6 +65,8 @@
 // #include <algorithm>
 
 #include <GoPiGo3.h>
+
+using namespace std;
 
 //  CONSTANTS
 #define LEFT                        0
@@ -105,12 +108,16 @@ public:
 
     void  forward();
 
-/*
-    // void drive_cm(float dist, bool blocking=true);
-    // void drive_inches(float dist, bool blocking=true);
-*/
+
+    void drive_cm(float dist, bool blocking=true);
+    void drive_inches(float dist, bool blocking=true);
+
     void  backward();
 
+    bool target_reached(float left_target_degrees, float right_target_degrees);
+    void reset_encoders(bool blocking=true);
+    array<unsigned int,2> read_encoders();
+    array<unsigned int,2> read_raw_encoders();
 
 };  //end class EasyGoPiGo3
 

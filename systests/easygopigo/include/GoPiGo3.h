@@ -7,6 +7,12 @@
  *  For more information see https://github.com/DexterInd/GoPiGo3/blob/master/LICENSE.md
  *
  *  C++ drivers for the GoPiGo3
+ * 
+ *  THIS VERSION CONTAINS ENHANCEMENTS BEYOND THE LATEST DI/ModRobotics REPOSITORY:
+ *  (Original GoPiGo3 C++ API treated encoder value as 4-byte integers - should be 4-byte unsigned integer)
+ *  - get_umotor_encoders()  returns 4-byte unsigned integer encoder in degrees with one degree precision, half degree accuracy
+ *  - get_umotor_raw_encoders()  returns actual encoder value since get_motor_encoders() returns only one degree precision
+ *  - offset_umotor_raw_encoder() works with 4-byte unsigned integer position
  */
 
 #ifndef GoPiGo3_h_
@@ -253,14 +259,14 @@ class GoPiGo3{
     float WHEEL_CIRCUMFERENCE      = WHEEL_DIAMETER   * M_PI;  // pi from cmath
     int   MOTOR_GEAR_RATIO         = 120;
     int   ENCODER_TICKS_PER_ROTATION = 6;  // default GoPiGo3 has 6 ticks, 16 ticks if in .list_of_serial_numbers.pkl file
-    int   MOTOR_TICKS_PER_DEGREE     = ((MOTOR_GEAR_RATIO * ENCODER_TICKS_PER_ROTATION) / 360.0);  // ticks per degree of wheel shaft rotation
+    float MOTOR_TICKS_PER_DEGREE     = ((MOTOR_GEAR_RATIO * ENCODER_TICKS_PER_ROTATION) / 360.0);  // ticks per degree of wheel shaft rotation
 
-  // Confirm that the BrickPi3 is connected and up-to-date
+  // Confirm that the GoPiGo3 is connected and up-to-date
     int     detect(bool critical = true);
 
   // Get the manufacturer (should be "Dexter Industries")
     int     get_manufacturer(char *str);
-  // Get the board name (should be "BrickPi3")
+  // Get the board name (should be "GoPiGo3")
     int     get_board(char *str);
   // Get the hardware version number
     int     get_version_hardware(char *str);
@@ -305,11 +311,23 @@ class GoPiGo3{
     int     get_motor_status(uint8_t port, uint8_t &state, int8_t &power, int32_t &position, int16_t &dps);
   // Offset the encoder position. By setting the offset to the current position, it effectively resets the encoder value.
     int     offset_motor_encoder(uint8_t port, int32_t position);
-  // Get the encoder position
-    // Pass the port and pass-by-reference variable where the encoder value will be stored. Returns the error code.
+  // Offset the encoder position using 4-byte unsigned integer. offset to the current position, resets the encoder value to 0.
+    int     offset_umotor_raw_encoder(uint8_t port, uint32_t urawposition);
+  // Get the encoder position (in degrees)
+    // Pass the port and pass-by-reference variable where the encoder value in signed integer degrees will be stored. Returns the error code.
     int     get_motor_encoder(uint8_t port, int32_t &value);
-    // Pass the port. Returns the encoder value.
+    // Pass the port. Returns the encoder value in signed integer degrees.
     int32_t get_motor_encoder(uint8_t port);
+  // Get the encoder position (in degrees) as 4-byte unsigned integer
+    // Pass the port and pass-by-reference variable the encoder value as unsigned integer degrees. Returns the error code.
+    int     get_umotor_encoder(uint8_t port, uint32_t &uvalue);
+    // Pass the port. Returns the encoder value in 4-byte unsigned integer degrees.
+    uint32_t get_umotor_encoder(uint8_t port);
+   // Get the encoder position raw in ticks
+    // Pass the port and pass-by-reference variable for the raw encoder value in 4-byte unsigned integer ticks. Returns the error code.
+    int     get_umotor_raw_encoder(uint8_t port, uint32_t &uvalue);
+    // Pass the port. Returns the raw encoder ticks as 4-byte unsigned int value.
+    uint32_t get_umotor_raw_encoder(uint8_t port);
     // Set ecoder value to 0
     int     reset_motor_encoder(uint8_t port);
 
