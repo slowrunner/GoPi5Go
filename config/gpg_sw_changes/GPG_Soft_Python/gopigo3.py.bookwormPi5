@@ -28,7 +28,6 @@ import json
 FIRMWARE_VERSION_REQUIRED = "1.0.x" # Make sure the top 2 of 3 numbers match
 
 # import pigpio
-import gpiod
 
 if hardware_connected:
     GPG_SPI = spidev.SpiDev()
