@@ -1,0 +1,90 @@
+# ******  GoPi5Go life.log  ******* 
+# ** First "life" 2024-03-17 
+2024-03-17 20:28|------------ boot ------------
+2024-03-17 20:40|lifelogger.dEmain execution: 0.20
+2024-03-17 20:40|[logMaintenance.py.main]** reboot to test crontab setup of life logging **
+2024-03-17 20:43|------------ boot ------------
+2024-03-17 20:52|[logMaintenance.py.main]** WaLiPi5 is going to nap for 0.05 hours **
+2024-03-17 20:52|lifelogger.dEmain execution: 0.15
+2024-03-17 20:56|------------ boot ------------
+2024-03-18 08:34|[logMaintenance.py.main]** WaLiPi5 is going to nap for 1 hours **
+2024-03-18 08:35|lifelogger.dEmain execution: 11.65
+2024-03-18 09:36|------------ boot ------------
+2024-03-18 10:57|lifelogger.dEmain execution: 1.35
+2024-03-18 10:57|[logMaintenance.py.main]** WaLiPi5 is going to nap for 4 hours **
+2024-03-18 14:59|------------ boot ------------
+2024-03-18 23:50|lifelogger.dEmain execution: 8.85
+2024-03-18 23:51|[logMaintenance.py.main]** WaLiPi5 is going to nap for 8 hours **
+2024-03-19 07:53|------------ boot ------------
+2024-03-19 12:20|lifelogger.dEmain execution: 4.45
+2024-03-19 12:38|------------ boot ------------
+2024-03-19 13:01|[logMaintenance.py.main]** going down for backup before installing gopi5go power service **
+2024-03-19 13:02|lifelogger.dEmain execution: 0.40
+2024-03-19 14:10|------------ boot ------------
+2024-03-19 14:16|lifelogger.dEmain execution: 0.10
+2024-03-19 14:36|------------ boot ------------
+2024-03-19 15:00|lifelogger.dEmain execution: 0.40
+2024-03-19 15:02|[logMaintenance.py.main]** 32-bit PiOS GoPiGo3 with Raspberry Pi 5 working with GoPiGo3 C++ API **
+2024-03-19 22:17|------------ boot ------------
+2024-03-19 22:17|[logMaintenance.py.main]** Begin 64-bit PiOS Bookworm Desktop life **
+2024-03-20 02:50|[logMaintenance.py.main]** WaLiPi5 is going to nap for 5 hours **
+2024-03-20 02:50|lifelogger.dEmain execution: 4.55
+2024-03-20 07:52|------------ boot ------------
+2024-03-20 11:40|lifelogger.dEmain execution: 3.80
+2024-03-20 11:46|------------ boot ------------
+2024-03-20 11:48|[logMaintenance.py.main]** Modified for TICKS GoPiGo3.cpp test locked up Dave - ls not recognized, login connection reset **
+2024-03-20 12:04|lifelogger.dEmain execution: 0.30
+2024-03-20 13:00|------------ boot ------------
+2024-03-20 20:30|[logMaintenance.py.main]** New GoPiGo3 C++ API pull request merged to Dexter GoPiGo3 github **
+2024-03-20 22:11|[logMaintenance.py.main]** WaLiPi5 is going to nap for 9 hours **
+2024-03-20 22:12|lifelogger.dEmain execution: 9.20
+2024-03-21 07:13|------------ boot ------------
+2024-03-21 11:52|lifelogger.dEmain execution: 4.65
+2024-03-21 11:52|[logMaintenance.py.main]** testing power button **
+2024-03-21 11:56|------------ boot ------------
+2024-03-21 11:57|[logMaintenance.py.main]** Power Button: blink red for 34s, blink purple for 10s, power off at 45s **
+2024-03-21 12:01|[logMaintenance.py.main]** Testing CLI shut down -h now **
+2024-03-21 12:02|lifelogger.dEmain execution: 0.10
+2024-03-21 12:10|------------ boot ------------
+2024-03-21 12:17|[logMaintenance.py.main]** CLI shut down test: immediate ssh termination, at 1m 15s RPi to red LED, red board to blinking green. After RPi LED red, Press pwr button: total power off after 3s **
+2024-03-21 12:18|[logMaintenance.py.main]** Testing sudo reboot now **
+2024-03-21 12:19|lifelogger.dEmain execution: 0.15
+2024-03-21 12:21|------------ boot ------------
+2024-03-21 12:26|[logMaintenance.py.main]** reboot test: 58s RPi LED red, red board green LED starts blinking.  1m 30s red board LED solid green, can remote in again **
+2024-03-21 16:09|lifelogger.dEmain execution: 3.80
+2024-03-21 16:11|------------ boot ------------
+2024-03-22 02:18|[logMaintenance.py.main]** Started batteryLife test at 2:15 6.5W 12.5v docked 11.7v undocked **
+2024-03-22 06:02|lifelogger.dEmain execution: 13.85
+2024-03-22 08:43|------------ boot ------------
+2024-03-22 08:47|[logMaintenance.py.main]** batteryLife test ran 3h 48m to reading 7.45v adj 8.21v with oak and lidar idle **
+2024-03-22 10:33|[logMaintenance.py.main]** starting stress testing **
+2024-03-23 00:01|lifelogger.dEmain execution: 15.30
+2024-03-23 00:02|[logMaintenance.py.main]** WaLiPi5 is going to nap for 8 hours **
+2024-03-23 08:03|------------ boot ------------
+2024-03-24 11:48|lifelogger.dEmain execution: 27.75
+2024-03-24 12:06|[logMaintenance.py.main]** lost its bash mind **
+2024-03-24 12:06|------------ boot ------------
+2024-03-24 12:15|lifelogger.dEmain execution: 0.15
+2024-03-24 12:22|------------ boot ------------
+2024-03-24 13:10|lifelogger.dEmain execution: 0.80
+2024-03-24 13:18|------------ boot ------------
+2024-03-24 13:36|lifelogger.dEmain execution: 0.30
+2024-03-24 13:46|------------ boot ------------
+2024-03-25 00:40|lifelogger.dEmain execution: 10.90
+2024-03-25 00:58|------------ boot ------------
+2024-03-25 22:43|[logMaintenance.py.main]** Python GoPiGo3 API working **
+2024-03-25 22:46|lifelogger.dEmain execution: 21.80
+2024-03-25 22:48|------------ boot ------------
+2024-03-25 22:57|lifelogger.dEmain execution: 0.15
+2024-03-25 23:03|[logMaintenance.py.main]** removed power to rewire without voltmeters **
+2024-03-25 23:03|------------ boot ------------
+2024-03-25 23:03|[logMaintenance.py.main]** WaLiPi5 is going to nap for 8 hours **
+2024-03-26 07:52|------------ boot ------------
+2024-03-26 08:49|lifelogger.dEmain execution: 0.95
+2024-03-26 08:59|------------ boot ------------
+2024-03-26 09:04|------------ boot ------------
+2024-03-26 09:08|------------ boot ------------
+2024-03-25 09:20|[logMaintenance.py.main]** repeated Input/output error requiring pwr cycle to fix **
+2024-03-26 09:20|lifelogger.dEmain execution: 0.5
+2024-03-26 09:20|------------ boot ------------
+2024-03-26 09:29|lifelogger.dEmain execution: 0.15
