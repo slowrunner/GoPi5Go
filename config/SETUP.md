@@ -142,3 +142,9 @@ RIGHT: motor_state: 0,  pwr: -128,  pos: 1038,  dps: -163
 - build
 - ./build/egpgtest
 
+** === Setup automatic file system checking 5 boots or 7 days
+```
+./setup_tune2fs.sh
+sudo reboot
+```
+
