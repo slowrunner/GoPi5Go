@@ -1,10 +1,10 @@
 # GoPi5Go
-GoPiGo3 Robot with Raspberry Pi 5 Processor  
 
-Reincarnating Humble Dave (HumbleDave) and ROSbot Dave (rosbot-on-gopigo3) 
+**Autonomous ROS2 home robot based on GoPiGo3 and Raspberry Pi 5**
+
+Reincarnating Humble Dave (HumbleDave) and ROSbot Dave (rosbot-on-gopigo3)  
 on the Raspberry Pi5 Single Board Computer  
 
-**Autonomous ROS2 home robot based on GoPiGo3 and RaspberryPi**
 
 
 <img src="https://github.com/slowrunner/GoPi5Go/blob/main/Graphics/2024-03-17_Front_GoPi5Go_Dave.JPG" width="378" height="504" />
