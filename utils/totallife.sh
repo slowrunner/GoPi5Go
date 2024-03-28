@@ -7,7 +7,7 @@
 # Counted Keys:
 #   Playtimes:           " Docking: success "
 #   Sessions:            "- boot -"              ( "\- boot \-" search string )
-#   Safety shutdowns:    "safety shutdown"
+#   Safety shutdowns:    "SAFETY SHUTDOWN"
 
 echo "(Cleaning life.log first)"
 /home/pi/GoPi5Go/plib/cleanlifelog.py
@@ -34,7 +34,7 @@ booted=`(grep -c "\- boot \-" $fn)`
 echo "Sessions (boot): " `(grep -c "\- boot \-" $fn)`
 aveSession=`(echo "scale=1; ($totalAwake / $booted)" | bc -l)`
 echo "Average Session: " $aveSession "hrs"
-safetyShutdowns=`(grep -c "safety shutdown" $fn)`
+safetyShutdowns=`(grep -c "SAFETY SHUTDOWN" $fn)`
 echo "Safety Shutdowns: " $safetyShutdowns 
 totalMoved=`(awk -F'moved:' '{sum+=$2}END{printf "%.1f", sum;}' $ofn)`
 totalMovedFt=`(echo "scale=1; ($totalMoved / 0.3048)" | bc)`
