@@ -24,5 +24,5 @@
 @reboot sleep 10  && /usr/bin/python3 /home/pi/GoPi5Go/plib/cleanlifelog.py
 @reboot sleep 15  && /home/pi/GoPi5Go/utils/nohup_loglife.sh
 0 * * * * /usr/bin/python3 /home/pi/GoPi5Go/plib/cleanlifelog.py
-
+@reboot sleep 60  && /home/pi/GoPi5Go/utils/nohup_safetyShutdown.sh
 
