@@ -7,7 +7,7 @@
 #        then will force a shutdown.
 #
 #      Will start wifi led blinking orange ~15 minutes before safety shutdown is executed
-#      when battery.SAFETY_SHUTDOWN_vBatt is 9.75v and battery.WARNING_LOW_vBatt is 10.0v
+#      when battery.SAFETY_SHUTDOWN_vBatt is 9.75v and battery.WARNING_LOW_vBatt is 10.25v
 #
 #      Note: Program prints actual battery voltage which is 0.81v higher than GoPiGo3 reading
 #            due to reverse polarity protection diode, wires, and connections
@@ -67,7 +67,8 @@ def main():
   warning_led_on = False
   leds.wifi_blinker_off(egpg)
 
-  speak.say("Starting safetyShutdown.py at {:.2f} volts.".format(egpg.volt()+battery.REV_PROTECT_DIODE))  
+  str_to_log = "'Starting safetyShutdown.py at {:.2f} volts.'".format(egpg.volt()+battery.REV_PROTECT_DIODE)
+  os.system("/home/pi/GoPi5Go/utils/logMaintenance.py " + str_to_log)
 
   try:
     while True:
