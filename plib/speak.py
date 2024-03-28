@@ -77,18 +77,18 @@ def say_espeak(phrase,vol=100,anytime=False):
         subprocess.check_output(['espeak-ng -a'+str(vol)+' "%s"' % phrase], stderr=subprocess.STDOUT, shell=True)
     logger.info(phrase+spoken)
 
-def say(phrase,vol=250,anytime=False):
+def say(phrase,vol=200,anytime=False):
     say_espeak(phrase,vol,anytime)
     # vol = 50 for HP amplified spkr
     # vol = vol + 40  # adjust for flite
     # say_flite(phrase,vol,anytime)
 
-def shout(phrase,vol=1000,anytime=False):
+def shout(phrase,vol=500,anytime=False):
     say_espeak(phrase,vol,anytime)
     # vol = vol - 50  # adjust for flite
     # say_flite(phrase,vol,anytime)
 
-def whisper(phrase,vol=150,anytime=False):
+def whisper(phrase,vol=40,anytime=False):
     say_espeak(phrase,vol,anytime)
     # vol = vol + 30  # adjust for flite
     # say_flite(phrase,vol,anytime=False)

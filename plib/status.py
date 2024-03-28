@@ -33,8 +33,7 @@ import myPyLib
 # import speak
 # import myconfig
 from datetime import datetime
-#from noinit_easygopigo3 import EasyGoPiGo3
-from easygopigo3 import EasyGoPiGo3
+from noinit_easygopigo3 import EasyGoPiGo3
 import battery
 # import myDistSensor
 import lifeLog
