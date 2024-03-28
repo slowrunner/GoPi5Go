@@ -15,6 +15,7 @@
  aNNN.n  change default_turn to NNN deg
  xN      execute spin N times
  sNNN    change motor dps to NNN
+ o       spin opposite direction
  wNN.n   set WHEEL_DIAMETER to NN.n
  bNNN.n  set WHEEL_BASE_WIDTH to NNN.n
  j       write current wbase and wdia to /home/pi/Dexter/gpg3_config.json
@@ -101,6 +102,7 @@ while True:
         print("f       change default_turn to 360 deg")
         print("xN      execute spin N times")
         print("sNNN    change motor dps to NNN")
+        print("o       spin opposite direction")
         print("wNN.n   set wheel diameter to NN.n")
         print("bNNN.n  set wheel base to NNN.n")
         print("j       write current wbase and wdia to /home/pi/Dexter/gpg3_config.json")
@@ -128,6 +130,11 @@ while True:
         continue
     elif i[0] == "a":
         default_turn = float(i[1:])
+        deg = default_turn
+        print("New default spin:{:.2f}".format(default_turn))
+        continue
+    elif i[0] == "o":
+        default_turn = -1 * default_turn
         deg = default_turn
         print("New default spin:{:.2f}".format(default_turn))
         continue
