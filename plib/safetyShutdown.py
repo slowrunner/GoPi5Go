@@ -91,7 +91,7 @@ def main():
                 leds.wifi_blinker_on(egpg,color=leds.ORANGE)
                 os.system("/home/pi/GoPi5Go/utils/logMaintenance.py 'safetyShutdown: voltage warning blinker activated '")
                 last_leg_count = 150  # allow plenty of bouncing around the low mark
-                speak.shout("Warning Battery Voltage is {:.2f} volts.  Need to be Docked".format(egpg.volt()+battery.REV_PROTECT_DIODE))
+                speak.shout("15 minute warning.  Battery Voltage is {:.1f} volts.  Need to be Docked".format(egpg.volt()+battery.REV_PROTECT_DIODE))
         if (batteryLowCount > 3):
           vBatt,_ = battery.vBatt_vReading(egpg)
           print ("WARNING, WARNING, SHUTTING DOWN NOW")
