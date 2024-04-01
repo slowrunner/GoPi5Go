@@ -25,6 +25,7 @@ import battery
 import leds
 import status
 import speak
+import lifeLog
 
 # ######### CNTL-C #####
 # Callback and setup to catch control-C and quit program
@@ -99,8 +100,9 @@ def main():
           egpg.reset_all()
           time.sleep(1)
           os.system("/home/pi/GoPi5Go/utils/logMaintenance.py 'SAFETY SHUTDOWN - BATTERY LOW'")
-          str_log_voltages = "/home/pi/GoPi5Go/logMaintenance.py " + " '" + battery.voltages_string(egpg) +"' "
-          os.system(str_log_voltages)
+          str_log_voltages = "** "+battery.voltages_string(egpg)+" **"
+          lifeLog.logger.info(str_log_voltages)
+
           time.sleep(1)
           # os.system("sudo shutdown +10")   # for testing
           os.system("sudo shutdown -h +2")
@@ -111,6 +113,11 @@ def main():
   except SystemExit:
     print("safetyShutdown.py: exiting")
 
+  except Exception as e:
+      print("safetyShutdown.py exiting with exception: ",type(e).__name__,",",str(e))
+      str_to_log="Exiting with Exception "+type(e).__name__+": "+str(e)+"\n"
+      print(str_to_log)
+      lifeLog.logger.info(str_to_log)
 if __name__ == "__main__":
     main()
 

@@ -10,6 +10,7 @@ import sys
 sys.path.insert(1,"/home/pi/GoPi5Go/plib/")
 # from noinit_easygopigo3 import EasyGoPiGo3
 from easygopigo3 import EasyGoPiGo3
+import lifeLog
 
 CHARGING_ADJUST_V = 0.2    # When charging the GoPiGo3 reading is closer to the actual battery voltage
 REV_PROTECT_DIODE = 0.76    # The GoPiGo3 has a reverse polarity protection diode drop of 0.6v to 0.8v (n=2)
@@ -19,14 +20,20 @@ SAFETY_SHUTDOWN_vReading = SAFETY_SHUTDOWN_vBatt - REV_PROTECT_DIODE   # 8.5v Ea
 WARNING_LOW_vBatt = 10.25       # Give (~15 minutes) Advance Warning before safety shutdown
 
 def vBatt_vReading(egpg):
-	vReading = egpg.volt()
-	if (vReading > 11.7):
-	  # charging
-	  vBatt = vReading + REV_PROTECT_DIODE - CHARGING_ADJUST_V
-	  # print("charging")
-	else:
-	  vBatt = vReading + REV_PROTECT_DIODE
-	return vBatt,vReading
+      try:
+          vReading = egpg.volt()
+      except Exception as e:
+          str_to_log="Exception "+type(e).__name__+": "+str(e)+" continuing"
+          print(str_to_log)
+          lifeLog.logger.info(str_to_log)
+          vReading = 0
+      if (vReading > 11.7):
+          # charging
+          vBatt = vReading + REV_PROTECT_DIODE - CHARGING_ADJUST_V
+          # print("charging")
+      else:
+          vBatt = vReading + REV_PROTECT_DIODE
+      return vBatt,vReading
 
 def voltages_string(egpg):
         vBatt, vReading = vBatt_vReading(egpg)
