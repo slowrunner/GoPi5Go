@@ -20,13 +20,13 @@ SAFETY_SHUTDOWN_vReading = SAFETY_SHUTDOWN_vBatt - REV_PROTECT_DIODE   # 8.5v Ea
 WARNING_LOW_vBatt = 10.25       # Give (~15 minutes) Advance Warning before safety shutdown
 
 def vBatt_vReading(egpg):
+      vReading = 0
       try:
           vReading = egpg.volt()
       except Exception as e:
-          str_to_log="Exception "+type(e).__name__+": "+str(e)+" continuing"
+          str_to_log="Exception "+type(e).__name__+": "+str(e)+" vReading:{:.2f}".format(vReading)+" continuing"
           print(str_to_log)
           lifeLog.logger.info(str_to_log)
-          vReading = 0
       if (vReading > 11.7):
           # charging
           vBatt = vReading + REV_PROTECT_DIODE - CHARGING_ADJUST_V
