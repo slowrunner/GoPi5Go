@@ -22,6 +22,8 @@
          - press w to drive forward
          - press x to drive backward
          - press r to reset encoders to 0
+         - press - to slow speed
+         - press + to increase speed
 */
 
 #include <GoPiGo3.h>   // for GoPiGo3
@@ -31,7 +33,7 @@
 
 
 #define NO_LIMIT_SPEED 1000
-
+#define DEFAULT_SPEED 150
 GoPiGo3 GPG;
 
 void exit_signal_handler(int signo);
@@ -43,17 +45,18 @@ int main(){
         int8_t  motor_power;
         int32_t  motor_position;
         int16_t  motor_dps;
+        int16_t  speed = DEFAULT_SPEED;
 
 	signal(SIGINT, exit_signal_handler); // register the exit function for Ctrl+C
 
 	GPG.detect();
 
 	printf("\n**** GoPiGo3 Robot Constants:\n");
-	printf(" - WHEEL_DIAMETER: %.3f mm\n", GPG.WHEEL_DIAMETER);
-	printf(" - WHEEL_BASE_WIDTH: %.3f mm\n", GPG.WHEEL_BASE_WIDTH);
-	printf(" - ENCODER_TICKS_PER_ROTATION: %d\n", GPG.ENCODER_TICKS_PER_ROTATION);
-	printf(" - MOTOR_GEAR_RATIO: %d\n", GPG.MOTOR_GEAR_RATIO);
-
+	printf(" - WHEEL_DIAMETER: %.3f mm\n",GPG.WHEEL_DIAMETER);
+	printf(" - WHEEL_BASE_WIDTH: %.3f mm\n",GPG.WHEEL_BASE_WIDTH);
+	printf(" - ENCODER_TICKS_PER_ROTATION: %d\n",GPG.ENCODER_TICKS_PER_ROTATION);
+	printf(" - MOTOR_GEAR_RATIO: %d\n",GPG.MOTOR_GEAR_RATIO);
+        printf(" - SPEED: %d\n",speed);
 
 
 	bool keepLooping = true;
@@ -66,8 +69,8 @@ int main(){
 
 	GPG.reset_motor_encoder(MOTOR_LEFT + MOTOR_RIGHT);
 
-	GPG.set_motor_limits(MOTOR_LEFT,50,150);
-	GPG.set_motor_limits(MOTOR_RIGHT,50,150);
+	GPG.set_motor_limits(MOTOR_LEFT,0,speed);
+	GPG.set_motor_limits(MOTOR_RIGHT,0,speed);
 
 	do{
 
@@ -114,6 +117,18 @@ int main(){
 				break;
 			case 'r' :  // reset encoders to zero
 				GPG.reset_motor_encoder(MOTOR_LEFT + MOTOR_RIGHT);
+				break;
+                        case '-' :  // Decrease speed
+                                speed -= 25;
+                                printf(" - SPEED: %d\n",speed);
+                        	GPG.set_motor_limits(MOTOR_LEFT,0,speed);
+				GPG.set_motor_limits(MOTOR_RIGHT,0,speed);
+				break;
+                        case '+' :  // Increase speed
+                                speed += 25;
+                                printf(" - SPEED: %d\n",speed);
+                        	GPG.set_motor_limits(MOTOR_LEFT,0,speed);
+				GPG.set_motor_limits(MOTOR_RIGHT,0,speed);
 				break;
 			case 0x3 :  // ctrl-c
                                 exit_signal_handler(SIGINT);
