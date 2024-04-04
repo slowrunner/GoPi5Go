@@ -1,0 +1,34 @@
+gpg3_volt_test.py results
+
+Note:  bad data was always 0.045v or 0.046v 
+
+- 0.001s:
+
+We took 75973 measurements at 0.0010 seconds (based on reference voltage of 11.77)
+min: -0.069  max: 0.250  mean: -0.015  mode: -0.009   sdev: 0.015    bad_data: 13  SPI_errors: 1
+
+We took 24608 measurements at 0.0010 seconds (based on reference voltage of 11.701)
+min: -0.120  max: 0.000  mean: -0.083  mode: -0.086   sdev: 0.013    bad_data: 8  SPI_errors: 1
+
+
+- 0.002s:
+
+We took 19053 measurements at 0.0020 seconds (based on reference voltage of 11.761)
+min: -0.060  max: 0.034  mean: -0.024  mode: -0.026   sdev: 0.013    bad_data: 1  SPI_errors: 0
+
+
+- 0.005s:
+
+We took 22102 measurements at 0.0050 seconds (based on reference voltage of 11.736)
+min: -0.103  max: 0.000  mean: -0.051  mode: -0.051   sdev: 0.018    bad_data: 1  SPI_errors: 0
+
+We took 27507 measurements at 0.0050 seconds (based on reference voltage of 11.77)
+min: -0.069  max: 0.043  mean: -0.015  mode: -0.009   sdev: 0.018    bad_data: 1  SPI_errors: 0
+
+
+- 0.01s:
+
+We took 11017 measurements at 0.0100 seconds (based on reference voltage of 11.761)
+min: -0.069  max: 0.034  mean: -0.027  mode: -0.026   sdev: 0.013    bad_data: 2  SPI_errors: 0
+
+
