@@ -4,6 +4,10 @@
 
 # PURPOSE: Characterize GoPiGo3 battery voltage measurements
 
+# RESULTS:
+#  - Taking readings more often than 0.002 seconds results in frequent bad data and SPI No Response errors
+#  - bad data usually 0.045v or 0.046v
+
 """
 
   USAGE: ./gpg3_volt_test.py [-h] [-i INTERVAL]
