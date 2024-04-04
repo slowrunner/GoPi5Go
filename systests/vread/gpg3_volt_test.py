@@ -7,6 +7,7 @@
 # RESULTS:
 #  - Taking readings more often than 0.002 seconds results in frequent bad data and SPI No Response errors
 #  - bad data usually 0.045v or 0.046v
+#  - precision appears to be around 0.05 volts
 
 """
 
