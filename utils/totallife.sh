@@ -23,7 +23,7 @@ echo "*** GoPi5Go Dave TOTAL LIFE STATISTICS ***"
 echo "Total Awake:  " $totalAwake " hrs"
 echo "Total Naps:    " $totalNaps " hrs"
 echo "Total Life:   " $totalLife " hrs (since Mar 17, 2024)"
-# echo "Playtimes (Undocked-Docked):" `(grep -c " Docking: success " $fn)`
+echo "Playtimes (Undocked-Docked):" `(grep -c " Docking: success " $fn)`
 # last5playtimes=`(grep " hrs playtime " $fn | tail -5 | awk -F" after "  '{sum+=$2}END{print sum;}' )`
 # last5avePlaytime=`(echo "scale=1; $last5playtimes / 5" | bc)`
 # echo "Average playtime (last five)" $last5avePlaytime "hrs "
