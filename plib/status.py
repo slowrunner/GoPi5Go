@@ -108,8 +108,8 @@ def main():
     myPyLib.set_cntl_c_handler(handle_ctlc)
 
     # #### Create a mutex protected instance of EasyGoPiGo3 base class
-    # egpg = EasyGoPiGo3(use_mutex=True,noinit=True)
-    egpg = EasyGoPiGo3(use_mutex=True)
+    egpg = EasyGoPiGo3(use_mutex=True,noinit=True)
+    # egpg = EasyGoPiGo3(use_mutex=True)
     # myconfig.setParameters(egpg)
 
     # ARGUMENT PARSER
