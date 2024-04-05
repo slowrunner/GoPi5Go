@@ -11,6 +11,8 @@
 #
 #      ./status.py -h (or --help) will print usage
 
+#  Protected from No SPI Response Exceptions - continues
+
 """
 ********* GoPi5Go Dave STATUS *****
 2021-08-05  08:33:37 up 2 min,  1 user,  load average: 1.14, 0.92, 0.38
@@ -80,7 +82,14 @@ def printStatus(egpg):
     print(battery.voltages_string(egpg))
     if battery.on_last_leg(egpg):
         print("WARNING - Battery Is Nearing Shutdown Voltage")
-    v5V = egpg.get_voltage_5v()
+    try:
+        v5V = egpg.get_voltage_5v()
+    except Exception as e:
+        str_to_log="Exception in get_voltage_5v()"+type(e).__name__+": "+str(e)+" continuing"
+        print(str_to_log)
+        lifeLog.logger.info(str_to_log)
+        v5V = 0
+
     print("5v Supply: %0.2f" % v5V)
     print("Processor Temp: %s" % getCPUtemperature())
     print("Clock Frequency: %s" % getClockFreq())
@@ -117,7 +126,6 @@ def main():
         while True:
             time.sleep(5)
             printStatus(egpg)
-            vBatt = egpg.volt()
             if (loopFlag is False):
                 break
         # end while
