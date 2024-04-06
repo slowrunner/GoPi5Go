@@ -8,6 +8,7 @@ import sys
 sys.path.append('/home/pi/GoPi5Go/plib')
 from noinit_easygopigo3 import EasyGoPiGo3
 from time import sleep
+import math
 
 if sys.platform == 'win32':
     import msvcrt
@@ -23,10 +24,10 @@ using the EasyGoPiGo3 API.  It works best with a US keyboard layout.
 Moving around:
 
 forward        i
-spin ccw   j       l   spin cw
+spin ccw   j   k   l   spin cw
 backward       ,
 
-space bar: stop
+STOP:  k or spacebar
 
 q/z : increase/decrease max speeds by 10%
 w/x : increase/decrease only linear speed by 10%
@@ -45,6 +46,7 @@ moveBindings = {
     # '.': (-1, 0, 0, 1),
     # 'm': (-1, 0, 0, -1),
     ' ': (0, 0, 0, 0),
+    'k': (0, 0, 0, 0),
 }
 
 speedBindings = {
@@ -83,7 +85,7 @@ def restoreTerminalSettings(old_settings):
 
 def vels(speed, turn):
     turn_degpersec = turn/6.283185 * 360.0
-    return 'currently:\tspeed {:.2f} m/s\tturn {:.1f} rad/s {:.0f} deg/s'.format(speed, turn, turn_degpersec)
+    return 'currently:\tspeed {:.2f} m/s\tturn {:.2f} rad/s {:.0f} deg/s'.format(speed, turn, turn_degpersec)
 
 
 def main():
@@ -103,10 +105,7 @@ def main():
         print(vels(speed, turn))
         while True:
             key = getKey(settings)
-            # if (key == ' '):
-            #     print("key: spacebar")
-            # else:
-            #     print("key: ",key)
+            # print("key: ",key)
             if key in moveBindings.keys():
                 x = moveBindings[key][0]
                 y = moveBindings[key][1]
@@ -124,14 +123,12 @@ def main():
             elif (key == '\x03'):
                     break
             else:
-                pass
+                egpg.stop()
+
             # dps = speed (m/s) * 1000 (mm/m) * 360 (deg) / wheel_circumference (mm)
             dps = speed * 1000  * 360.0 / egpg.WHEEL_CIRCUMFERENCE
-            # spin_dps = turn (rad/s) * ((WHEEL_BASE * pi) / 2pi) (mm/rad 1 rev)  / (WHEEL_DIAMETER * pi) (mm/rad 1 rev) * 360/2pi (deg/rad)
-            # spin_dps =  1   rad/sed * 105.09 / 2  / 66.05 * 360/2 = 143 dps
-
-            spin_dps = int(turn * egpg.WHEEL_BASE_WIDTH / 2.0 / egpg.WHEEL_DIAMETER * 180.0)
-            print("spin_dps: {} DPS".format(spin_dps))
+            spin_dps = int(turn * egpg.WHEEL_BASE_WIDTH / egpg.WHEEL_DIAMETER * 360 / (2*math.pi))
+            # print("spin_dps: {} DPS".format(spin_dps))
 
             if key in moveBindings.keys():
                 if (x > 0):
