@@ -17,13 +17,14 @@ else:
 
 
 msg = """
-This node takes keypresses from the keyboard to drive the GoPiGo3 robot
+This program takes keypresses from the keyboard to drive the GoPiGo3 robot
 using the EasyGoPiGo3 API.  It works best with a US keyboard layout.
 ---------------------------
 Moving around:
-   u    i    o
-   j    k    l
-   m    ,    .
+
+forward        i
+spin ccw   j       l   spin cw
+backward       ,
 
 space bar: stop
 
@@ -36,13 +37,13 @@ CTRL-C to quit
 
 moveBindings = {
     'i': (1, 0, 0, 0),
-    'o': (1, 0, 0, -1),
+    # 'o': (1, 0, 0, -1),
     'j': (0, 0, 0, 1),
     'l': (0, 0, 0, -1),
-    'u': (1, 0, 0, 1),
+    # 'u': (1, 0, 0, 1),
     ',': (-1, 0, 0, 0),
-    '.': (-1, 0, 0, 1),
-    'm': (-1, 0, 0, -1),
+    # '.': (-1, 0, 0, 1),
+    # 'm': (-1, 0, 0, -1),
     ' ': (0, 0, 0, 0),
 }
 
@@ -81,14 +82,13 @@ def restoreTerminalSettings(old_settings):
 
 
 def vels(speed, turn):
-    return 'currently:\tspeed %s\tturn %s ' % (speed, turn)
+    turn_degpersec = turn/6.283185 * 360.0
+    return 'currently:\tspeed {:.2f} m/s\tturn {:.1f} rad/s {:.0f} deg/s'.format(speed, turn, turn_degpersec)
 
 
 def main():
     settings = saveTerminalSettings()
     egpg = EasyGoPiGo3(use_mutex=True, noinit=True)
-    egpg.set_speed(125)
-    # print("NO_LIMIT_SPEED:",egpg.NO_LIMIT_SPEED)
 
     speed = 0.1  # m/s
     turn = 1.0   # rad/s
@@ -103,16 +103,16 @@ def main():
         print(vels(speed, turn))
         while True:
             key = getKey(settings)
-            if (key == ' '):
-                print("key: spacebar")
-            else:
-                print("key: ",key)
+            # if (key == ' '):
+            #     print("key: spacebar")
+            # else:
+            #     print("key: ",key)
             if key in moveBindings.keys():
                 x = moveBindings[key][0]
                 y = moveBindings[key][1]
                 z = moveBindings[key][2]
                 th = moveBindings[key][3]
-                print("x: {:.2f} y: {:.2f} z: {:.2f} th: {:.2f}".format(x,y,z,th))
+                #print("x: {:.2f} y: {:.2f} z: {:.2f} th: {:.2f}".format(x,y,z,th))
             elif key in speedBindings.keys():
                 speed = speed * speedBindings[key][0]
                 turn = turn * speedBindings[key][1]
@@ -125,15 +125,32 @@ def main():
                     break
             else:
                 pass
+            # dps = speed (m/s) * 1000 (mm/m) * 360 (deg) / wheel_circumference (mm)
+            dps = speed * 1000  * 360.0 / egpg.WHEEL_CIRCUMFERENCE
+            # spin_dps = turn (rad/s) * ((WHEEL_BASE * pi) / 2pi) (mm/rad 1 rev)  / (WHEEL_DIAMETER * pi) (mm/rad 1 rev) * 360/2pi (deg/rad)
+            # spin_dps =  1   rad/sed * 105.09 / 2  / 66.05 * 360/2 = 143 dps
+
+            spin_dps = int(turn * egpg.WHEEL_BASE_WIDTH / 2.0 / egpg.WHEEL_DIAMETER * 180.0)
+            print("spin_dps: {} DPS".format(spin_dps))
 
             if key in moveBindings.keys():
                 if (x > 0):
-                    egpg.forward()
+                    if (th == 0):
+                        egpg.set_speed(dps)
+                        egpg.forward()
                 elif (x<0):
-                    egpg.backward()
-                else:
-                    egpg.stop()
-
+                    if (th == 0):
+                        egpg.set_speed(dps)
+                        egpg.backward()
+                else:   # x == 0
+                    if (th > 0):
+                        egpg.set_speed(spin_dps)
+                        egpg.spin_left()
+                    elif (th < 0):
+                        egpg.set_speed(spin_dps)
+                        egpg.spin_right()
+                    else:
+                        egpg.stop()
             # twist = geometry_msgs.msg.Twist()
             # twist.linear.x = x * speed
             # twist.linear.y = y * speed
@@ -148,7 +165,7 @@ def main():
         print(e)
 
     finally:
-
+        egpg.stop()
         # twist = geometry_msgs.msg.Twist()
         # twist.linear.x = 0.0
         # twist.linear.y = 0.0
