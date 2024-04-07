@@ -69,9 +69,10 @@ def restoreTerminalSettings(old_settings):
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
 
 
-def vels(speed, turn):
+def vels(speed, turn, egpg):
     turn_degpersec = turn/6.283185 * 360.0
-    return 'currently:\tspeed {:.2f} m/s\tturn {:.2f} rad/s {:.0f} deg/s'.format(speed, turn, turn_degpersec)
+    x_dps = int(speed * 1000  * 360.0 / egpg.WHEEL_CIRCUMFERENCE)
+    return 'currently:\tspeed {:.2f} m/s ({} DPS) \tturn {:.2f} rad/s {:.0f} deg/s'.format(speed, x_dps, turn, turn_degpersec)
 
 
 def main():
@@ -86,7 +87,7 @@ def main():
 
     try:
         print(msg)
-        print(vels(speed, turn))
+        print(vels(speed, turn, egpg))
         while True:
             key = getKey(settings)
             # print("key: ",key)
@@ -96,10 +97,10 @@ def main():
             elif key in speedBindings.keys():
                 speed = speed * speedBindings[key][0]
                 turn = turn * speedBindings[key][1]
-                print(vels(speed, turn))
+                print(vels(speed, turn, egpg))
                 if (status == 5):
                     print(msg)
-                    print(vels(speed, turn))
+                    print(vels(speed, turn, egpg))
                 status = (status + 1) %  6
             elif (key == '\x03'):
                     break
