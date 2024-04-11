@@ -2,7 +2,7 @@
 
 For some reason the GoPiGo3 SPI interface on Raspberry Pi 5 is prone to frequent early chip select release  
 resulting in the GoPiGo3 not writing the SPI reply bytes in the transfer array.  This issue has not been  
-seen running the GoPiGo3 API on Raspberry Pi 2, 3, 3B+, or Pi4, but ![has been reported by others happening  
+seen running the GoPiGo3 API on Raspberry Pi 2, 3, 3B+, or Pi4, but [has been reported by others happening  
 on the Pi4.](https://github.com/raspberrypi/linux/issues/5655)  
 
 The current released GoPiGo3 API sets the SPI maximum transfer speed at 500000:  
