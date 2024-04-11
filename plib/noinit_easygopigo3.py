@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
 # FILE: noinit_easygopigo3.py
-# - Differs from official easygopigo3.py 
-#   - Does not require pigpiod and does not setup SPI
-#   - Does not reset speed to DEFAULT_SPEED when initialized
+# - Differs from official easygopigo3.py
+#   - Does not reset speed to DEFAULT_SPEED when initialized if noinit=True
 
 from __future__ import print_function
 from __future__ import division
