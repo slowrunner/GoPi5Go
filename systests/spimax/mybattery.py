@@ -1,10 +1,11 @@
 #!/usr/bin/python3
 
-# FILE: battery.py
+# FILE: mybattery.py
 
 # PURPOSE:  Central facts and methods for the ModRobotics/TalentCell YB1203000 Li-Ion Battery Pack
 #           12.6v to 9v 3A "3000mAh" Battery Pack
 #
+# SPECIAL - using slower SPI max transfer rate
 
 import sys
 sys.path.insert(1,"/home/pi/GoPi5Go/plib/")

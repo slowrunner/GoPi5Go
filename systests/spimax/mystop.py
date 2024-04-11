@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-# FILE:  test_docking.py
+# FILE:  mystop.py
 
 """
-   USAGE:  Set NUM_OF_DOCKING_TESTS and then execute ./test_docking.py
+   USAGE:  Execute ./mystop.py to stop runaway GoPi5Go-Dave
 """
 
 

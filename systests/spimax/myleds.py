@@ -1,7 +1,11 @@
 #!/usr/bin/python3
 
-# File: leds.py
+# File: myleds.py
 #
+#
+# SPECIAL - using slower SPI max transfer rate
+
+
 # Methods:
 #    leds.all_on(egpg)   turn two red blinker leds on and two "eyes" on bright white
 #    leds.all_off(egpg)  turn two red blinker leds off and two "eyes" off

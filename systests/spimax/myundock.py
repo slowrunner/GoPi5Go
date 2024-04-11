@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
-# FILE:  test_docking.py
+# FILE:  myundock.py
+#
+# SPECIAL - using slower SPI max transfer rate
+
 
 """
    USAGE:  Set NUM_OF_DOCKING_TESTS and then execute ./test_docking.py

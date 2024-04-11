@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 
-# FILE: noinit_easygopigo3.py
+# FILE: myeasygopigo3.py
 # - Differs from official easygopigo3.py 
 #   - Does not require pigpiod and does not setup SPI
 #   - Does not reset speed to DEFAULT_SPEED when initialized
 #   - ignores OS ERROR: No SPI Response exceptions
+#   - uses mygopigo3.py for slower SPI max transfer
+
+# SPECIAL - using slower SPI max transfer rate
+
 
 from __future__ import print_function
 from __future__ import division

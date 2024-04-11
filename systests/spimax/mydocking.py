@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 
-# FILE:  docking.py
+# FILE:  mydocking.py
+#
+# SPECIAL - using slower SPI max transfer rate
+
 
 """
    USAGE:
-       import docking
-       from noinit_easygopigo3 import EasyGoPiGo3
+       import mydocking as docking
+       from myeasygopigo3 import EasyGoPiGo3
 
        egpg = EasyGoPiGo3(use_mutex=True, noinit=True)
 

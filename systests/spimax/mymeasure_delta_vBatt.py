@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 
-# FILE:  test_docking.py
+# FILE:  mymeasure_delta_vBatt.py
 
-# Drive GOPIGO3 robot from keyboard with EasyGoPiGo3 API
-# reporting average vBatt, delta average vBatt, max delta average vBatt
+# (Drive GOPIGO3 robot from keyboard with drive_gopigo3_keyboard.py)
+# Reports average vBatt, delta average vBatt, max delta average vBatt
 # (This one uses my custom noinit_easygopigo3.py)
+
+#
+# SPECIAL - using slower SPI max transfer rate
+
 
 import sys
 sys.path.append('/home/pi/GoPi5Go/plib')

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# status.py    Basic Status with battery voltage
+# FILE: mystatus.py    Basic Status with battery voltage
 
 
 #      import status provides printStatus(egpg,ds)
@@ -12,6 +12,10 @@
 #      ./status.py -h (or --help) will print usage
 
 #  Protected from No SPI Response Exceptions - continues
+
+#
+# SPECIAL - using slower SPI max transfer rate
+
 
 """
 ********* GoPi5Go Dave STATUS *****

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 #
-# safetyShutdown.py     SAFELY SHUTDOWN AT BATTERY 
+# FILE: mysafetyShutdown.py     SAFELY SHUTDOWN AT BATTERY 
 #
 #      Loop reading the battery voltage
 #        UNTIL voltage stays below LOW_BATTERY_V 4 times,
@@ -12,6 +12,10 @@
 #      Note: Program prints actual battery voltage which is 0.81v higher than GoPiGo3 reading
 #            due to reverse polarity protection diode, wires, and connections
 #
+
+#
+# SPECIAL - using slower SPI max transfer rate
+
 
 import sys
 import time
