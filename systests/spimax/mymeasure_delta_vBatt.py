@@ -11,7 +11,7 @@ sys.path.append('/home/pi/GoPi5Go/plib')
 # from noinit_easygopigo3 import EasyGoPiGo3
 from myeasygopigo3 import EasyGoPiGo3
 import mybattery as battery
-
+import lifeLog
 
 from time import sleep
 import math
@@ -69,7 +69,9 @@ def main():
     except KeyboardInterrupt:
         pass
     except Exception as e:
-        print(e)
+        str_to_log="Exception:"+type(e).__name__+": "+str(e)
+        print(str_to_log)
+        lifeLog.logger.info(str_to_log)
 
     finally:
         print("\n")
