@@ -8,10 +8,12 @@
 
 import sys
 sys.path.insert(1,"/home/pi/GoPi5Go/plib/")
-# from noinit_easygopigo3 import EasyGoPiGo3
-from easygopigo3 import EasyGoPiGo3
+from noinit_easygopigo3 import EasyGoPiGo3
+# from easygopigo3 import EasyGoPiGo3
 import lifeLog
 import numpy as np
+import time
+import statistics
 
 CHARGING_ADJUST_V = 0.2    # When charging the GoPiGo3 reading is closer to the actual battery voltage
 REV_PROTECT_DIODE = 0.76    # The GoPiGo3 has a reverse polarity protection diode drop of 0.6v to 0.8v (n=2)
@@ -65,13 +67,27 @@ def on_last_leg(egpg):
 	vBatt, _ = vBatt_vReading(egpg)
 	return vBatt < WARNING_LOW_vBatt
 
+def aveBatteryV(egpg):
+    vlist = []
+    for i in range(3):
+        vBatt = vBatt_vReading(egpg)[0]
+        # if vBatt is obviously out of range, read again
+        if (vBatt < 8):
+            time.sleep(0.01)
+            vBatt = vBatt_vReading(egpg)[0]
+        vlist += [vBatt]
+        time.sleep(0.01)  # cannot be faster than 0.005
+    return statistics.mean(vlist)
+
+def pctRemaining(egpg):
+    return(pctRemaining_from_vBatt(aveBatteryV(egpg)))
+
 
 
 def testMain():
-	# egpg = EasyGoPiGo3(use_mutex=True, noinit=True)
-	egpg = EasyGoPiGo3(use_mutex=True)  
+	egpg = EasyGoPiGo3(use_mutex=True, noinit=True)
 	print(voltages_string(egpg))  
 	print("Battery Remaining: {:.0f}% at 10.15v".format(pctRemaining_from_vBatt(10.15)*100 ))
-
+	print("Battery Percent Remaining: {:.0f}%".format(pctRemaining(egpg)*100 ))
 
 if __name__ == '__main__': testMain()
