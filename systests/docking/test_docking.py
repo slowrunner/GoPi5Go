@@ -2,77 +2,81 @@
 
 # FILE:  test_docking.py
 
-# Drive GOPIGO3 robot from keyboard with EasyGoPiGo3 API
-# reporting average vBatt, delta average vBatt, max delta average vBatt
-# (This one uses my custom noinit_easygopigo3.py)
+"""
+   USAGE:  Set NUM_OF_DOCKING_TESTS and then execute ./test_docking.py
+"""
+
 
 import sys
-sys.path.append('/home/pi/GoPi5Go/plib')
+sys.path.insert(1,'/home/pi/GoPi5Go/plib')
 from noinit_easygopigo3 import EasyGoPiGo3
+import docking
+import time
 import battery
+import lifeLog
 
+NUM_OF_DOCKING_TESTS = 10
+UNDOCKED_SLEEP = 10
+DOCKED_SLEEP = 30
 
-from time import sleep
-import math
-import statistics
-
-def aveBatteryV(egpg,vlist):
-    for i in range(3):
-        vBatt = battery.vBatt_vReading(egpg)[0]
-        # if vBatt is obviously out of range, read again
-        if (vBatt < 9):  
-            sleep(0.01)
-            vBatt = battery.vBatt_vReading(egpg)[0]
-        vlist += [vBatt]
-        sleep(0.01)  # cannot be faster than 0.005
-    if ( len(vlist)>9 ):
-       # print("vlist before shortening: ",vlist)
-       vlist = vlist[-9:]
-       # print("vlist after shortening: ",vlist)
-    return statistics.mean(vlist[-3:]),vlist
-
-def delta_ave_vBatt(vlist):
-    # print("vlist ", vlist)
-    # print("vlist[-3:] ",vlist[-3:], "vlist[-9:-6] ", vlist[-9:-6])
-    res = statistics.mean(vlist[-3:]) - statistics.mean(vlist[-9:-6])
-    return res
-
-def ave_vBatt_str(vBatt,deltavBatt,maxDeltavBatt):
-    return "vbatt: {:>5.2f}  d(vBatt): {:>6.3f}  max d(vBatt): {:>6.3f}".format(vBatt,deltavBatt,maxDeltavBatt)
+SPEED_MPS = 0.05  # m/s
+DOCKING_BIAS = -0.01  # m/s  add angular to make drive straight
+DOCKING_DIST_CM = -17.4  # cm
+UNDOCKING_BIAS = 0.03  # m/s  add angular to make drive straight
+UNDOCKING_DIST_CM = 17.0  # cm
+UNDOCK_PCT = 0.90
+DOCK_PCT = 0.10
 
 
 
 
 def main():
-    global egpg
 
     egpg = EasyGoPiGo3(use_mutex=True, noinit=True)
 
-    vlist = []
-    vBatt,vlist = aveBatteryV(egpg,vlist)
-    vBatt,vlist = aveBatteryV(egpg,vlist)
-    vBatt,vlist = aveBatteryV(egpg,vlist)
-    davevBatt = delta_ave_vBatt(vlist)
-    max_d_ave_vBatt = delta_ave_vBatt(vlist)
-
     try:
-        while True:
-            vBatt,vlist = aveBatteryV(egpg,vlist)
-            davevBatt = delta_ave_vBatt(vlist)
-            max_d_ave_vBatt = max(max_d_ave_vBatt,davevBatt)
-            if (max_d_ave_vBatt > 1.0):
-                print("resetting max_d_ave_vBatt: {:.3f}".format(max_d_ave_vBatt))
-                max_d_ave_vBatt = 0
-            print(ave_vBatt_str(vBatt,davevBatt,max_d_ave_vBatt)+"             ",end = "\r")
+        for test in range(NUM_OF_DOCKING_TESTS):
 
+            tnow = time.strftime("%Y-%m-%d %H:%M:%S")
+            print("\n{:s} **** test_docking.main(): TEST {:d} ".format(tnow,test))
+            batt_pct = battery.pctRemaining(egpg)
+            while (batt_pct < UNDOCK_PCT):
+                tnow = time.strftime("%Y-%m-%d %H:%M:%S")
+                print("{:s} Battery at {:.0f}%, Waiting for battery > {:.0f}%".format(tnow,batt_pct*100,UNDOCK_PCT*100),end="\r")
+                time.sleep(6)
+                batt_pct = battery.pctRemaining(egpg)
+            tnow = time.strftime("%Y-%m-%d %H:%M:%S")
+            print("\n{:s} Battery at {:.0f}%, UNDOCKING".format(tnow,batt_pct*100))
+            str_to_log = "Battery at {:.0f}%, undocking".format(batt_pct*100)
+            lifeLog.logger.info(str_to_log)
+            docking.undock(egpg)
+            # time.sleep(UNDOCKED_SLEEP)
+            batt_pct = battery.pctRemaining(egpg)
+            while (batt_pct > DOCK_PCT):
+                tnow = time.strftime("%Y-%m-%d %H:%M:%S")
+                print("{:s} Battery at {:.0f}%, Waiting for battery < {:.0f}%".format(tnow,batt_pct*100,DOCK_PCT*100),end="\r")
+                time.sleep(6)
+                batt_pct = battery.pctRemaining(egpg)
+            tnow = time.strftime("%Y-%m-%d %H:%M:%S")
+            print("\n{:s} Battery at {:.0f}%, DOCKING".format(tnow,batt_pct*100))
+            vBattB4, vReadingB4 = battery.vBatt_vReading(egpg)
+            batt_pctB4 = battery.pctRemaining(egpg)   # battery before docking
+            vBattAveB4 = battery.aveBatteryV(egpg)
+            print("vBattB4: {:.2f}  vBattAveB4: {:.2f}  vReadingB4: {:.2f} volts Remaining: {:.0f}%".format(vBattB4, vBattAveB4, vReadingB4, batt_pctB4*100))
+            docking.dock(egpg)
+            vBattAveDocked = battery.aveBatteryV(egpg)
+            vBattDocked, vReadingDocked = battery.vBatt_vReading(egpg)
+            batt_pctDocked = battery.pctRemaining(egpg)   # battery remaining after docking
+            print("vBattDocked: {:.2f}  vBattAveDocked: {:.2f}  vReadingDocked: {:.2f} volts Remaining: {:.0f}%".format(vBattDocked, vBattAveDocked, vReadingDocked, batt_pctDocked*100))
+            str_to_log = "Battery at {:.1f}v {:.0f}%, Docking: success (assumed)".format(vBattAveB4,batt_pctB4*100)
+            lifeLog.logger.info(str_to_log)
+
+        tnow = time.strftime("%Y-%m-%d %H:%M:%S")
+        print("{:s} test_docking.main(): TEST COMPLETE".format(tnow))
     except KeyboardInterrupt:
-        pass
-    except Exception as e:
-        print(e)
-
-    finally:
-        print("\n")
-
+        egpg.stop()
+        tnow = time.strftime("%Y-%m-%d %H:%M:%S")
+        print("\n{:s} Test Stopped Early".format(tnow))
 
 if __name__ == '__main__':
     main()
