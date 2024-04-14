@@ -15,11 +15,12 @@ Spatial Tiny-yolo example
 ANALYSIS:
  - Returning rgb preview annotated with object boundary and spacial x,y,z data, and full depthmap
    20 FPS Ave RPi3B+ load 4.0 Temp: 65degC (no throttling, soft temp limit flag set)
+   25 FPS Ave RPi5 w/Pi5 Cooler   5min load 1.6  Temp: 58degC 2.4GHz no throttle, no temp limiting
 '''
 
 # Get argument first
 # nnBlobPath = str((Path(__file__).parent / Path('../models/yolo-v4-tiny-tf_openvino_2021.4_6shave.blob')).resolve().absolute())
-nnBlobPath = "/home/pi/GoPi5Go/oak_models/yolo-v4-tiny-tf_openvino_2021.4_6shave.blob"
+nnBlobPath = "/home/pi/GoPi5Go/models/depthai/yolo-v4-tiny-tf_openvino_2021.4_6shave.blob"
 # if 1 < len(sys.argv):
 #    arg = sys.argv[1]
 #    if arg == "yolo3":

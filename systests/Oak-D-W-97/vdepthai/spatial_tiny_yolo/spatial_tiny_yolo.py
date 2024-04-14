@@ -23,7 +23,7 @@ optional arguments:
 '''
 
 # nnBlobPath = str((Path(__file__).parent / Path('../models/yolo-v4-tiny-tf_openvino_2021.4_6shave.blob')).resolve().absolute())
-nnBlobPath = "/home/pi/wali_pi5/oak_models/yolo-v4-tiny-tf_openvino_2021.4_6shave.blob"
+nnBlobPath = "/home/pi/GoPi5Go/models/depthai/yolo-v4-tiny-tf_openvino_2021.4_6shave.blob"
 
 
 # Get argument first

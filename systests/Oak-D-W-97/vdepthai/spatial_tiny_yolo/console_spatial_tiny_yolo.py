@@ -15,12 +15,12 @@ Spatial Tiny-yolo example
 
 USAGE:  console_spatial_tiny_yolo.py
 
-REQ:  model located at /home/pi/wali_pi5/oak_models
+REQ:  model located at /home/pi/GoPi5Go/models/depthai
 
 '''
 
 # nnBlobPath = str((Path(__file__).parent / Path('../models/yolo-v4-tiny-tf_openvino_2021.4_6shave.blob')).resolve().absolute())
-nnBlobPath = "/home/pi/wali_pi5/oak_models/yolo-v4-tiny-tf_openvino_2021.4_6shave.blob"
+nnBlobPath = "/home/pi/GoPi5Go/models/depthai/yolo-v4-tiny-tf_openvino_2021.4_6shave.blob"
 
 if not Path(nnBlobPath).exists():
     raise FileNotFoundError('Required YOLO v4 blob not found')

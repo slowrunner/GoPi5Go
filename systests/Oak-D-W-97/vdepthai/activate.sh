@@ -1,7 +1,7 @@
 
 
-# USAGE:  source activate.sh
+# USAGE:  source activate.sh   !!! cannot use ./activate.sh  !!!
 
 echo -e "\n*** Executing 'source bin/activate' \n"
-source bin/activate
+. bin/activate
 
