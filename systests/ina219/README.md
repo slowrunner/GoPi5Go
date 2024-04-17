@@ -42,3 +42,8 @@ i2cdetect -y 1
 ``` 
 
 For complete info, see [gopigo3-pi5-ina219/README.md](https://github.com/slowrunner/gopigo3-pi5-ina219/blob/main/README.md)
+
+Specifications (Adafruit INA219 High Side DC Current Sensor Breakout - 2018 era version):
+* 0.1 ohm 1% 2W current sense resistor
+* Up to +26V target voltage
+* Up to ±3.2A current measurement, with ±0.8mA resolution
