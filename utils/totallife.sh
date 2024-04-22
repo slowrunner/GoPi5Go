@@ -5,12 +5,19 @@
 # requires bc  (sudo apt-get install bc)
 #
 # Counted Keys:
-#   Playtimes:           " Docking: success "
+#   Playtimes:           ": success "
 #   Sessions:            "- boot -"              ( "\- boot \-" search string )
 #   Safety shutdowns:    "SAFETY SHUTDOWN"
+#
 # Summed Keys:
 #   Undocked for ... after __
 #   Docking ... after __
+#   execution:
+#   nap for
+#   h playtime
+#   h charging
+#   moved:          (odometer.log)
+
 declare -i newBatteryAtCycle=416
 
 echo "(Cleaning life.log first)"
