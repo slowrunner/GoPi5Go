@@ -45,9 +45,9 @@ def main():
     # ina.configure(ina.RANGE_16V)
 
     dtStart = dt.datetime.now()
-    print("dtStart:{}".format(dtStart.strftime("%Y-%m-%d %H:%M:%S")))
-    dtLastStartCharging = dtStart
-    dtLastStartPlaytime = dtStart
+    # print("dtStart:{}".format(dtStart.strftime("%Y-%m-%d %H:%M:%S")))
+    # dtLastStartCharging = dtStart
+    # dtLastStartPlaytime = dtStart
 
     try:
         for test in range(NUM_OF_DOCKING_TESTS):
@@ -70,17 +70,16 @@ def main():
             print("\n")
             tnow = time.strftime("%Y-%m-%d %H:%M:%S")
             dtLastStartPlaytime = dt.datetime.now()
-            print("dtLastStartPlayttime:{}".format(dtLastStartPlaytime.strftime("%Y-%m-%d %H:%M:%S")))
-            print("dtLastStartCharging:{}".format(dtLastStartCharging.strftime("%Y-%m-%d %H:%M:%S")))
+            # print("dtLastStartPlayttime:{}".format(dtLastStartPlaytime.strftime("%Y-%m-%d %H:%M:%S")))
+            # print("dtLastStartCharging:{}".format(dtLastStartCharging.strftime("%Y-%m-%d %H:%M:%S")))
             # print("\n{:s} Battery at {:.0f}%, UNDOCKING".format(tnow,batt_pct*100))
             # charging_current = -1 * ina.current()  # mA
             charging_voltage = ina.voltage()
             lastChargeTimeInSeconds = (dtLastStartPlaytime - dtLastStartCharging).total_seconds()
             lastChargeTimeInDays = divmod(lastChargeTimeInSeconds, 86400)
             lastChargeTimeHours = round( (lastChargeTimeInDays[1] / 3600.0),1)
-            print("lastChargeTimeInSeconds: {:.0f} lastChargeTimeInDays: {} lastChargeTimeHours: {:.1f}".format(lastChargeTimeInSeconds, lastChargeTimeInDays, lastChargeTimeHours))
+            # print("lastChargeTimeInSeconds: {:.0f} lastChargeTimeInDays: {} lastChargeTimeHours: {:.1f}".format(lastChargeTimeInSeconds, lastChargeTimeInDays, lastChargeTimeHours))
             str_to_log = "---- Undocking at Charge Current {:.0f} mA {:.2f}v after {:.1f} h charging".format(UNDOCK_CHARGING_CURRENT_mA,charging_voltage,lastChargeTimeHours)
-            # str_to_log = "Battery at {:.0f}%, undocking".format(batt_pct*100)
             print("\n{:s} {:s} ".format(tnow,str_to_log))
             lifeLog.logger.info(str_to_log)
             docking.undock(egpg)
@@ -88,10 +87,8 @@ def main():
             daveDataJson.saveData('lastDismountTime', tnow)
             daveDataJson.saveData('dockingState',"undocked")
 
-            # time.sleep(UNDOCKED_SLEEP)
             batt_pct = battery.pctRemaining(egpg)
             batt_voltage = ina.voltage()
-            # while (batt_pct > DOCK_PCT):
             while (batt_voltage > DOCK_VOLTAGE):
                 tnow = time.strftime("%Y-%m-%d %H:%M:%S")
                 print("{:s} Battery at {:.0f}% {:.2f}v, Waiting for battery < {:.2f}v".format(tnow,batt_pct*100,batt_voltage,DOCK_VOLTAGE),end="\r")
@@ -100,7 +97,7 @@ def main():
                 batt_voltage = ina.voltage()
             print("\n")
             tnow = time.strftime("%Y-%m-%d %H:%M:%S")
-            print("\n{:s} Battery at {:.0f}% {:.2f}v, DOCKING".format(tnow,batt_pct*100,batt_voltage))
+            # print("\n{:s} Battery at {:.0f}% {:.2f}v, DOCKING".format(tnow,batt_pct*100,batt_voltage))
             vBattB4, vReadingB4 = battery.vBatt_vReading(egpg)
             batt_pctB4 = battery.pctRemaining(egpg)   # battery before docking
             vBattAveB4 = battery.aveBatteryV(egpg)
@@ -109,32 +106,31 @@ def main():
             vBattAveDocked = battery.aveBatteryV(egpg)
             vBattDocked, vReadingDocked = battery.vBatt_vReading(egpg)
             batt_pctDocked = battery.pctRemaining(egpg)   # battery remaining after docking
-            print("vBattDocked: {:.2f}  vBattAveDocked: {:.2f}  vReadingDocked: {:.2f} volts Remaining: {:.0f}%".format(vBattDocked, vBattAveDocked, vReadingDocked, batt_pctDocked*100))
+            # print("vBattDocked: {:.2f}  vBattAveDocked: {:.2f}  vReadingDocked: {:.2f} volts Remaining: {:.0f}%".format(vBattDocked, vBattAveDocked, vReadingDocked, batt_pctDocked*100))
             dvBatt = vBattAveDocked - vBattAveB4
             if (dvBatt > DOCKING_SUCCESS_dvBatt):
                 tnow = time.strftime("%Y-%m-%d %H:%M:%S")
-                # str_to_log = "Battery at {:.1f}v {:.0f}%, Docking: success".format(vBattAveB4,batt_pctB4*100)
                 docking_success = True
                 dtLastStartCharging = dt.datetime.now()
-                print("dtLastStartPlayttime:{}".format(dtLastStartPlaytime.strftime("%Y-%m-%d %H:%M:%S")))
-                print("dtLastStartCharging:{}".format(dtLastStartCharging.strftime("%Y-%m-%d %H:%M:%S")))
+                # print("dtLastStartPlayttime:{}".format(dtLastStartPlaytime.strftime("%Y-%m-%d %H:%M:%S")))
+                # print("dtLastStartCharging:{}".format(dtLastStartCharging.strftime("%Y-%m-%d %H:%M:%S")))
                 try:
                     chargeCycles = int(daveDataJson.getData('chargeCycles'))
                     chargeCycles += 1
                 except:
                     chargeCycles = 0
 
-                if (daveDataJson.saveData('chargeCycles', chargeCycles) == True):
-                    print('   Saved chargeCycles: {}'.format(chargeCycles))
-                else:
-                    print("   saveData('chargeCycles') failed")
+                # if (daveDataJson.saveData('chargeCycles', chargeCycles) == True):
+                #     print('   Saved chargeCycles: {}'.format(chargeCycles))
+                # else:
+                #     print("   saveData('chargeCycles') failed")
 
                 daveDataJson.saveData('lastDockingTime', tnow)
                 daveDataJson.saveData('dockingState',"docked")
                 lastPlaytimeInSeconds = (dtLastStartCharging - dtLastStartPlaytime).total_seconds()
                 lastPlaytimeDays = divmod(lastPlaytimeInSeconds, 86400)
                 lastPlaytimeHours = round( (lastPlaytimeDays[1] / 3600.0),1)
-                print("lastPlaytimeInSeconds: {:.0f} lastPlaytimeDays: {} lastPlaytimeHours: {:.1f}".format(lastChargeTimeInSeconds, lastChargeTimeInDays, lastChargeTimeHours))
+                # print("lastPlaytimeInSeconds: {:.0f} lastPlaytimeDays: {} lastPlaytimeHours: {:.1f}".format(lastChargeTimeInSeconds, lastChargeTimeInDays, lastChargeTimeHours))
 
                 str_to_log = "---- Docking {} : success at {:.0f}% {:.1f}v after {:.1f} h playtime".format(chargeCycles,DOCK_PCT,vBattAveB4,lastPlaytimeHours)
             else:
