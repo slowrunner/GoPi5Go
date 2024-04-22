@@ -9,6 +9,8 @@
 #   Sessions:            "- boot -"              ( "\- boot \-" search string )
 #   Safety shutdowns:    "SAFETY SHUTDOWN"
 
+declare -i newBatteryAtCycle=416
+
 echo "(Cleaning life.log first)"
 /home/pi/GoPi5Go/plib/cleanlifelog.py
 echo " "
@@ -19,11 +21,19 @@ ofn='/home/pi/GoPi5Go/logs/odometer.log'
 totalAwake=`(awk -F'execution:' '{sum+=$2}END{print sum;}' $fn)`
 totalNaps=`(awk -F'nap for' '{sum+=$2}END{print sum;}' $fn)`
 totalLife=`(echo "scale=1; ($totalAwake + $totalNaps)" | bc)`
+lastDockingStr=`(grep "h playtime" $fn | tail -1)`
+totalDockings=`(awk -F"Docking " '{sub(/ .*/,"",$2);print $2}' <<< $lastDockingStr)`
+currentBattCycles=`(echo "scale=1; $totalDockings - $newBatteryAtCycle" | bc)`
+
 echo "*** GoPi5Go Dave TOTAL LIFE STATISTICS ***"
 echo "Total Awake:  " $totalAwake " hrs"
 echo "Total Naps:    " $totalNaps " hrs"
 echo "Total Life:   " $totalLife " hrs (since Mar 17, 2024)"
-echo "Playtimes (Undocked-Docked):" `(grep -c " Docking: success " $fn)`
+echo "GoPi5Go-Dave Playtimes (Undocked-Docked):" `(grep -c ": success" $fn)`
+echo "Total Dockings: " $totalDockings
+echo "New Batteries At Cycle:" $newBatteryAtCycle
+echo "Battery At Cycle: " $currentBattCycles
+
 # last5playtimes=`(grep " hrs playtime " $fn | tail -5 | awk -F" after "  '{sum+=$2}END{print sum;}' )`
 # last5avePlaytime=`(echo "scale=1; $last5playtimes / 5" | bc)`
 # echo "Average playtime (last five)" $last5avePlaytime "hrs "
