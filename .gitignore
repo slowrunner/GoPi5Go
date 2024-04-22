@@ -58,3 +58,10 @@ CMakeCache.txt
 install_manifest.txt
 *.so
 Makefile
+systests/ina219/gopigo3-pi5-ina219/
+systests/Oak-D-W-97/vdepthai/depthai-python/
+systests/Oak-D-W-97/vdepthai/depthai/
+systests/Oak-D-W-97/vdepthai/lib64
+odometer.log
+daveData.json
+models/depthai/yolo-v4-tiny-tf_openvino_2021.4_6shave.blob
