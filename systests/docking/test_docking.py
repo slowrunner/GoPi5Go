@@ -4,6 +4,18 @@
 
 """
    USAGE:  Set NUM_OF_DOCKING_TESTS and then execute ./test_docking.py
+
+   PROCESS:  Monitor INA219 current and voltage sensor
+             Undock when charging current falls below cutoff target
+             Dock when voltage reaches 9.85v
+
+   RESULTS:
+
+       time - charge - cutoff - estimated more playtime at 6.5W average load
+       1.5h - 23.3Wh - 643mA =  (3h 6m)
+       2.0h - 26.1Wh - 331mA      +21m
+       2.5h - 27.5Wh - 176mA      +11m (xtra hour charge = 32m xtra playtime)
+       3.5h - 28.5Wh - 20mA       + 8m (xtra hour charge =  8m xtra playtime)
 """
 
 
@@ -28,7 +40,7 @@ DOCKING_BIAS = -0.01  # m/s  add angular to make drive straight
 DOCKING_DIST_CM = -17.4  # cm
 UNDOCKING_BIAS = 0.03  # m/s  add angular to make drive straight
 UNDOCKING_DIST_CM = 17.0  # cm
-UNDOCK_CHARGING_CURRENT_mA = 20
+UNDOCK_CHARGING_CURRENT_mA = 175
 DOCK_PCT = 0.04
 DOCK_VOLTAGE = 9.85
 DOCKING_SUCCESS_dvBatt = 0.1  # delta average battery voltage (rise) after successful docking
