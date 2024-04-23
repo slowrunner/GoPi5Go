@@ -46,8 +46,8 @@ def main():
 
     dtStart = dt.datetime.now()
     # print("dtStart:{}".format(dtStart.strftime("%Y-%m-%d %H:%M:%S")))
-    # dtLastStartCharging = dtStart
-    # dtLastStartPlaytime = dtStart
+    dtLastStartCharging = dtStart
+    dtLastStartPlaytime = dtStart
 
     try:
         for test in range(NUM_OF_DOCKING_TESTS):
@@ -84,8 +84,11 @@ def main():
             lifeLog.logger.info(str_to_log)
             docking.undock(egpg)
 
+            daveDataJson.saveData('lastDismount', str_to_log)
+            daveDataJson.saveData('lastRechargeDuration', lastChargeTimeHours)
             daveDataJson.saveData('lastDismountTime', tnow)
             daveDataJson.saveData('dockingState',"undocked")
+            daveDataJson.saveData('chargingState',"discharging")
 
             batt_pct = battery.pctRemaining(egpg)
             batt_voltage = ina.voltage()
@@ -127,16 +130,22 @@ def main():
 
                 daveDataJson.saveData('lastDockingTime', tnow)
                 daveDataJson.saveData('dockingState',"docked")
+                daveDataJson.saveData('chargingState',"charging")
+
                 lastPlaytimeInSeconds = (dtLastStartCharging - dtLastStartPlaytime).total_seconds()
                 lastPlaytimeDays = divmod(lastPlaytimeInSeconds, 86400)
                 lastPlaytimeHours = round( (lastPlaytimeDays[1] / 3600.0),1)
                 # print("lastPlaytimeInSeconds: {:.0f} lastPlaytimeDays: {} lastPlaytimeHours: {:.1f}".format(lastChargeTimeInSeconds, lastChargeTimeInDays, lastChargeTimeHours))
 
                 str_to_log = "---- Docking {} : success at {:.0f}% {:.1f}v after {:.1f} h playtime".format(chargeCycles,DOCK_PCT,vBattAveB4,lastPlaytimeHours)
+                daveDataJson.saveData('lastPlaytimeDuration', lastPlaytimeHours)
+
             else:
                 str_to_log = "Battery at {:.1f}v {:.0f}%, Docking: failure".format(vBattAveB4,batt_pctB4*100)
                 docking_success = False
             lifeLog.logger.info(str_to_log)
+            daveDataJson.saveData('lastDocking', str_to_log)
+
             if (docking_success == False):
                 daveDataJson.saveData('dockingState',"dockingfailure")
                 tnow = time.strftime("%Y-%m-%d %H:%M:%S")

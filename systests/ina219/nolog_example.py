@@ -9,7 +9,7 @@ MAX_EXPECTED_AMPS = 0.2
 
 def read():
     ina = INA219(SHUNT_OHMS, MAX_EXPECTED_AMPS, log_level=None)
-    ina.configure(ina.RANGE_16V, ina.GAIN_AUTO)
+    ina.configure(ina.RANGE_16V, ina.GAIN_AUTO,bus_adc=ina.ADC_128SAMP,shunt_adc=ina.ADC_128SAMP )
 
     print("Bus Voltage    : %.3f V" % ina.voltage())
     print("Bus Current    : %.3f mA" % ina.current())

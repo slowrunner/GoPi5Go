@@ -18,7 +18,7 @@ import time
 import statistics
 import daveDataJson
 import ina219
-
+from threading import Thread
 
 CHARGING_ADJUST_V = 0.2    # When charging the GoPiGo3 reading is closer to the actual battery voltage
 REV_PROTECT_DIODE = 0.7    # The GoPiGo3 has a reverse polarity protection diode drop of 0.6v to 0.8v (n=2)
@@ -26,6 +26,7 @@ REV_PROTECT_DIODE = 0.7    # The GoPiGo3 has a reverse polarity protection diode
 SAFETY_SHUTDOWN_vBatt = 9.75   # Battery Discharge Protection Circuit allows down to 8.2v or so (9.75 leaves 5-12m reserve)
 SAFETY_SHUTDOWN_vReading = SAFETY_SHUTDOWN_vBatt - REV_PROTECT_DIODE   # 8.5v EasyGoPiGo3.volt() reading
 WARNING_LOW_vBatt = 10.0       # Give (~15 minutes) Advance Warning before safety shutdown
+BATTERY_CLASS_RATE_PER_HOUR = 360     # update once every 10 seconds
 
 # egpg.volt() Data points
 # 2024-4-2 Data  4h19m 12.5v to 8.91v at cutoff - To Cutoff: 9.84v = 5m, 10.15v = 5% 13m, 10.29v = 10% 26m, 10.32v = 12% 20m
@@ -86,22 +87,79 @@ def pctRemaining(egpg):
     return(pctRemaining_from_vBatt(aveBatteryV(egpg)))
 
 
-class Battery:
+class Battery(Thread):
     """Class containing TalentCell YB1203000 parameters and methods"""
     ina = None   # INA219 class instance
     SHUNT_OHMS = 0.1
     MAX_EXPECTED_AMPS = 2.0
 
-    def __init__(self):
+    power_meter = 0
+    measurement_count = 0
+    mAh_meter = 0
+    rate_per_hour = BATTERY_CLASS_RATE_PER_HOUR
+    charging = False
+    last_charging = False
+    log_to_console = False
+
+
+    def __init__(self,log_to_console = False):
+        super(Battery, self).__init__()       # init Battery thread
+        self.daemon = True
+        self.cancelled = False
         self.ina = ina219.INA219(self.SHUNT_OHMS, self.MAX_EXPECTED_AMPS,log_level=None)
         self.ina.configure(self.ina.RANGE_16V, bus_adc=self.ina.ADC_128SAMP,shunt_adc=self.ina.ADC_128SAMP)
+        if (self.ave_current() < 0):
+            self.charging = True
+        else:
+            self.charging = False
+        self.last_charging = self.charging
+        self.log_to_console = log_to_console
+
+    def run(self):
+       """Overloaded Thread.run, runs update method once every second"""
+       while not self.cancelled:
+           time.sleep(int(3600/self.rate_per_hour))
+           self.updateBattery()
+
+    def cancel(self):
+        """End the battery update thread"""
+        self.cancelled = True
+
+    def updateBattery(self):
+        """Update the battery power statistics"""
+        current_now = self.ave_current()
+        voltage_now = self.ave_voltage()
+        power_now = self.ave_power()
+        if (current_now < 0):
+            self.charging = True
+        else:
+            self.charging = False
+
+        tnow = time.strftime("%Y-%m-%d %H:%M:%S")
+        if not (self.charging == self.last_charging):
+            if self.log_to_console:
+                if (self.last_charging == True):
+                    print("{} Charge Complete: {:.0f} mAh  {:.1f}Wh \n".format(tnow,self.mAh_meter,self.power_meter))
+                else:
+                    print("{} Playtime Complete: {:.0f} mAh  {:.1f}Wh \n".format(tnow,self.mAh_meter,self.power_meter))
+            self.mAh_meter = 0
+            self.power_meter = 0
+            self.last_charging = self.charging
+        self.mAh_meter += current_now / self.rate_per_hour
+        self.power_meter += power_now / self.rate_per_hour
+
+        if self.log_to_console:
+            print("{} Reading: {:.2f} V  {:.3f} A  {:.2f} W  {:.0f} mAh  {:.1f}Wh     ".format(
+                  tnow,voltage_now, current_now/1000.0, power_now,self.mAh_meter,self.power_meter))
+
+
 
     def ave_voltage(self):
         vlist = []
         for i in range(3):
             vBatt = self.ina.voltage()
             vlist += [vBatt]
-            time.sleep(0.01)  # cannot be faster than 0.005
+            time.sleep(0.02)  # cannot be faster than 0.02
         return statistics.mean(vlist)
 
     def ave_current(self):
@@ -109,7 +167,7 @@ class Battery:
         for i in range(3):
             cBatt = self.ina.current()
             clist += [cBatt]
-            time.sleep(0.01)  # cannot be faster than 0.005
+            time.sleep(0.02)  # cannot be faster than 0.02
         return statistics.mean(clist)
 
     def ave_power(self):
@@ -117,7 +175,7 @@ class Battery:
         for i in range(3):
             pBatt = self.ina.power()
             plist += [pBatt]
-            time.sleep(0.01)  # cannot be faster than 0.005
+            time.sleep(0.02)  # cannot be faster than 0.02
         return statistics.mean(plist)/1000.0
 
     def pctRemaining(self):
@@ -156,13 +214,25 @@ class Battery:
 
 
 def testMain():
-	egpg = EasyGoPiGo3(use_mutex=True, noinit=True)
-	print(voltages_string(egpg))  
-	print("Battery Remaining: {:.0f}% at 10.0v".format(pctRemaining_from_vBatt(10.0)*100 ))
-	print("Battery Remaining: {:.0f}% at 9.75v".format(pctRemaining_from_vBatt(9.75)*100 ))
-	print("Battery Percent Remaining now: {:.0f}%".format(pctRemaining(egpg)*100 ))
+    egpg = EasyGoPiGo3(use_mutex=True, noinit=True)
+    print(voltages_string(egpg))  
+    print("Battery Remaining: {:.0f}% at 10.0v".format(pctRemaining_from_vBatt(10.0)*100 ))
+    print("Battery Remaining: {:.0f}% at 9.75v".format(pctRemaining_from_vBatt(9.75)*100 ))
+    print("Battery Percent Remaining now: {:.0f}%".format(pctRemaining(egpg)*100 ))
 
-	batt = Battery()
-	print(batt.status_string())
+    batt = Battery(log_to_console=True)
+    batt.start()
+    print(batt.status_string())
+    try:
+        time.sleep(60)
+    except KeyboardInterrupt:
+        print("\n")
+        pass
+    finally:
+        print("Closing Battery Thread")
+        batt.cancel()
+        time.sleep(1)
+    print(batt.status_string())
+    print("Done")
 
 if __name__ == '__main__': testMain()
