@@ -243,4 +243,13 @@ def testMain():
     print(batt.status_string())
     print("Done")
 
-if __name__ == '__main__': testMain()
+
+def main():
+    batt = Battery(log_to_console=True)
+    batt.start()
+    print(batt.status_string())
+    batt.cancel()
+
+
+# if __name__ == '__main__': testMain()
+if __name__ == '__main__': main()
