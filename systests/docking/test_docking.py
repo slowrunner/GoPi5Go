@@ -42,7 +42,7 @@ UNDOCKING_BIAS = 0.03  # m/s  add angular to make drive straight
 UNDOCKING_DIST_CM = 17.0  # cm
 UNDOCK_CHARGING_CURRENT_mA = 175
 DOCK_PCT = 0.04
-DOCK_VOLTAGE = 9.85
+DOCK_VOLTAGE = 9.85  
 DOCKING_SUCCESS_dvBatt = 0.1  # delta average battery voltage (rise) after successful docking
 
 SHUNT_OHMS = 0.1
@@ -68,7 +68,7 @@ def main():
             print("\n{:s} **** test_docking.main(): TEST {:d} ".format(tnow,test))
             batt_pct = battery.pctRemaining(egpg)
             charging_current = -1 * ina.current()  # mA
-            charging_voltage = ina.voltage()
+            charging_voltage = ina.supply_voltage()
             # while (batt_pct < UNDOCK_PCT):
             while (charging_current > UNDOCK_CHARGING_CURRENT_mA):
                 tnow = time.strftime("%Y-%m-%d %H:%M:%S")
@@ -77,7 +77,7 @@ def main():
                 time.sleep(6)
                 # batt_pct = battery.pctRemaining(egpg)
                 charging_current = -1 * ina.current()  # mA
-                charging_voltage = ina.voltage()
+                charging_voltage = ina.supply_voltage()
 
             print("\n")
             tnow = time.strftime("%Y-%m-%d %H:%M:%S")
@@ -86,7 +86,7 @@ def main():
             # print("dtLastStartCharging:{}".format(dtLastStartCharging.strftime("%Y-%m-%d %H:%M:%S")))
             # print("\n{:s} Battery at {:.0f}%, UNDOCKING".format(tnow,batt_pct*100))
             # charging_current = -1 * ina.current()  # mA
-            charging_voltage = ina.voltage()
+            charging_voltage = ina.supply_voltage()
             lastChargeTimeInSeconds = (dtLastStartPlaytime - dtLastStartCharging).total_seconds()
             lastChargeTimeInDays = divmod(lastChargeTimeInSeconds, 86400)
             lastChargeTimeHours = round( (lastChargeTimeInDays[1] / 3600.0),1)
@@ -103,13 +103,13 @@ def main():
             daveDataJson.saveData('chargingState',"discharging")
 
             batt_pct = battery.pctRemaining(egpg)
-            batt_voltage = ina.voltage()
+            batt_voltage = ina.supply_voltage()
             while (batt_voltage > DOCK_VOLTAGE):
                 tnow = time.strftime("%Y-%m-%d %H:%M:%S")
                 print("{:s} Battery at {:.0f}% {:.2f}v, Waiting for battery < {:.2f}v".format(tnow,batt_pct*100,batt_voltage,DOCK_VOLTAGE),end="\r")
                 time.sleep(6)
                 batt_pct = battery.pctRemaining(egpg)
-                batt_voltage = ina.voltage()
+                batt_voltage = ina.supply_voltage()
             print("\n")
             tnow = time.strftime("%Y-%m-%d %H:%M:%S")
             # print("\n{:s} Battery at {:.0f}% {:.2f}v, DOCKING".format(tnow,batt_pct*100,batt_voltage))
@@ -139,7 +139,8 @@ def main():
                 #     print('   Saved chargeCycles: {}'.format(chargeCycles))
                 # else:
                 #     print("   saveData('chargeCycles') failed")
-
+              
+                daveDataJson.saveData('chargeCycles', chargeCycles)
                 daveDataJson.saveData('lastDockingTime', tnow)
                 daveDataJson.saveData('dockingState',"docked")
                 daveDataJson.saveData('chargingState',"charging")
