@@ -48,6 +48,7 @@ MAX_EXPECTED_AMPS = 2.0
 
 
 def do_charging(ina,egpg):
+            global dtLastStartPlaytime, dtLastStartCharging
             batt_pct = battery.pctRemaining(egpg)
             charging_current = -1 * ina.current()  # mA
             charging_voltage = ina.supply_voltage()
@@ -79,6 +80,7 @@ def do_charging(ina,egpg):
 
 
 def do_playtime(ina,egpg):
+            global dtLastStartPlaytime, dtLastStartCharging
             batt_pct = battery.pctRemaining(egpg)
             batt_voltage = ina.supply_voltage()
             while (batt_voltage > DOCK_VOLTAGE):
