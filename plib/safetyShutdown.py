@@ -84,7 +84,7 @@ def main():
                     last_leg_count = 0
                     warning_led_on = False
                     leds.wifi_blinker_off(egpg)
-                    os.system("/home/pi/GoPi5Go/utils/logMaintenance.py 'safetyShutdown: voltage warning blinker deactivated '")
+                    # os.system("/home/pi/GoPi5Go/utils/logMaintenance.py 'safetyShutdown: voltage warning blinker deactivated '")
         if (warning_led_on == False) and battery.on_last_leg(egpg):
             last_leg_count += 1
             if last_leg_count > 4:

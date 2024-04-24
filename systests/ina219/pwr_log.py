@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
 
+# FILE: pwr_log.py
+
+# OPERATION:  prints date/time stamped supply_voltage, current, load, and cumulative capacity in mAh and Wh
+#             prints charge / playtime complete summary when current changes sign
+#
+# NOTE: supply voltage measured to be around 50mV less than measured by AstroAI DT132A meter
+#       (version of this program prior to 2024-04-23 used bus voltage which was around 120mV less than meter measurement)
+
 import ina219
 from ina219 import DeviceRangeError
 import time
@@ -25,7 +33,7 @@ rate_per_hour = 20
 def ave_voltage():
         vlist = []
         for i in range(3):
-            vBatt = ina.voltage()
+            vBatt = ina.supply_voltage()
             vlist += [vBatt]
             time.sleep(0.01)  # cannot be faster than 0.005
         return statistics.mean(vlist)
