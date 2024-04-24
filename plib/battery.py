@@ -86,6 +86,14 @@ def aveBatteryV(egpg):
 def pctRemaining(egpg):
     return(pctRemaining_from_vBatt(aveBatteryV(egpg)))
 
+def charging(ina):
+        clist = []
+        for i in range(3):
+            cBatt = ina.current()
+            clist += [cBatt]
+            time.sleep(0.02)  # cannot be faster than 0.02
+        current = statistics.mean(clist)
+        return (current < 0)
 
 class Battery(Thread):
     """Class containing TalentCell YB1203000 parameters and methods"""
