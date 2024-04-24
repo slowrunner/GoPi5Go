@@ -140,6 +140,7 @@ def do_playtime(ina,egpg):
 
 
 def main():
+    global dtLastStartPlaytime, dtLastStartCharging
 
     egpg = EasyGoPiGo3(use_mutex=True, noinit=True)
     ina = ina219.INA219(SHUNT_OHMS,MAX_EXPECTED_AMPS, log_level=None)
