@@ -46,21 +46,25 @@ DOCKING_SUCCESS_dvBatt = 0.1  # delta average battery voltage (rise) after succe
 SHUNT_OHMS = 0.1
 MAX_EXPECTED_AMPS = 2.0
 
+DT_FORMAT = "%Y-%m-%d %H:%M:%S"
+
 
 def do_charging(ina,egpg):
-            global dtLastStartPlaytime, dtLastStartCharging
+
+            dtLastStartCharging = dt.datetime.strptime(daveDataJson.getData("lastDockingTime"),DT_FORMAT)
+            dtLastStartPlaytime = dt.datetime.strptime(daveDataJson.getData("lastDismountTime"),DT_FORMAT)
             batt_pct = battery.pctRemaining(egpg)
             charging_current = -1 * ina.current()  # mA
             charging_voltage = ina.supply_voltage()
             while (charging_current > UNDOCK_CHARGING_CURRENT_mA):
-                tnow = time.strftime("%Y-%m-%d %H:%M:%S")
+                tnow = time.strftime(DT_FORMAT)
                 print("{:s} Charging at {:.2f}v {:.0f}mA, Waiting for current < {:.0f}mA      ".format(tnow,charging_voltage,charging_current,UNDOCK_CHARGING_CURRENT_mA),end="\r")
                 time.sleep(6)
                 charging_current = -1 * ina.current()  # mA
                 charging_voltage = ina.supply_voltage()
 
             print("\n")
-            tnow = time.strftime("%Y-%m-%d %H:%M:%S")
+            tnow = time.strftime(DT_FORMAT)
             dtLastStartPlaytime = dt.datetime.now()
             charging_voltage = ina.supply_voltage()
             lastChargeTimeInSeconds = (dtLastStartPlaytime - dtLastStartCharging).total_seconds()
@@ -80,17 +84,19 @@ def do_charging(ina,egpg):
 
 
 def do_playtime(ina,egpg):
-            global dtLastStartPlaytime, dtLastStartCharging
+
+            dtLastStartCharging = dt.datetime.strptime(daveDataJson.getData("lastDockingTime"),DT_FORMAT)
+            dtLastStartPlaytime = dt.datetime.strptime(daveDataJson.getData("lastDismountTime"),DT_FORMAT)
             batt_pct = battery.pctRemaining(egpg)
             batt_voltage = ina.supply_voltage()
             while (batt_voltage > DOCK_VOLTAGE):
-                tnow = time.strftime("%Y-%m-%d %H:%M:%S")
+                tnow = time.strftime(DT_FORMAT)
                 print("{:s} Battery at {:.0f}% {:.2f}v, Waiting for battery < {:.2f}v".format(tnow,batt_pct*100,batt_voltage,DOCK_VOLTAGE),end="\r")
                 time.sleep(6)
                 batt_pct = battery.pctRemaining(egpg)
                 batt_voltage = ina.supply_voltage()
             print("\n")
-            tnow = time.strftime("%Y-%m-%d %H:%M:%S")
+            tnow = time.strftime(DT_FORMAT)
             vBattB4, vReadingB4 = battery.vBatt_vReading(egpg)
             batt_pctB4 = battery.pctRemaining(egpg)   # battery before docking
             vBattAveB4 = battery.aveBatteryV(egpg)
@@ -102,7 +108,7 @@ def do_playtime(ina,egpg):
             # print("vBattDocked: {:.2f}  vBattAveDocked: {:.2f}  vReadingDocked: {:.2f} volts Remaining: {:.0f}%".format(vBattDocked, vBattAveDocked, vReadingDocked, batt_pctDocked*100))
             dvBatt = vBattAveDocked - vBattAveB4
             if (dvBatt > DOCKING_SUCCESS_dvBatt):
-                tnow = time.strftime("%Y-%m-%d %H:%M:%S")
+                tnow = time.strftime(DT_FORMAT)
                 docking_success = True
                 dtLastStartCharging = dt.datetime.now()
                 try:
@@ -132,7 +138,7 @@ def do_playtime(ina,egpg):
 
             if (docking_success == False):
                 daveDataJson.saveData('dockingState',"dockingfailure")
-                tnow = time.strftime("%Y-%m-%d %H:%M:%S")
+                tnow = time.strftime(DT_FORMAT)
                 print("\n{:s} Docking Failure (dvBatt: {:.2f}v) -  Test Stopped Early".format(tnow,dvBatt))
                 egpg.stop()
                 sys.exit(1)
@@ -140,30 +146,30 @@ def do_playtime(ina,egpg):
 
 
 def main():
-    global dtLastStartPlaytime, dtLastStartCharging
 
     egpg = EasyGoPiGo3(use_mutex=True, noinit=True)
     ina = ina219.INA219(SHUNT_OHMS,MAX_EXPECTED_AMPS, log_level=None)
     ina.configure(ina.RANGE_16V,bus_adc=ina.ADC_128SAMP,shunt_adc=ina.ADC_128SAMP)
 
-    dtStart = dt.datetime.now()
-    dtLastStartCharging = dtStart
-    dtLastStartPlaytime = dtStart
-
     try:
         for test in range(NUM_OF_DOCKING_TESTS):
-            tnow = time.strftime("%Y-%m-%d %H:%M:%S")
+            tnow = time.strftime(DT_FORMAT)
             print("\n{:s} **** test_docking.main(): TEST {:d} ".format(tnow,test))
             if battery.charging(ina):
                 do_charging(ina,egpg)
             else:
                 do_playtime(ina,egpg)
 
-        tnow = time.strftime("%Y-%m-%d %H:%M:%S")
+            if battery.charging(ina):
+                do_charging(ina,egpg)
+            else:
+                do_playtime(ina,egpg)
+
+        tnow = time.strftime(DT_FORMAT)
         print("{:s} test_docking.main(): TEST COMPLETE".format(tnow))
     except KeyboardInterrupt:
         egpg.stop()
-        tnow = time.strftime("%Y-%m-%d %H:%M:%S")
+        tnow = time.strftime(DT_FORMAT)
         print("\n{:s} Test Stopped Early".format(tnow))
 
 if __name__ == '__main__':
