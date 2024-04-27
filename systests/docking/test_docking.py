@@ -23,10 +23,12 @@ import sys
 sys.path.insert(1,'/home/pi/GoPi5Go/plib')
 from noinit_easygopigo3 import EasyGoPiGo3
 import docking
-import time
 import battery
 import lifeLog
-import  daveDataJson
+import daveDataJson
+import speak
+
+import time
 import ina219
 import logging
 import datetime as dt
@@ -74,6 +76,7 @@ def do_charging(ina,egpg):
             str_to_log = "---- Undocking at Charge Current {:.0f} mA {:.2f}v after {:.1f} h charging".format(UNDOCK_CHARGING_CURRENT_mA,charging_voltage,lastChargeTimeHours)
             print("\n{:s} {:s} ".format(tnow,str_to_log))
             lifeLog.logger.info(str_to_log)
+            speak.say("Full Charge.  Undocking now.")
             docking.undock(egpg)
 
             daveDataJson.saveData('lastDismount', str_to_log)
@@ -101,6 +104,7 @@ def do_playtime(ina,egpg):
             batt_pctB4 = battery.pctRemaining(egpg)   # battery before docking
             vBattAveB4 = battery.aveBatteryV(egpg)
             # print("vBattB4: {:.2f}  vBattAveB4: {:.2f}  vReadingB4: {:.2f} volts Remaining: {:.0f}%".format(vBattB4, vBattAveB4, vReadingB4, batt_pctB4*100))
+            speak.say("Battery at {:.1f} volts.  Docking now.".format(vBattAveB4))
             docking.dock(egpg)
             vBattAveDocked = battery.aveBatteryV(egpg)
             vBattDocked, vReadingDocked = battery.vBatt_vReading(egpg)

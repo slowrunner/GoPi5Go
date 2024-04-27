@@ -25,7 +25,7 @@ REV_PROTECT_DIODE = 0.7    # The GoPiGo3 has a reverse polarity protection diode
                             # This value results in average readings vs battery voltage error of +/- 0.03
 SAFETY_SHUTDOWN_vBatt = 9.75   # Battery Discharge Protection Circuit allows down to 8.2v or so (9.75 leaves 5-12m reserve)
 SAFETY_SHUTDOWN_vReading = SAFETY_SHUTDOWN_vBatt - REV_PROTECT_DIODE   # 8.5v EasyGoPiGo3.volt() reading
-WARNING_LOW_vBatt = 10.0       # Give (~15 minutes) Advance Warning before safety shutdown
+WARNING_LOW_vBatt = 9.9       # Give (~15 minutes) Advance Warning before safety shutdown
 BATTERY_CLASS_RATE_PER_HOUR = 360     # update once every 10 seconds
 
 # egpg.volt() Data points
