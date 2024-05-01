@@ -60,11 +60,11 @@ def do_charging(ina,egpg):
             charging_voltage = ina.supply_voltage()
             while (charging_current > UNDOCK_CHARGING_CURRENT_mA):
                 tnow = time.strftime(DT_FORMAT)
-                print("{:s} Charging at {:.2f}v {:.0f}mA, Waiting for current < {:.0f}mA      ".format(tnow,charging_voltage,charging_current,UNDOCK_CHARGING_CURRENT_mA),end="\r")
+                print("{:s} Charging at {:.2f}v {:.0f}mA, Waiting for current < {:.0f}mA      ".format(
+                       tnow,charging_voltage,charging_current,UNDOCK_CHARGING_CURRENT_mA),end="\r")
                 time.sleep(6)
                 charging_current = -1 * ina.current()  # mA
                 charging_voltage = ina.supply_voltage()
-
             print("\n")
             tnow = time.strftime(DT_FORMAT)
             dtLastStartPlaytime = dt.datetime.now()
@@ -90,11 +90,14 @@ def do_playtime(ina,egpg):
 
             dtLastStartCharging = dt.datetime.strptime(daveDataJson.getData("lastDockingTime"),DT_FORMAT)
             dtLastStartPlaytime = dt.datetime.strptime(daveDataJson.getData("lastDismountTime"),DT_FORMAT)
+            daveDataJson.saveData('dockingState',"undocked")
+            daveDataJson.saveData('chargingState',"discharging")
             batt_pct = battery.pctRemaining(egpg)
             batt_voltage = ina.supply_voltage()
             while (batt_voltage > DOCK_VOLTAGE):
                 tnow = time.strftime(DT_FORMAT)
-                print("{:s} Battery at {:.0f}% {:.2f}v, Waiting for battery < {:.2f}v".format(tnow,batt_pct*100,batt_voltage,DOCK_VOLTAGE),end="\r")
+                print("{:s} Battery at {:.0f}% {:.2f}v, Waiting for battery < {:.2f}v   ".format(
+                       tnow,batt_pct*100,batt_voltage,DOCK_VOLTAGE),end="\r")
                 time.sleep(6)
                 batt_pct = battery.pctRemaining(egpg)
                 batt_voltage = ina.supply_voltage()
@@ -111,8 +114,8 @@ def do_playtime(ina,egpg):
             batt_pctDocked = battery.pctRemaining(egpg)   # battery remaining after docking
             # print("vBattDocked: {:.2f}  vBattAveDocked: {:.2f}  vReadingDocked: {:.2f} volts Remaining: {:.0f}%".format(vBattDocked, vBattAveDocked, vReadingDocked, batt_pctDocked*100))
             dvBatt = vBattAveDocked - vBattAveB4
-            if (dvBatt > DOCKING_SUCCESS_dvBatt):
-                tnow = time.strftime(DT_FORMAT)
+            time.sleep(10)  # wait to see if charging starts
+            if battery.charging(ina):
                 docking_success = True
                 dtLastStartCharging = dt.datetime.now()
                 try:
@@ -132,6 +135,7 @@ def do_playtime(ina,egpg):
                 daveDataJson.saveData('dockingState',"docked")
                 daveDataJson.saveData('chargingState',"charging")
                 daveDataJson.saveData('chargeCycles', chargeCycles)
+                speak.say("Docking success after {:.1f} hours playtime".format(lastPlaytimeHours))
 
 
             else:
@@ -139,11 +143,12 @@ def do_playtime(ina,egpg):
                 docking_success = False
             lifeLog.logger.info(str_to_log)
             daveDataJson.saveData('lastDocking', str_to_log)
-
+            tnow = time.strftime(DT_FORMAT)
+            print(tnow,str_to_log)
             if (docking_success == False):
                 daveDataJson.saveData('dockingState',"dockingfailure")
-                tnow = time.strftime(DT_FORMAT)
                 print("\n{:s} Docking Failure (dvBatt: {:.2f}v) -  Test Stopped Early".format(tnow,dvBatt))
+                speak.say("Docking Failure.  Docking Failure Detected.  Stopping Test Early.  Docking Failure.")
                 egpg.stop()
                 sys.exit(1)
 
@@ -163,11 +168,13 @@ def main():
                 do_charging(ina,egpg)
             else:
                 do_playtime(ina,egpg)
+            time.sleep(10)  # Allow time for charging / discharge to settle
 
             if battery.charging(ina):
                 do_charging(ina,egpg)
             else:
                 do_playtime(ina,egpg)
+            time.sleep(10)  # allow time for charging / discharge to settle
 
         tnow = time.strftime(DT_FORMAT)
         print("{:s} test_docking.main(): TEST COMPLETE".format(tnow))
