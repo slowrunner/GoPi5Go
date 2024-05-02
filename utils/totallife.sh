@@ -28,7 +28,9 @@ ofn='/home/pi/GoPi5Go/logs/odometer.log'
 totalAwake=`(awk -F'execution:' '{sum+=$2}END{print sum;}' $fn)`
 totalNaps=`(awk -F'nap for' '{sum+=$2}END{print sum;}' $fn)`
 totalLife=`(echo "scale=1; ($totalAwake + $totalNaps)" | bc)`
-lastDockingStr=`(grep "h playtime" $fn | tail -1)`
+# weirdness without +'' at end, see ls appended to lastDockingStr??
+lastDockingStr=`(grep "h playtime" $fn | tail -1 )`+''
+# echo "lastDockingStr: " $lastDockingStr " :"
 lastUndockingStr=`(grep "h charging" $fn | tail -1)`
 totalDockings=`(awk -F"Docking " '{sub(/ .*/,"",$2);print $2}' <<< $lastDockingStr)`
 currentBattCycles=`(echo "scale=1; $totalDockings - $newBatteryAtCycle" | bc)`
@@ -59,4 +61,3 @@ echo "Total Travel: " $totalMoved "meters" $totalMovedFt "feet"
 echo " "
 echo "Last Undocking String: " $lastUndockingStr
 echo "Last Docking   String: " $lastDockingStr
-

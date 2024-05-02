@@ -37,12 +37,12 @@ NUM_OF_DOCKING_TESTS = 10
 
 SPEED_MPS = 0.05  # m/s
 DOCKING_BIAS = -0.01  # m/s  add angular to make drive straight
-DOCKING_DIST_CM = -17.4  # cm
+DOCKING_DIST_CM = -17.5  # cm
 UNDOCKING_BIAS = 0.03  # m/s  add angular to make drive straight
 UNDOCKING_DIST_CM = 17.0  # cm
 
 UNDOCK_CHARGING_CURRENT_mA = 175
-DOCK_VOLTAGE = 9.85
+DOCK_VOLTAGE = 9.90
 DOCKING_SUCCESS_dvBatt = 0.1  # delta average battery voltage (rise) after successful docking
 
 SHUNT_OHMS = 0.1
@@ -149,8 +149,13 @@ def do_playtime(ina,egpg):
                 daveDataJson.saveData('dockingState',"dockingfailure")
                 print("\n{:s} Docking Failure (dvBatt: {:.2f}v) -  Test Stopped Early".format(tnow,dvBatt))
                 speak.say("Docking Failure.  Docking Failure Detected.  Stopping Test Early.  Docking Failure.")
-                egpg.stop()
-                sys.exit(1)
+                while True:
+                    current_now = battery.ave_current(ina)
+                    voltage_now = battery.ave_voltage(ina)
+                    power_now =   battery.ave_power(ina)
+                    tnow = time.strftime("%Y-%m-%d %H:%M:%S")
+                    print("{} Reading: {:.2f} V  {:.3f} A  {:.2f} W    ".format(tnow,ave_voltage(), ave_current()/1000.0, ave_power() ))
+                    time.sleep(10)
 
 
 

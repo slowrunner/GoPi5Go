@@ -86,14 +86,44 @@ def aveBatteryV(egpg):
 def pctRemaining(egpg):
     return(pctRemaining_from_vBatt(aveBatteryV(egpg)))
 
+
+# ******** INA219 Function based interface
+
 def charging(ina):
         clist = []
         for i in range(3):
             cBatt = ina.current()
             clist += [cBatt]
-            time.sleep(0.02)  # cannot be faster than 0.02
+            time.sleep(0.1)  # cannot be faster than 0.1 to get three distinct readings?
         current = statistics.mean(clist)
+        print("battery.charging(ina): current {:.0f}  vals {}".format(current,clist))
         return (current < 0)
+
+def ave_voltage(ina):
+        vlist = []
+        for i in range(3):
+            vBatt = ina.supply_voltage()
+            vlist += [vBatt]
+            time.sleep(0.02)  # cannot be faster than 0.02
+        return statistics.mean(vlist)
+
+def ave_current(ina):
+        clist = []
+        for i in range(3):
+            cBatt = ina.current()
+            clist += [cBatt]
+            time.sleep(0.02)  # cannot be faster than 0.02
+        return statistics.mean(clist)
+
+def ave_power(ina):
+        plist = []
+        for i in range(3):
+            pBatt = ina.power()
+            plist += [pBatt]
+            time.sleep(0.02)  # cannot be faster than 0.02
+        return statistics.mean(plist)/1000.0
+
+# ********* INA219 Object based interface
 
 class Battery(Thread):
     """Class containing TalentCell YB1203000 parameters and methods"""
