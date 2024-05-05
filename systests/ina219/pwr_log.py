@@ -8,21 +8,12 @@
 # NOTE: supply voltage measured to be around 50mV less than measured by AstroAI DT132A meter
 #       (version of this program prior to 2024-04-23 used bus voltage which was around 120mV less than meter measurement)
 
-import ina219
-from ina219 import DeviceRangeError
+from easy_ina219 import EasyINA219
 import time
-import logging
-import statistics
 
-SHUNT_OHMS = 0.1
-MAX_EXPECTED_AMPS = 2.0
-
-ina = ina219.INA219(SHUNT_OHMS,MAX_EXPECTED_AMPS, log_level=logging.ERROR)
-ina.configure(ina.RANGE_16V,bus_adc=ina.ADC_128SAMP,shunt_adc=ina.ADC_128SAMP)
+eina = EasyINA219()
 time.sleep(0.5)
 
-# ina = ina219.INA219(SHUNT_OHMS)
-# ina.configure(ina.RANGE_16V)
 
 power_meter = 0
 measurement_count = 0
@@ -30,33 +21,9 @@ mAh_meter = 0
 
 rate_per_hour = 20
 
-def ave_voltage():
-        vlist = []
-        for i in range(3):
-            vBatt = ina.supply_voltage()
-            vlist += [vBatt]
-            time.sleep(0.01)  # cannot be faster than 0.005
-        return statistics.mean(vlist)
-
-def ave_current():
-        clist = []
-        for i in range(3):
-            cBatt = ina.current()
-            clist += [cBatt]
-            time.sleep(0.01)  # cannot be faster than 0.005
-        return statistics.mean(clist)
-
-def ave_power():
-        plist = []
-        for i in range(3):
-            pBatt = ina.power()
-            plist += [pBatt]
-            time.sleep(0.01)  # cannot be faster than 0.005
-        return statistics.mean(plist)/1000.0
-
 
 try:
-    current_now = ina.current()
+    current_now = eina.milliamps()
     if (current_now < 0):
         charging = True
     else:
@@ -64,9 +31,9 @@ try:
     last_charging = charging
 
     while True:
-        current_now = ave_current()
-        voltage_now = ave_voltage()
-        power_now = ave_power()
+        current_now = eina.ave_milliamps()
+        voltage_now = eina.ave_volts()
+        power_now = eina.ave_watts()
         if (current_now < 0):
             charging = True
         else:
@@ -84,9 +51,7 @@ try:
         mAh_meter += current_now / rate_per_hour 
         power_meter += power_now / rate_per_hour
 
-        print("{} Reading: {:.2f} V  {:.3f} A  {:.2f} W  {:.0f} mAh  {:.1f}Wh     ".format(tnow,ave_voltage(), ave_current()/1000.0, ave_power(),mAh_meter,power_meter))
+        print("{} Reading: {:.2f} V  {:.3f} A  {:.2f} W  {:.0f} mAh  {:.1f}Wh     ".format(tnow,eina.ave_volts(), eina.ave_milliamps()/1000.0, eina.ave_watts(),mAh_meter,power_meter))
         time.sleep(3600/rate_per_hour)
-except DeviceRangeError as e:
+except Exception as e:
     print(e)
-finally:
-    ina.wake()
