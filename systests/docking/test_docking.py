@@ -37,7 +37,7 @@ NUM_OF_DOCKING_TESTS = 10
 
 SPEED_MPS = 0.05  # m/s
 DOCKING_BIAS = -0.01  # m/s  add angular to make drive straight
-DOCKING_DIST_CM = -17.6  # cm
+DOCKING_DIST_CM = -17.8  # cm
 UNDOCKING_BIAS = 0.03  # m/s  add angular to make drive straight
 UNDOCKING_DIST_CM = 17.0  # cm
 
@@ -48,6 +48,13 @@ DOCKING_SUCCESS_dvBatt = 0.1  # delta average battery voltage (rise) after succe
 
 DT_FORMAT = "%Y-%m-%d %H:%M:%S"
 
+def charging(eina):
+       current_now = eina.ave_milliamps()
+       if (current_now < 0):
+            charging = True
+       else:
+            charging = False
+       return charging
 
 def do_charging(eina,egpg):
 
@@ -120,7 +127,7 @@ def do_playtime(eina,egpg):
             # print("vBattDocked: {:.2f}  vBattAveDocked: {:.2f}  vReadingDocked: {:.2f} volts Remaining: {:.0f}%".format(vBattDocked, vBattAveDocked, vReadingDocked, batt_pctDocked*100))
             dvBatt = vBattAveDocked - vBattAveB4
             time.sleep(10)  # wait to see if charging starts
-            if battery.charging(eina.ina219):
+            if charging(eina):
                 docking_success = True
                 dtLastStartCharging = dt.datetime.now()
                 try:
@@ -178,14 +185,13 @@ def main():
         for test in range(NUM_OF_DOCKING_TESTS):
             tnow = time.strftime(DT_FORMAT)
             print("\n{:s} **** test_docking.main(): TEST {:d} ".format(tnow,test))
-            # if battery.charging(ina):
-            if battery.charging(eina.ina219):
+            if charging(eina):
                 do_charging(eina,egpg)
             else:
                 do_playtime(eina,egpg)
             time.sleep(10)  # Allow time for charging / discharge to settle
 
-            if battery.charging(eina.ina219):
+            if charging(eina):
                 do_charging(eina,egpg)
             else:
                 do_playtime(eina,egpg)

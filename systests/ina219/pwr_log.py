@@ -19,7 +19,7 @@ power_meter = 0
 measurement_count = 0
 mAh_meter = 0
 
-rate_per_hour = 20
+rate_per_hour = 60
 
 
 try:
