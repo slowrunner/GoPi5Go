@@ -8,7 +8,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-humble-navigation2 ros-humble-nav2-bringup \
     ros-humble-slam-toolbox ros-humble-robot-localization \
     ros-humble-xacro \
-    ros-humble-irobot-create-msgs \
     ros-humble-teleop-twist-joy ros-humble-teleop-twist-keyboard \
     python3-colcon-common-extensions \
     ros-humble-tf-transformations python3-rosdep2 \
@@ -35,6 +34,20 @@ RUN useradd -s /bin/bash pi
 RUN echo 'pi:pi' | chpasswd 
 RUN adduser pi sudo
 RUN echo '%pi ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+# Groups on PiOS:  pi adm dialout cdrom sudo audio video plugdev games users input render netdev lpadmin docker gpio i2c spi
+# spi:x:995:pi
+# i2c:x:994:pi
+# gpio:x:993:pi
+# audio:x:29:pi,pulse
+RUN groupadd spi --system -g 995
+RUN groupadd i2c -g 994
+RUN groupadd gpio -g 993
+
+
+RUN usermod -a -G spi pi
+RUN usermod -a -G i2c pi
+RUN usermod -a -G gpio pi
 RUN usermod -a -G audio pi
 
 # files to copy must be in the docker tree
@@ -47,8 +60,6 @@ RUN echo 'SUBSYSTEM=="usb", ATTRS{idVendor}=="03e7", MODE="0666"' | tee /etc/ude
 
 
 
-USER pi:pi
-
 # python access to joystick
 RUN sudo pip3 install evdev
 
@@ -58,6 +69,10 @@ RUN sudo pip3 install piper-tts
 RUN sudo pip3 install vcgencmd
 
 # NOTE: joystick access will require docker running in --privileged mode
+
+
+USER pi
+
 
 # CMD bash -c "source start_wali.sh"
 CMD bash

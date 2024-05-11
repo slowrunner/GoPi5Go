@@ -8,8 +8,9 @@ docker run -it --net=host \
  -v /dev/input:/dev/input \
  -v /home/pi:/home/pi \
  -v /dev/bus/usb:/dev/bus/usb \
+ --device /dev/gpiochip4 \
  -e TZ=America/New_York \
  -w /ros2ws \
  --privileged \
  --rm \
- r2hdp
+ gopi5gor2hdp
