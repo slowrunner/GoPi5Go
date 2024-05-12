@@ -65,3 +65,7 @@ systests/Oak-D-W-97/vdepthai/lib64
 odometer.log
 daveData.json
 models/depthai/yolo-v4-tiny-tf_openvino_2021.4_6shave.blob
+ros2ws/logs
+ros2ws/install
+ros2ws/roslogs
+ros2ws/log

@@ -3,7 +3,8 @@ FROM r2hdp
 RUN sudo apt-get update 
 RUN sudo apt-get install -y \
     python3-serial \
-    i2c-tools
+    i2c-tools \
+    libraspberrypi-bin 
 
 # Install the GoPiGo3 API
 
@@ -26,6 +27,9 @@ RUN sudo usermod -a -G users pi
 RUN sudo pip3 install spidev
 RUN sudo pip3 install smbus-cffi     
 RUN sudo pip3 install python-periphery     
+RUN sudo pip3 install transforms3d
+
+ENV RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 
 # Switch to pi user
 USER pi
