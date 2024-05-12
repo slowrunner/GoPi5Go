@@ -23,6 +23,10 @@ RUN sudo usermod -a -G render pi
 RUN sudo usermod -a -G netdev pi
 RUN sudo usermod -a -G users pi
 
+# Allow pi user access to joystick
+RUN sudo chgrp input /dev/input/js0
+RUN sudo chgrp input /dev/input/event*
+
 # RUN apt install python-dev 
 RUN sudo pip3 install spidev
 RUN sudo pip3 install smbus-cffi     
