@@ -48,14 +48,14 @@ echo -e "\n** NOT STARTING GoPiGo3 IMU SENSOR NODE"
 # echo "*** ros2 run ros2_gopigo3_node imu_sensor &"
 # ros2 run ros2_gopigo3_node imu_sensor &
 
-echo -e "\n*** NOT STATING SNES GAMEPAD NODE"
-# echo -e "\n*** Start SNES gamepad node"
-# echo '*** nohup ros2 launch teleop_twist_joy teleop-launch.py joy_config:="snes" &'
-# nohup ros2 launch teleop_twist_joy teleop-launch.py joy_config:="snes" &
+echo -e "\n*** STARTING F710 JOYSTICK NODE"
+echo '*** ros2 launch teleop_twist_joy teleop-launch.py joy_config:="F710" &'
+ros2 launch teleop_twist_joy teleop-launch.py joy_config:="F710" &
 # echo '*** nohup ros2 launch teleop_twist_joy teleop-launch.py joy_config:="snes_slow" &'
 # nohup ros2 launch teleop_twist_joy teleop-launch.py joy_config:="snes_slow" &
 
-echo -e "\n*** STARTUP SLEEP 5s BEFORE STARTING LIDAR"
+echo -e "\n*** STARTUP SLEEP 5s"
+# echo -e "\n*** STARTUP SLEEP 5s BEFORE STARTING LIDAR"
 sleep 1
 echo "5"
 sleep 1
@@ -68,12 +68,12 @@ sleep 1
 echo "1"
 sleep 1
 
-echo -e "\n*** Start YDLidar X4 node"
-echo "*** nohup ros2 launch ydlidar_ros2_driver ydlidar_launch.py &"
+# echo -e "\n*** Start YDLidar X4 node"
+# echo "*** nohup ros2 launch ydlidar_ros2_driver ydlidar_launch.py &"
 # with nohup.out logging
 # nohup ros2 launch ydlidar_ros2_driver ydlidar_launch.py &
 # without logging (if call stop_scan service the nohup.out grows quickly)
-ros2 launch ydlidar_ros2_driver ydlidar_launch.py &
+# ros2 launch ydlidar_ros2_driver ydlidar_launch.py &
 
 
 # Uncomment the following instead of using start_image_pub.sh
@@ -83,18 +83,18 @@ ros2 launch ydlidar_ros2_driver ydlidar_launch.py &
 
 
 # Uncomment the following instead of using start_slam_toobox.sh
-echo -e "\n*** STARTING ROS2 SLAM-TOOLBOX - ASYNC MAPPING"
-echo "*** Drive GoPiGo3 around room, generating /map topics"
-echo "*** (Async: Best-effort processing, online - navigating on limited CPU)"
-echo "*** nohup ros2 launch slam_toolbox online_async_launch.py 'slam_params_file:=./my_mapper_params_online_async.yaml' &"
+# echo -e "\n*** STARTING ROS2 SLAM-TOOLBOX - ASYNC MAPPING"
+# echo "*** Drive GoPiGo3 around room, generating /map topics"
+# echo "*** (Async: Best-effort processing, online - navigating on limited CPU)"
+# echo "*** nohup ros2 launch slam_toolbox online_async_launch.py 'slam_params_file:=./my_mapper_params_online_async.yaml' &"
 # with logging to nohup.out
-nohup ros2 launch slam_toolbox online_async_launch.py 'slam_params_file:=./my_mapper_params_online_async.yaml' &
+# nohup ros2 launch slam_toolbox online_async_launch.py 'slam_params_file:=./my_mapper_params_online_async.yaml' &
 # without logging 
-ros2 launch slam_toolbox online_async_launch.py 'slam_params_file:=./my_mapper_params_online_async.yaml' &
+# ros2 launch slam_toolbox online_async_launch.py 'slam_params_file:=./my_mapper_params_online_async.yaml' &
 
 
-echo -e "\n*** Publishing servo one center position (0.0)"
-nohup ros2 topic pub --once /servo/position/S1 std_msgs/msg/Float64 '{data: 0.0}' &
+# echo -e "\n*** Publishing servo one center position (0.0)"
+# nohup ros2 topic pub --once /servo/position/S1 std_msgs/msg/Float64 '{data: 0.0}' &
 
 echo -e "\n*** Starting Odometer Node to log movements to odometer.log"
 echo "*** ros2 run ros2_gopigo3_node odometer &"
