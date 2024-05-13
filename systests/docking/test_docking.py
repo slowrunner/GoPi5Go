@@ -36,7 +36,7 @@ import time
 import logging
 import datetime as dt
 
-NUM_OF_DOCKING_TESTS = 10
+NUM_OF_DOCKING_TESTS = 1000  # approx. four cycles per day
 
 UNDOCK_CHARGING_CURRENT_mA = 175
 DOCK_VOLTAGE = 9.90

@@ -12,13 +12,13 @@ rosdep install -i --from-path src
 
 
 echo "*** colcon build --packages-select ros2_gopigo3_msg "
-colcon build --packages-select ros2_gopigo3_msg 
+colcon build --packages-select ros2_gopigo3_msg
 
 echo "*** colcon build --packages-select ros2_gopigo3_node"
-colcon build --packages-select ros2_gopigo3_node
+colcon build --symlink-install --packages-select ros2_gopigo3_node
 
 echo "*** colcon build --packages-select teleop_gopigo3_keyboard"
-colcon build --packages-select teleop_gopigo3_keyboard
+colcon build --symlink-install --packages-select teleop_gopigo3_keyboard
 
 # echo "*** colcon build --packages-select ros2_libcamera_pub"
 # colcon build --packages-select ros2_libcamera_pub
