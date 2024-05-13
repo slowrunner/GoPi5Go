@@ -10,3 +10,9 @@ if [ -f /usr/share/colcon_cd/function/colcon_cd.sh ]; then
     source /usr/share/colcon_cd/function/colcon_cd.sh
     export _colcon_cd_root=/home/pi/GoPi5Go/ros2ws
 fi
+
+# Add DOCKER: to prompt when in container
+# "pi@GoPi5Go:DOCKER:~/GoPi5Go/ros2ws $ "
+if [ ! -f /usr/bin/docker ]; then
+    export PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:DOCKER:\[\033[01;34m\]\w \$ \[\033[00m\]"
+fi
