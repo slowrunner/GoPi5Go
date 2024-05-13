@@ -69,3 +69,4 @@ ros2ws/logs
 ros2ws/install
 ros2ws/roslogs
 ros2ws/log
+nohup.out

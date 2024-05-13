@@ -24,8 +24,10 @@ RUN sudo usermod -a -G netdev pi
 RUN sudo usermod -a -G users pi
 
 # Allow pi user access to joystick
-RUN sudo chgrp input /dev/input/js0
-RUN sudo chgrp input /dev/input/event*
+# Cannot do here - run in bash script
+# RUN sudo chgrp input /dev/input/js0
+# RUN sudo chgrp input /dev/input/event*
+
 
 # RUN apt install python-dev 
 RUN sudo pip3 install spidev
@@ -41,6 +43,7 @@ USER pi
 # Copy the GoPiGo3 Python wheels into container and install
 ADD gopigo3 /home/pi/gopigo3_wheels
 RUN sudo pip3 install --no-index --find-links=/home/pi/gopigo3_wheels -r /home/pi/gopigo3_wheels/requirements.txt
+
 
 # CMD source start_rosbot_gopi5go-dave.sh
 CMD bash

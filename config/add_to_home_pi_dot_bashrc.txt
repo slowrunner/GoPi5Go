@@ -1,6 +1,12 @@
 # ADD TO /home/pi/.bashrc FOR ROS2 Humble GoPi5Go-Dave Robot
-source /opt/ros/humble/setup.bash
-export ROS_DOMAIN_ID=0
-source /usr/share/colcon_cd/function/colcon_cd.sh
-export _colcon_cd_root=/home/pi/GoPi5Go/ros2ws
-export ROS_LOG_DIR="/home/pi/GoPi5Go/ros2ws/roslogs"
+
+# ADDED FOR ROS2 Humble GoPi5Go-Dave Robot
+if [ -f /opt/ros/humble/setup.bash ]; then 
+    source /opt/ros/humble/setup.bash
+    export ROS_DOMAIN_ID=0
+    export ROS_LOG_DIR="/home/pi/GoPi5Go/ros2ws/roslogs"
+fi
+if [ -f /usr/share/colcon_cd/function/colcon_cd.sh ]; then
+    source /usr/share/colcon_cd/function/colcon_cd.sh
+    export _colcon_cd_root=/home/pi/GoPi5Go/ros2ws
+fi

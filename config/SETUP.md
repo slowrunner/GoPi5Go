@@ -148,3 +148,8 @@ RIGHT: motor_state: 0,  pwr: -128,  pos: 1038,  dps: -163
 sudo reboot
 ```
 
+** === Setup permissions for joystick access 
+```
+sudo chgrp input /dev/input/js0
+sudo chgrp input /dev/input/event*
+```

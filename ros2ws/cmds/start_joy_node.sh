@@ -10,6 +10,10 @@ echo -e "\n*** Sourcing /opt/ros/humble/setup.bash"
 echo -e "\n*** Sourcing install/setup.bash"
 . ~/$basedir/ros2ws/install/setup.bash
 
+echo -e "\n*** sudo chgrp input /dev/input/event*"
+sudo chgrp input /dev/input/event*
+
+
 # echo -e "\n*** Start SNES gamepad node"
 # echo '*** ros2 launch teleop_twist_joy teleop-launch.py joy_config:="snes_slow" '
 # ros2 launch teleop_twist_joy teleop-launch.py joy_config:="snes_slow" 
