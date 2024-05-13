@@ -49,7 +49,8 @@ echo -e "\n** NOT STARTING GoPiGo3 IMU SENSOR NODE"
 # ros2 run ros2_gopigo3_node imu_sensor &
 
 echo -e "\n*** sudo chgrp input /dev/input/event* ***"
-sudo chgrp input /dev/input/event* ***"
+sudo chgrp input /dev/input/event*
+
 echo -e "\n*** STARTING F710 JOYSTICK NODE"
 echo '*** ros2 launch teleop_twist_joy teleop-launch.py joy_config:="F710" &'
 ros2 launch teleop_twist_joy teleop-launch.py joy_config:="F710" &
