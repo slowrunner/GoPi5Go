@@ -32,9 +32,6 @@ def drive_cm_bias(dist,bias,speed,egpg):
             if DEBUG:
                 print("Drive Parameters - Speeds(L/R): ({:.3f},{:.3f}) m/s   DPS: ({:d},{:d})  Time: {:.1f}s".format(
                     left_speed/1000,right_speed/1000,left_dps,right_dps,drive_time))
-                print("Resetting Encoders")
-            egpg.reset_encoders()
-            sleep(0.005)
             startposleft  = egpg.get_motor_encoder(egpg.MOTOR_LEFT)
             startposright = egpg.get_motor_encoder(egpg.MOTOR_RIGHT)
             if DEBUG: print("- encoder startpos: ({:d},{:d})".format(startposleft,startposright))
@@ -76,7 +73,8 @@ def main():
     dist_cm = 100
 
     egpg = EasyGoPiGo3(use_mutex=True, noinit=True)
-
+    print("Resetting Encoders")
+    egpg.reset_encoders()
     try:
         drive_cm_bias(dist_cm, BIAS, SPEED, egpg)
     except KeyboardInterrupt:
