@@ -117,6 +117,9 @@ def do_playtime(eina,egpg):
             # print("vBattB4: {:.2f}  vBattAveB4: {:.2f}  vReadingB4: {:.2f} volts Remaining: {:.0f}%".format(vBattB4, vBattAveB4, vReadingB4, batt_pctB4*100))
             speak.say("Battery at {:.1f} volts.  Docking now.".format(vBattAveB4))
             docking.dock(egpg)
+            tnow = time.strftime(DT_FORMAT)
+            daveDataJson.saveData('lastDockingTime', tnow)
+            daveDataJson.saveData('dockingState',"docked")
             vBattAveDocked = battery.aveBatteryV(egpg)
             vBattDocked, vReadingDocked = battery.vBatt_vReading(egpg)
             batt_pctDocked = battery.pctRemaining(egpg)   # battery remaining after docking
@@ -139,8 +142,6 @@ def do_playtime(eina,egpg):
 
                 str_to_log = "---- Docking {} : success at {:.0f}% {:.1f}v after {:.1f} h playtime".format(chargeCycles,batt_pctB4,vBattAveB4,lastPlaytimeHours)
                 daveDataJson.saveData('lastPlaytimeDuration', lastPlaytimeHours)
-                daveDataJson.saveData('lastDockingTime', tnow)
-                daveDataJson.saveData('dockingState',"docked")
                 daveDataJson.saveData('chargingState',"charging")
                 daveDataJson.saveData('chargeCycles', chargeCycles)
                 speak.say("Docking success after {:.1f} hours playtime".format(lastPlaytimeHours))
@@ -165,7 +166,7 @@ def do_playtime(eina,egpg):
                     # power_now =   battery.ave_power(ina)
                     power_now =   eina.ave_watts()
                     tnow = time.strftime("%Y-%m-%d %H:%M:%S")
-                    print("{} Reading: {:.2f} V  {:.3f} A  {:.2f} W    ".format(tnow,ave_voltage(), ave_current()/1000.0, ave_power() ))
+                    print("{} Reading: {:.2f} V  {:.3f} A  {:.2f} W    ".format(tnow,voltage_now, current_now, power_now ))
                     time.sleep(10)
 
 
