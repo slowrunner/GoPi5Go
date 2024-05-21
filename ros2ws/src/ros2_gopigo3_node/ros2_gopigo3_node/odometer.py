@@ -56,7 +56,7 @@ from rclpy.qos import qos_profile_sensor_data
 DEBUG = False
 
 # Uncomment for debug prints to console
-DEBUG = True
+# DEBUG = True
 
 ODOLOGFILE = '/home/pi/GoPi5Go/logs/odometer.log'
 TWO_PI= math.pi * 2.0
