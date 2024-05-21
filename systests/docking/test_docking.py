@@ -28,6 +28,7 @@ from noinit_easygopigo3 import EasyGoPiGo3
 import docking
 import battery
 import lifeLog
+import odomLog
 import daveDataJson
 import speak
 from easy_ina219 import EasyINA219
@@ -145,7 +146,10 @@ def do_playtime(eina,egpg):
                 daveDataJson.saveData('chargingState',"charging")
                 daveDataJson.saveData('chargeCycles', chargeCycles)
                 speak.say("Docking success after {:.1f} hours playtime".format(lastPlaytimeHours))
-
+                str_to_log = "***  Reset Encoders ***"
+                egpg.reset_encoders(blocking=False)
+                odomLog.logger.info(str_to_log)
+                speak.say("Reset Encoders To Zero")
 
             else:
                 str_to_log = "Battery at {:.1f}v {:.0f}%, Docking: failure".format(vBattAveB4,batt_pctB4*100)
