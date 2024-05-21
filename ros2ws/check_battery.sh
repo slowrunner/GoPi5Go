@@ -8,3 +8,4 @@ echo -e "\n*** Checking Battery with ROS2"
 echo "ros2 topic echo --once /battery_voltage"
 ros2 topic echo --once /battery_voltage
 
+python3 /home/pi/GoPi5Go/plib/battery.py
