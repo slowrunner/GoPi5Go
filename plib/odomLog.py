@@ -30,7 +30,8 @@ logger.setLevel(logging.INFO)
 
 loghandler = logging.FileHandler('/home/pi/'+HOME+'/logs/odometer.log')
 
-logformatter = logging.Formatter('%(asctime)s|[%(filename)s.%(funcName)s]%(message)s',"%Y-%m-%d %H:%M")
+# logformatter = logging.Formatter('%(asctime)s|[%(filename)s.%(funcName)s]%(message)s',"%Y-%m-%d %H:%M")
+logformatter = logging.Formatter('%(asctime)s|%(message)s',"%Y-%m-%d %H:%M:%S")
 loghandler.setFormatter(logformatter)
 logger.addHandler(loghandler)
 
