@@ -12,7 +12,7 @@
 #    Bernardo R Japon: edits for "Hands On ROS for Robotics Programming", Packt Publishing
 #
 # VERSION HISTORY:
-#
+#    2024:  Use EasyGoPiGo3 for reset_encoders, and other convenience methods.  Add /stop_status topic.
 #    2021:  Migration to ROS2, and
 #               moved custom msgs to ros2_gopigo3_msg,
 #               gpg_config.json comapatibility (gopigo3.py v1.3),
@@ -29,6 +29,7 @@ import sys
 
 try:
     import gopigo3
+    import easygopigo3
 except IOError as e:
     print("cannot find SPI device")
     sys.exit()
@@ -117,7 +118,7 @@ class GoPiGo3Node(Node):
         """
 
         # GoPiGo3 and ROS setup
-        self.g = gopigo3.GoPiGo3()
+        self.g = easygopigo3.EasyGoPiGo3(use_mutex=True)
 
         # Short Constants in meters
         self.WIDTH = self.g.WHEEL_BASE_WIDTH * 1e-3
@@ -351,9 +352,10 @@ class GoPiGo3Node(Node):
     def reset_odometry(self):
         if DEBUG:
             print('reset_odometry(): encoders: ({},{})'.format(self.g.get_motor_encoder(self.ML),self.g.get_motor_encoder(self.MR)))
-        self.g.offset_motor_encoder(self.ML, self.g.get_motor_encoder(self.ML))
-        self.g.offset_motor_encoder(self.MR, self.g.get_motor_encoder(self.MR))
+        # self.g.offset_motor_encoder(self.ML, self.g.get_motor_encoder(self.ML))
+        # self.g.offset_motor_encoder(self.MR, self.g.get_motor_encoder(self.MR))
         # self.g.reset_motor_encoder(self.ML+self.MR)
+        self.g.reset_encoders(blocking=False)
         if DEBUG:
             print('reset_odometry(): encoders: ({},{})'.format(self.g.get_motor_encoder(self.ML),self.g.get_motor_encoder(self.MR)))
         self.last_encoders = {'l': 0, 'r': 0}
@@ -366,7 +368,8 @@ class GoPiGo3Node(Node):
             print('odom_reset({}, {}): triggered'.format(req,response))
             print('odom_reset: type(req): {}'.format(type(req)))
             print('odom_reset: type(response): {}'.format(type(response)))
-        self.g.reset_motor_encoder(self.ML+self.MR)
+        # self.g.reset_motor_encoder(self.ML+self.MR)
+        self.g.reset_encoders(blocking=False)
         self.last_encoders = {'l': 0, 'r': 0}
         self.pose.pose.orientation.x = 0.0
         self.pose.pose.orientation.y = 0.0

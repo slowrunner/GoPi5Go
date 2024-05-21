@@ -156,7 +156,7 @@ class OdometerNode(Node):
 
     self.motor_status_msg = motor_status_msg
 
-    while self.odometry_msg == None: pass   # wait for first /odom topic to arrive
+    if self.odometry_msg == None: return   # wait for first /odom topic to arrive
     self.current_point = self.odometry_msg.pose.pose.position
     self.current_heading = euler_from_quaternion(self.odometry_msg.pose.pose.orientation)[2]
     self.current_timestamp = self.odometry_msg.header.stamp
@@ -172,27 +172,18 @@ class OdometerNode(Node):
         self.startup = False
         pass
 
-    # uncomment to see the message - (it will take over the output)
-    # if DEBUG: self.get_logger().info('motor_status_msg: {}'.format(self.motor_status_msg))
-
     # CHECK FOR MOVING
-    #   GoPiGo3 issue reset_motor_encoder() will cause motor_status speed and power to report movement.
+    #   GoPiGo3 issue reset_encoders() will cause a non-zero motor_status speed.
     #       workaround: ignore wild speeds outside GoPiGo3 ability
-    #                   ignore valid non-zero speed when encoder is -1, 0 or 1 value
-    #       This will delay detection of movement after encoder reset up to 2 degrees (1 mm maximum loss)
+    #                   ignore if power = 0
     lSpeed = abs(self.motor_status_msg.left.speed)
     rSpeed = abs(self.motor_status_msg.right.speed)
     lEncoder = abs(self.motor_status_msg.left.encoder)
     rEncoder = abs(self.motor_status_msg.right.encoder)
-    moving_now = ((1000 > lSpeed > 0.0)  or \
-                  (1000 > rSpeed > 0.0) ) and \
-                  (lEncoder > 1)  and \
-                  (rEncoder > 1)
-
-    # moving_now = ((abs(self.motor_status_msg.left.power) > 20)  and \
-    #               (self.motor_status_msg.left.power != -128))   or \
-    #              ((abs(self.motor_status_msg.right.power) > 20)  and \
-    #               (self.motor_status_msg.right.power != -128))
+    lPower = abs(self.motor_status_msg.left.power)
+    rPower = abs(self.motor_status_msg.right.power)
+    moving_now = ((1000 > lSpeed > 0.0)  and (127 > lPower > 0) ) or \
+                 ((1000 > rSpeed > 0.0)  and (127 > rPower > 0) )
 
     if moving_now == False:
         if (self.moving == True):   # end of motion
