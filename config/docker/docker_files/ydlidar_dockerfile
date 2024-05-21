@@ -1,0 +1,67 @@
+FROM r2hdp
+
+RUN sudo apt-get update 
+RUN sudo apt-get install -y \
+    python3-serial \
+    i2c-tools \
+    libraspberrypi-bin \
+    swig 
+
+# Install the GoPiGo3 API
+
+COPY 99-com.rules /etc/udev/rules.d
+
+RUN sudo groupadd spi --system -f -g 995
+RUN sudo groupadd netdev --system -f -g 106
+RUN sudo groupadd i2c --system -f -g 994
+RUN sudo groupadd gpio --system -f -g 993
+RUN sudo usermod -a -G adm pi
+RUN sudo usermod -a -G dialout pi
+RUN sudo usermod -a -G video pi
+RUN sudo usermod -a -G plugdev pi
+RUN sudo usermod -a -G input pi
+RUN sudo usermod -a -G render pi
+RUN sudo usermod -a -G netdev pi
+RUN sudo usermod -a -G users pi
+
+# Allow pi user access to joystick
+# Cannot do here - run in bash script
+# RUN sudo chgrp input /dev/input/js0
+# RUN sudo chgrp input /dev/input/event*
+
+
+# RUN apt install python-dev 
+RUN sudo pip3 install spidev
+RUN sudo pip3 install smbus-cffi     
+RUN sudo pip3 install python-periphery     
+RUN sudo pip3 install transforms3d
+
+ENV RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+
+# Install the YDLidar-SDK
+
+COPY ydlidar.rules /etc/udev/rules.d
+COPY ydlidar-2303.rules /etc/udev/rules.d
+COPY ydlidar-V2.rules /etc/udev/rules.d
+
+ADD YDLidar-SDK /home/pi/YDLidar-SDK
+WORKDIR /home/pi/YDLidar-SDK
+RUN sudo mkdir /home/pi/YDLidar-SDK/build
+WORKDIR /home/pi/YDLidar-SDK/build
+RUN sudo cmake /home/pi/YDLidar-SDK
+RUN sudo make
+RUN sudo make install
+WORKDIR /home/pi/YDLidar-SDK
+RUN sudo pip3 install .
+
+
+# Switch to pi user
+USER pi
+
+# Copy the GoPiGo3 Python wheels into container and install
+ADD gopigo3 /home/pi/gopigo3_wheels
+RUN sudo pip3 install --no-index --find-links=/home/pi/gopigo3_wheels -r /home/pi/gopigo3_wheels/requirements.txt
+
+
+# CMD source start_rosbot_gopi5go-dave.sh
+CMD bash
