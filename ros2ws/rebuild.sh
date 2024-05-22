@@ -23,11 +23,11 @@ colcon build --symlink-install --packages-select teleop_gopigo3_keyboard
 # echo "*** colcon build --packages-select ros2_libcamera_pub"
 # colcon build --packages-select ros2_libcamera_pub
 
-# echo "** colcon build --symlink-install --packages-select ydlidar_ros2_driver"
-# colcon build --symlink-install --packages-select ydlidar_ros2_driver
+echo "** colcon build --symlink-install --packages-select ydlidar_ros2_driver"
+colcon build --symlink-install --packages-select ydlidar_ros2_driver
 
-# echo "** colcon build --symlink-install --packages-select scan_client"
-# colcon build --symlink-install --packages-select scan_client
+echo "** colcon build --symlink-install --packages-select scan_client"
+colcon build --symlink-install --packages-select scan_client
 
 # echo "** colcon build --symlink-install --packages-select mpu9250driver"
 # colcon build --symlink-install --packages-select mpu9250driver
