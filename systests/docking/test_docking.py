@@ -146,9 +146,9 @@ def do_playtime(eina,egpg):
                 daveDataJson.saveData('chargingState',"charging")
                 daveDataJson.saveData('chargeCycles', chargeCycles)
                 speak.say("Docking success after {:.1f} hours playtime".format(lastPlaytimeHours))
-                str_to_log = "***  Reset Encoders ***"
+                str_to_odomlog = "***  Reset Encoders ***"
                 egpg.reset_encoders(blocking=False)
-                odomLog.logger.info(str_to_log)
+                odomLog.logger.info(str_to_odomlog)
                 speak.say("Reset Encoders To Zero")
 
             else:
