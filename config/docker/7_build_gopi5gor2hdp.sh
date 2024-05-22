@@ -1,11 +1,19 @@
 #!/bin/bash
 
-# Process to build r2hdp under docker_images/
-# mv docker_images/ros/humble/ubuntu/jammy/desktop/Dockerfile docker_images/ros/humble/ubuntu/jammy/desktop/Dockerfile.ros_humble_desktop_dockerfile
-# cp docker_files/ros2_humble_desktop_plus_nav_dockerfile docker_images/ros/humble/ubuntu/jammy/desktop/Dockerfile
-# pushd docker_images/ros/humble/ubuntu/jammy/desktop
-# sudo docker build -t r2hdp .
-# popd
+# FILE: 7_build_gopi5gor2hdp.sh
+
+# This adds the GoPi5Go API, GoP5Go easy_ina219,  and YDLidar-SDK to the base r2hdp container
+
+cd ~/GoPi5Go/config/docker
+if [ -d YDLidar-SDK ]; then
+    echo -e "Removing existing docker/YDLidar-SDK/" 
+    rm -rf YDLidar-SDK
+fi
+echo -e "Bring down clean YDLidar-SDK"
+git clone https://github.com/YDLIDAR/YDLidar-SDK
+
+echo -e "copy in my ydlidar_test_interactive.cpp example"
+cp ~/GoPi5Go/systests/myYDLidar-SDK/ydlidar_test_interactive.cpp YDLidar-SDK/examples
 
 
 # build a ros humble desktop plus navigation, slam-toolbox, localization tagged r2hdp

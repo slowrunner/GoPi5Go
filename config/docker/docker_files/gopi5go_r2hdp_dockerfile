@@ -4,7 +4,8 @@ RUN sudo apt-get update
 RUN sudo apt-get install -y \
     python3-serial \
     i2c-tools \
-    libraspberrypi-bin 
+    libraspberrypi-bin \
+    swig 
 
 # Install the GoPiGo3 API
 
@@ -37,10 +38,27 @@ RUN sudo pip3 install transforms3d
 
 ENV RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 
+# Install the YDLidar-SDK
+
+COPY ydlidar.rules /etc/udev/rules.d
+COPY ydlidar-2303.rules /etc/udev/rules.d
+COPY ydlidar-V2.rules /etc/udev/rules.d
+
+ADD YDLidar-SDK /home/pi/YDLidar-SDK
+WORKDIR /home/pi/YDLidar-SDK
+RUN sudo mkdir /home/pi/YDLidar-SDK/build
+WORKDIR /home/pi/YDLidar-SDK/build
+RUN sudo cmake /home/pi/YDLidar-SDK
+RUN sudo make
+RUN sudo make install
+WORKDIR /home/pi/YDLidar-SDK
+RUN sudo pip3 install .
+
+
 # Switch to pi user
 USER pi
 
-# Copy the GoPiGo3 Python wheels into container and install
+# Copy the GoPiGo3 API and GoPi5Go-ina219 Python wheels into container and install
 ADD gopigo3 /home/pi/gopigo3_wheels
 RUN sudo pip3 install --no-index --find-links=/home/pi/gopigo3_wheels -r /home/pi/gopigo3_wheels/requirements.txt
 
