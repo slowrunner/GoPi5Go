@@ -32,6 +32,7 @@ import odomLog
 import daveDataJson
 import speak
 from easy_ina219 import EasyINA219
+from ina219 import DeviceRangeError
 
 import time
 import logging
@@ -63,6 +64,7 @@ def do_charging(eina,egpg):
             # charging_voltage = ina.supply_voltage()
             charging_voltage = eina.volts()
             while (charging_current > UNDOCK_CHARGING_CURRENT_mA):
+              try:
                 tnow = time.strftime(DT_FORMAT)
                 print("{:s} Charging at {:.2f}v {:.0f}mA, Waiting for current < {:.0f}mA      ".format(
                        tnow,charging_voltage,charging_current,UNDOCK_CHARGING_CURRENT_mA),end="\r")
@@ -71,6 +73,9 @@ def do_charging(eina,egpg):
                 charging_current = -1 * eina.milliamps()  # mA
                 # charging_voltage = ina.supply_voltage()
                 charging_voltage = eina.volts()
+              except DeviceRangeError as e:
+                print("\n",e)
+                pass
             print("\n")
             tnow = time.strftime(DT_FORMAT)
             dtLastStartPlaytime = dt.datetime.now()
@@ -103,6 +108,7 @@ def do_playtime(eina,egpg):
             # batt_voltage = ina.supply_voltage()
             batt_voltage = eina.volts()
             while (batt_voltage > DOCK_VOLTAGE):
+              try:
                 tnow = time.strftime(DT_FORMAT)
                 print("{:s} Battery at {:.0f}% {:.2f}v, Waiting for battery < {:.2f}v   ".format(
                        tnow,batt_pct*100,batt_voltage,DOCK_VOLTAGE),end="\r")
@@ -110,6 +116,9 @@ def do_playtime(eina,egpg):
                 batt_pct = battery.pctRemaining(egpg)
                 # batt_voltage = ina.supply_voltage()
                 batt_voltage = eina.volts()
+              except DeviceRangeError as e:
+                print("\n",e)
+                pass
             print("\n")
             tnow = time.strftime(DT_FORMAT)
             vBattB4, vReadingB4 = battery.vBatt_vReading(egpg)
@@ -163,6 +172,7 @@ def do_playtime(eina,egpg):
                 print("\n{:s} Docking Failure (dvBatt: {:.2f}v) -  Test Stopped Early".format(tnow,dvBatt))
                 speak.say("Docking Failure.  Docking Failure Detected.  Stopping Test Early.  Docking Failure.")
                 while True:
+                  try:
                     # current_now = battery.ave_current(ina)
                     current_now = eina.ave_milliamps()
                     # voltage_now = battery.ave_voltage(ina)
@@ -172,6 +182,9 @@ def do_playtime(eina,egpg):
                     tnow = time.strftime("%Y-%m-%d %H:%M:%S")
                     print("{} Reading: {:.2f} V  {:.3f} A  {:.2f} W    ".format(tnow,voltage_now, current_now, power_now ))
                     time.sleep(10)
+                  except DeviceRangeError as e:
+                    print("\n",e)
+                    pass
 
 
 

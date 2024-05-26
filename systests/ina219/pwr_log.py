@@ -10,16 +10,17 @@
 
 from easy_ina219 import EasyINA219
 import time
+from ina219 import DeviceRangeError
+
 
 eina = EasyINA219()
 time.sleep(0.5)
-
 
 power_meter = 0
 measurement_count = 0
 mAh_meter = 0
 
-rate_per_hour = 60
+rate_per_hour = 120
 
 
 try:
@@ -31,6 +32,7 @@ try:
     last_charging = charging
 
     while True:
+      try:
         current_now = eina.ave_milliamps()
         voltage_now = eina.ave_volts()
         power_now = eina.ave_watts()
@@ -53,5 +55,8 @@ try:
 
         print("{} Reading: {:.2f} V  {:.3f} A  {:.2f} W  {:.0f} mAh  {:.1f}Wh     ".format(tnow,eina.ave_volts(), eina.ave_milliamps()/1000.0, eina.ave_watts(),mAh_meter,power_meter))
         time.sleep(3600/rate_per_hour)
+      except DeviceRangeError as e:
+        print("ignoring: ",e)
+
 except Exception as e:
     print(e)

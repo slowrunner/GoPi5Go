@@ -1,0 +1,10 @@
+std_msgs/Header header
+float32   volts
+float32   milliamps
+float32   watts
+float32   watthours
+bool      charging
+int16     capacity
+int16     percent
+float32   last_charge
+float32   last_discharge
