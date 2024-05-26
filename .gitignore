@@ -71,3 +71,5 @@ ros2ws/roslogs
 ros2ws/log
 nohup.out
 YDLidar-SDK/
+*.onnx
+*.onnx.json
