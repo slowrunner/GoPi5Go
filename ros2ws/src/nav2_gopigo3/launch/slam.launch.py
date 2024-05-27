@@ -42,7 +42,7 @@ ARGUMENTS = [
 
 
 def generate_launch_description():
-    pkg_gopigo3_navigation = get_package_share_directory('gopigo3_navigation')
+    pkg_nav2_gopigo3 = get_package_share_directory('nav2_gopigo3')
 
     namespace = LaunchConfiguration('namespace')
     sync = LaunchConfiguration('sync')
@@ -50,7 +50,7 @@ def generate_launch_description():
     slam_params_arg = DeclareLaunchArgument(
         'params',
         default_value=PathJoinSubstitution(
-            [pkg_gopigo3_navigation, 'config', 'slam.yaml']),
+            [pkg_nav2_gopigo3, 'config', 'slam.yaml']),
         description='Robot namespace')
 
     slam_params = RewrittenYaml(

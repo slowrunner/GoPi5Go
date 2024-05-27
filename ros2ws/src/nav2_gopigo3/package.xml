@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>gopigo3_navigation</name>
+  <name>nav2_gopigo3</name>
   <version>1.0.4</version>
   <description>GoPiGo3 Navigation</description>
   <maintainer email="slowrunner@noreply.users.github.com">slowrunner</maintainer>

@@ -38,7 +38,7 @@ ARGUMENTS = [
                           description='Use sim time'),
     DeclareLaunchArgument('params_file',
                           default_value=PathJoinSubstitution([
-                              get_package_share_directory('gopigo3_navigation'),
+                              get_package_share_directory('nav2_gopigo3'),
                               'config',
                               'nav2.yaml'
                               ]),
