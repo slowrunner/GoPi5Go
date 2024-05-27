@@ -74,6 +74,15 @@ echo -e "\n*** Starting Odometer Node to log movements to odometer.log"
 echo "*** ros2 run ros2_gopigo3_node odometer &"
 ros2 run ros2_gopigo3_node odometer &
 
+echo -e "\n*** Starting Battery Node"
+echo -e "*** ros2 run gopi5go_dave battery_node &"
+ros2 run gopi5go_dave battery_node &
+
+echo -e "\n*** Start Docking Node"
+echo -e "*** ros2 run gopi5go_dave docking_node &"
+ros2 run gopi5go_dave docking_node &
+
+
 echo -e "\n*** STARTUP SLEEP 5s BEFORE STARTING LIDAR"
 sleep 1
 echo "5"
