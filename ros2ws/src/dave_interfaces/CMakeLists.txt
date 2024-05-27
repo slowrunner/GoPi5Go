@@ -15,7 +15,10 @@ find_package(std_msgs REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/Say.srv"
+  "srv/Dock.srv"
+  "srv/Undock.srv"
   "msg/BatteryState.msg"
+  "msg/DockStatus.msg"
   DEPENDENCIES std_msgs
 )
 

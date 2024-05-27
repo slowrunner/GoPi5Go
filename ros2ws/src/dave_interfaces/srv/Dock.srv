@@ -1,0 +1,7 @@
+# dave_interfaces.srv.Dock.srv 
+# Request
+---
+# Result
+bool is_docked
+bool is_charging
+bool success
