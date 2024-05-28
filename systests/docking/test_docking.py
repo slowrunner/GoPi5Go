@@ -33,6 +33,7 @@ import daveDataJson
 import speak
 from easy_ina219 import EasyINA219
 from ina219 import DeviceRangeError
+import biasdrive
 
 import time
 import logging
@@ -44,6 +45,15 @@ UNDOCK_CHARGING_CURRENT_mA = 175
 DOCK_VOLTAGE = 9.90
 
 
+NUM_OF_DOCKING_TESTS = 10
+UNDOCKED_SLEEP = 10
+DOCKED_SLEEP = 30
+
+SPEED_MPS = 0.05  # m/s
+DOCKING_BIAS = 0.0  # m/s  add angular to make drive straight
+DOCKING_FIX_DIST_CM = -1.0  # cm
+
+
 DT_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 def charging(eina):
@@ -53,6 +63,11 @@ def charging(eina):
        else:
             charging = False
        return charging
+
+def docking_failure_fix(egpg):
+    tnow = time.strftime(DT_FORMAT)
+    print(tnow,"docking_failure_fix: backing {:.1f} cm".format(DOCKING_FIX_DIST_CM))
+    biasdrive.drive_cm_bias(DOCKING_FIX_DIST_CM,DOCKING_BIAS,-SPEED_MPS,egpg)
 
 def do_charging(eina,egpg):
 
@@ -171,20 +186,49 @@ def do_playtime(eina,egpg):
                 daveDataJson.saveData('dockingState',"dockingfailure")
                 print("\n{:s} Docking Failure (dvBatt: {:.2f}v) -  Test Stopped Early".format(tnow,dvBatt))
                 speak.say("Docking Failure.  Docking Failure Detected.  Stopping Test Early.  Docking Failure.")
-                while True:
-                  try:
-                    # current_now = battery.ave_current(ina)
-                    current_now = eina.ave_milliamps()
-                    # voltage_now = battery.ave_voltage(ina)
-                    voltage_now = eina.ave_volts()
-                    # power_now =   battery.ave_power(ina)
-                    power_now =   eina.ave_watts()
-                    tnow = time.strftime("%Y-%m-%d %H:%M:%S")
-                    print("{} Reading: {:.2f} V  {:.3f} A  {:.2f} W    ".format(tnow,voltage_now, current_now, power_now ))
-                    time.sleep(10)
-                  except DeviceRangeError as e:
-                    print("\n",e)
-                    pass
+                docking_failure_fix(egpg)
+                time.sleep(5)
+                if charging(eina):
+                    docking_success = True
+                    dtLastStartCharging = dt.datetime.now()
+                    try:
+                        chargeCycles = int(daveDataJson.getData('chargeCycles'))
+                        chargeCycles += 1
+                    except:
+                        chargeCycles = 0
+
+                    lastPlaytimeInSeconds = (dtLastStartCharging - dtLastStartPlaytime).total_seconds()
+                    lastPlaytimeDays = divmod(lastPlaytimeInSeconds, 86400)
+                    lastPlaytimeHours = round( (lastPlaytimeDays[1] / 3600.0),1)
+
+                    str_to_log = "---- Fix Docking {} : success at {:.0f}% {:.1f}v after {:.1f} h playtime".format(chargeCycles,batt_pctB4,vBattAveB4,lastPlaytimeHours)
+                    daveDataJson.saveData('lastPlaytimeDuration', lastPlaytimeHours)
+                    daveDataJson.saveData('chargingState',"charging")
+                    daveDataJson.saveData('chargeCycles', chargeCycles)
+                    speak.say("Docking fix successful after {:.1f} hours playtime".format(lastPlaytimeHours))
+                    str_to_odomlog = "***  Reset Encoders ***"
+                    egpg.reset_encoders(blocking=False)
+                    odomLog.logger.info(str_to_odomlog)
+                    speak.say("Reset Encoders To Zero")
+
+                else:
+                    while True:
+                        print("\n{:s} Docking Failure (dvBatt: {:.2f}v) -  Test Stopped Early".format(tnow,dvBatt))
+                        speak.say("Docking Failure.  Docking Failure Detected.  Stopping Test Early.  Docking Failure.")
+
+                        try:
+                            # current_now = battery.ave_current(ina)
+                            current_now = eina.ave_milliamps()
+                            # voltage_now = battery.ave_voltage(ina)
+                            voltage_now = eina.ave_volts()
+                            # power_now =   battery.ave_power(ina)
+                            power_now =   eina.ave_watts()
+                            tnow = time.strftime("%Y-%m-%d %H:%M:%S")
+                            print("{} Reading: {:.2f} V  {:.3f} A  {:.2f} W    ".format(tnow,voltage_now, current_now, power_now ))
+                            time.sleep(10)
+                        except DeviceRangeError as e:
+                            print("\n",e)
+                            pass
 
 
 
