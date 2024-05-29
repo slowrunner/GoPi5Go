@@ -149,7 +149,6 @@ def do_playtime(eina,egpg):
             vBattDocked, vReadingDocked = battery.vBatt_vReading(egpg)
             batt_pctDocked = battery.pctRemaining(egpg)   # battery remaining after docking
             # print("vBattDocked: {:.2f}  vBattAveDocked: {:.2f}  vReadingDocked: {:.2f} volts Remaining: {:.0f}%".format(vBattDocked, vBattAveDocked, vReadingDocked, batt_pctDocked*100))
-            dvBatt = vBattAveDocked - vBattAveB4
             time.sleep(10)  # wait to see if charging starts
             if charging(eina):
                 docking_success = True
@@ -184,24 +183,23 @@ def do_playtime(eina,egpg):
             print(tnow,str_to_log)
             if (docking_success == False):
                 daveDataJson.saveData('dockingState',"dockingfailure")
-                print("\n{:s} Docking Failure (dvBatt: {:.2f}v) -  Test Stopped Early".format(tnow,dvBatt))
-                speak.say("Docking Failure.  Docking Failure Detected.  Stopping Test Early.  Docking Failure.")
+                print("\n",tnow,"Docking Failure. Attempting Fix.  Docking Failure.")
+                speak.say("Docking Failure.  Attempting Fix.  Docking Failure.")
                 docking_failure_fix(egpg)
                 time.sleep(5)
                 if charging(eina):
                     docking_success = True
                     dtLastStartCharging = dt.datetime.now()
-                    try:
-                        chargeCycles = int(daveDataJson.getData('chargeCycles'))
-                        chargeCycles += 1
-                    except:
-                        chargeCycles = 0
+                    chargeCycles = int(daveDataJson.getData('chargeCycles'))
+                    chargeCycles += 1
 
                     lastPlaytimeInSeconds = (dtLastStartCharging - dtLastStartPlaytime).total_seconds()
                     lastPlaytimeDays = divmod(lastPlaytimeInSeconds, 86400)
                     lastPlaytimeHours = round( (lastPlaytimeDays[1] / 3600.0),1)
 
                     str_to_log = "---- Fix Docking {} : success at {:.0f}% {:.1f}v after {:.1f} h playtime".format(chargeCycles,batt_pctB4,vBattAveB4,lastPlaytimeHours)
+                    lifeLog.logger.info(str_to_log)
+                    daveDataJson.saveData('lastDocking', str_to_log)
                     daveDataJson.saveData('lastPlaytimeDuration', lastPlaytimeHours)
                     daveDataJson.saveData('chargingState',"charging")
                     daveDataJson.saveData('chargeCycles', chargeCycles)
@@ -213,8 +211,8 @@ def do_playtime(eina,egpg):
 
                 else:
                     while True:
-                        print("\n{:s} Docking Failure (dvBatt: {:.2f}v) -  Test Stopped Early".format(tnow,dvBatt))
-                        speak.say("Docking Failure.  Docking Failure Detected.  Stopping Test Early.  Docking Failure.")
+                        print("\n{:s} Docking Failure -  Test Stopped Early".format(tnow))
+                        speak.say("Docking Failure.  Docking Failure Detected.  Test Stopped Early.  Docking Failure.")
 
                         try:
                             # current_now = battery.ave_current(ina)
@@ -224,7 +222,7 @@ def do_playtime(eina,egpg):
                             # power_now =   battery.ave_power(ina)
                             power_now =   eina.ave_watts()
                             tnow = time.strftime("%Y-%m-%d %H:%M:%S")
-                            print("{} Reading: {:.2f} V  {:.3f} A  {:.2f} W    ".format(tnow,voltage_now, current_now, power_now ))
+                            print("{} Docking Failed - Reading: {:.2f} V  {:.3f} A  {:.2f} W    ".format(tnow,voltage_now, current_now, power_now ))
                             time.sleep(10)
                         except DeviceRangeError as e:
                             print("\n",e)
