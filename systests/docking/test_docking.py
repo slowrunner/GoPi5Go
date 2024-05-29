@@ -148,7 +148,6 @@ def do_playtime(eina,egpg):
             vBattAveDocked = battery.aveBatteryV(egpg)
             vBattDocked, vReadingDocked = battery.vBatt_vReading(egpg)
             batt_pctDocked = battery.pctRemaining(egpg)   # battery remaining after docking
-            # print("vBattDocked: {:.2f}  vBattAveDocked: {:.2f}  vReadingDocked: {:.2f} volts Remaining: {:.0f}%".format(vBattDocked, vBattAveDocked, vReadingDocked, batt_pctDocked*100))
             time.sleep(10)  # wait to see if charging starts
             if charging(eina):
                 docking_success = True
@@ -199,6 +198,7 @@ def do_playtime(eina,egpg):
 
                     str_to_log = "---- Fix Docking {} : success at {:.0f}% {:.1f}v after {:.1f} h playtime".format(chargeCycles,batt_pctB4,vBattAveB4,lastPlaytimeHours)
                     lifeLog.logger.info(str_to_log)
+                    daveDataJson.saveData('dockingState',"docked")
                     daveDataJson.saveData('lastDocking', str_to_log)
                     daveDataJson.saveData('lastPlaytimeDuration', lastPlaytimeHours)
                     daveDataJson.saveData('chargingState',"charging")
