@@ -28,6 +28,7 @@ setup(
             'battery_node = gopi5go_dave.battery_node:main',
             'docking_node = gopi5go_dave.docking_node:main',
             'dave_node = gopi5go_dave.dave_node:main',
+            'test_dock = gopi5go_dave.test_dock:main',
         ],
     },
 )

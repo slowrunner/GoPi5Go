@@ -39,13 +39,10 @@ import time
 import logging
 import datetime as dt
 
-NUM_OF_DOCKING_TESTS = 1000  # approx. four cycles per day
-
 UNDOCK_CHARGING_CURRENT_mA = 175
 DOCK_VOLTAGE = 9.90
 
 
-NUM_OF_DOCKING_TESTS = 10
 UNDOCKED_SLEEP = 10
 DOCKED_SLEEP = 30
 
@@ -236,9 +233,10 @@ def main():
     # ina = ina219.INA219(SHUNT_OHMS,MAX_EXPECTED_AMPS, log_level=None)
     eina = EasyINA219()
     # ina.configure(ina.RANGE_16V,bus_adc=ina.ADC_128SAMP,shunt_adc=ina.ADC_128SAMP)
+    test = 1
 
     try:
-        for test in range(NUM_OF_DOCKING_TESTS):
+        while test > 0:
             tnow = time.strftime(DT_FORMAT)
             print("\n{:s} **** test_docking.main(): TEST {:d} ".format(tnow,test))
             if charging(eina):
@@ -252,13 +250,12 @@ def main():
             else:
                 do_playtime(eina,egpg)
             time.sleep(10)  # allow time for charging / discharge to settle
+            test += 1
 
-        tnow = time.strftime(DT_FORMAT)
-        print("{:s} test_docking.main(): TEST COMPLETE".format(tnow))
     except KeyboardInterrupt:
         egpg.stop()
         tnow = time.strftime(DT_FORMAT)
-        print("\n{:s} Test Stopped Early".format(tnow))
+        print("\n{:s} Test {:d} Stopped".format(tnow,test))
 
 if __name__ == '__main__':
     main()

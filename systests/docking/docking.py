@@ -35,7 +35,8 @@ DOCKED_SLEEP = 30
 SPEED_MPS = 0.05  # m/s
 DOCKING_BIAS = -0.01  # m/s  add angular to make drive straight
 DOCKING_DIST_CM = -17.4  # cm
-UNDOCKING_BIAS = 0.03  # m/s  add angular to make drive straight
+# UNDOCKING_BIAS = 0.03  # m/s  add angular to make drive straight
+UNDOCKING_BIAS = 0.02  # m/s  add angular to make drive straight
 UNDOCKING_DIST_CM = 17.0  # cm
 
 
