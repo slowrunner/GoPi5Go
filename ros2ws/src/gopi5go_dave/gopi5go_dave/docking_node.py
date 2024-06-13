@@ -40,6 +40,7 @@ from dave_interfaces.srv import Dock, Undock
 from dave_interfaces.msg import BatteryState, DockStatus
 import dock, undock
 from time import sleep
+import datetime as dt
 
 import rclpy
 from rclpy.node import Node
@@ -47,6 +48,10 @@ from rclpy.qos import qos_profile_sensor_data
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.callback_groups import MutuallyExclusiveCallbackGroup, ReentrantCallbackGroup
 import threading
+
+
+DT_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
+
 
 class Docking(Node):
 
@@ -64,17 +69,33 @@ class Docking(Node):
         self.timer = self.create_timer( 1.0/self.hz, self.docking_main_cb, callback_group=main_cb_grp)
         self.is_docked = False
         self.is_charging = False
-        self.get_logger().info('docking_node.init()')
+        self.prior_is_charging = self.is_charging
+        # self.get_logger().info('docking_node.init()')
+        dtstr = dt.datetime.now().strftime(DT_FORMAT)[:-3]
+        printMsg = 'docking_node.init(): is_charging: {}  is_docked: {}'.format(self.is_charging, self.is_docked)
+        print(dtstr,printMsg)
 
     def battery_state_cb(self,battery_state_msg):
         self.is_charging = battery_state_msg.charging
-        if (self.is_charging):
-            self.is_docked = True
+        if self.is_charging != self.prior_is_charging:  # something changed
+            if (self.is_charging):        # was not charging, now charging
+                self.is_docked = True
+            else:                         # was charging, now not 
+                self.is_docked = False
+        self.prior_is_charging = self.is_charging
+
         # self.battery_volts = battery_state_msg.volts
-        self.get_logger().info('docking_node.battery_state_cb()')
+        # self.get_logger().info('docking_node.battery_state_cb()')
+        dtstr = dt.datetime.now().strftime(DT_FORMAT)[:-3]
+        printMsg = 'docking_node.battery_state_cb(): is_charging: {}  is_docked: {}'.format(self.is_charging, self.is_docked)
+        print(dtstr,printMsg)
 
     def dock_cb(self, request, response):
-        self.get_logger().info('docking_node.dock_cb() entry')
+
+        dtstr = dt.datetime.now().strftime(DT_FORMAT)[:-3]
+        printMsg = 'docking_node.dock_cb() entry: is_charging: {}  is_docked: {}'.format(self.is_charging, self.is_docked)
+        print(dtstr,printMsg)
+        # self.get_logger().info('docking_node.dock_cb() entry')
 
         dock.main()
 
@@ -83,36 +104,51 @@ class Docking(Node):
         response.is_docked = self.is_docked
         response.is_charging = self.is_charging
         response.success= (self.is_docked and self.is_charging)
-        self.get_logger().info('docking_node.dock_cb() return')
+        # self.get_logger().info('docking_node.dock_cb() return')
+        dtstr = dt.datetime.now().strftime(DT_FORMAT)[:-3]
+        printMsg = 'docking_node.dock_cb() exit: success: {} : is_charging: {}  is_docked: {}'.format(response.success, self.is_charging, self.is_docked)
+        print(dtstr,printMsg)
 
         return response
 
     def undock_cb(self, request, response):
-        self.get_logger().info('docking_node.undock_cb() entry')
+        dtstr = dt.datetime.now().strftime(DT_FORMAT)[:-3]
+        printMsg = 'docking_node.undock_cb() entry: is_charging: {}  is_docked: {}'.format(self.is_charging, self.is_docked)
+        print(dtstr,printMsg)
+        # self.get_logger().info('docking_node.undock_cb() entry')
 
         undock.main()
         self.is_docked = False
 
         response.is_docked = self.is_docked
         response.success = True
-        self.get_logger().info('docking_node.undock_cb() return')
+        # self.get_logger().info('docking_node.undock_cb() return')
+        dtstr = dt.datetime.now().strftime(DT_FORMAT)[:-3]
+        printMsg = 'docking_node.undock_cb() exit: success: {} : is_charging: {}  is_docked: {}'.format(response.success, self.is_charging, self.is_docked)
+        print(dtstr,printMsg)
 
         return response
 
     def docking_main_cb(self):
-        self.get_logger().info('docking_node.main_cb() entry')
+        # self.get_logger().info('docking_node.main_cb() entry')
+        dtstr = dt.datetime.now().strftime(DT_FORMAT)[:-3]
+        printMsg = 'docking_node.main_cb() entry: is_charging: {}  is_docked: {}'.format(self.is_charging, self.is_docked)
+        print(dtstr,printMsg)
 
         try:
             dock_status = DockStatus()
             dock_status.is_docked = self.is_docked
             dock_status.is_charging = self.is_charging
             self.dock_status_pub.publish(dock_status)
+            dtstr = dt.datetime.now().strftime(DT_FORMAT)[:-3]
+            printMsg = 'docking_node.main_cb() publishing dock_status: is_charging: {}  is_docked: {}'.format(self.is_charging, self.is_docked)
+            print(dtstr,printMsg)
 
         except Exception as e:
             print("docking_main_cb: ",str(e))
             sys.exit(1)
 
-        self.get_logger().info('docking_node.main_cb() done')
+        # self.get_logger().info('docking_node.main_cb() done')
 
 
 def main():
