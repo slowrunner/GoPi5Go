@@ -26,14 +26,17 @@ def main():
 
     spi_mutex = SPI_Mutex()
 
-
-    while True:
+    doit = True
+    while doit:
 
         try:
             spi_mutex.acquire()
             dtstr = dt.datetime.now().strftime(DT_FORMAT)
             print(dtstr,"|",USER,": I got the mutex")
             time.sleep(1)
+        except KeyboardInterrupt:
+            print("\n")
+            doit = False
         finally:
             spi_mutex.release()
             dtstr = dt.datetime.now().strftime(DT_FORMAT)
