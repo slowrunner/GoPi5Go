@@ -1,5 +1,29 @@
 #!/usr/bin/env python3
 
+"""
+    FILE:  spi_mutex.py
+
+    Use to ensure only one process at a time accesses the SPI bus.
+
+    USAGE:  
+        (Put spi_mutex.py in execution folder of each user)
+
+        from spi_mutex import SPI_Mutex
+
+        spi_mutex = SPI_Mutex()
+
+
+        try:
+            spi_mutex.acquire()
+            # Do SPI bus operations
+        finally:
+            spi_mutex.release()
+
+    NOTE:  Puts lock file in /home/pi/   !!!! 
+           Does not work if put lock file in /run/lock or /var/lock
+
+
+"""
 
 import datetime as dt
 import time
@@ -7,14 +31,16 @@ import atexit
 import fcntl
 import os
 
+
+DEBUG = False
+
+
 class SPI_Mutex(object):
-    """ Stolen from Dexter Industries mutex """
 
     def __init__(self, loop_time = 0.0001):
         """ Initialize """
 
-        # self.Filename = "/var/lock/SPI_Mutex.lock"
-        self.Filename = "./SPI_Mutex.lck"
+        self.Filename = "/home/pi/SPI_Mutex.lck"
         self.LoopTime = loop_time
         self.Handle = None
 
@@ -40,13 +66,10 @@ class SPI_Mutex(object):
 
         while True:
             try:
-                # self.Handle = open(self.Filename, 'w')
-                # lock
-                # fcntl.lockf(self.Handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
                 fcntl.flock(self.Handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
                 return
             except IOError: # already locked by a different process
-                print("mutex locked, waiting")
+                if DEBUG: print("mutex locked, waiting")
                 time.sleep(self.LoopTime)
             except Exception as e:
                 print(e)
@@ -55,14 +78,13 @@ class SPI_Mutex(object):
         """ Release the mutex """
 
         if self.Handle is not None and self.Handle is not True:
-            # fcntl.lockf(self.Handle, fcntl.LOCK_UN)
             fcntl.flock(self.Handle, fcntl.LOCK_UN)
-            # self.Handle.close()
-            # self.Handle = None
             time.sleep(self.LoopTime)
 
 
 
+
+# EXAMPLE - Use with 2nd_SPI_user.py example
 
 DT_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
 
@@ -71,7 +93,6 @@ USER = "SPI_user"
 def main():
 
     spi_mutex = SPI_Mutex()
-
 
     while True:
 

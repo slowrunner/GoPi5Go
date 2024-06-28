@@ -1,13 +1,22 @@
 #!/usr/bin/env python3
 
+"""
+    FILE:  2nd_SPI_user.py
+
+
+    Example to test SPI_Mutex class
+
+    Terminal 1: ./spi_mutex.py
+    Terminal 2: ./2nd_SPI_user.py
+
+    spi_mutex.py will hold mutex for 5 seconds
+    2nd_SPI_user.py will hold mutex for 1 second
+
+"""
 
 import datetime as dt
 import time
 from spi_mutex import SPI_Mutex
-
-
-
-
 
 DT_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
 
