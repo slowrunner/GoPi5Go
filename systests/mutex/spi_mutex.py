@@ -5,8 +5,13 @@
 
     Use to ensure only one process at a time accesses the SPI bus.
 
-    USAGE:  
-        (Put spi_mutex.py in execution folder of each user)
+    USAGE:
+        Put spi_mutex.py in execution folder of each program that uses SPI 
+
+        or put spi_mutex.py somewhere and:
+
+        import os
+        os.path.insert(1,'/full/path/to/folder_containing_spi_mutex.py_file/')
 
         from spi_mutex import SPI_Mutex
 
@@ -19,8 +24,7 @@
         finally:
             spi_mutex.release()
 
-    NOTE:  Puts lock file in /home/pi/   !!!! 
-           Does not work if put lock file in /run/lock or /var/lock
+    NOTE:  Puts lock file SPI_Mutex.lck in /run/lock
 
 
 """
@@ -40,14 +44,14 @@ class SPI_Mutex(object):
     def __init__(self, loop_time = 0.0001):
         """ Initialize """
 
-        self.Filename = "/home/pi/SPI_Mutex.lck"
+        self.Filename = "/run/lock/SPI_Mutex.lck"
         self.LoopTime = loop_time
         self.Handle = None
 
         try:
             self.Handle = open(self.Filename, 'w')
             if os.path.isfile(self.Filename):
-                os.chmod(self.Filename, 0o666)
+                os.chmod(self.Filename, 0o777)
 
         except Exception as e:
             print(e)

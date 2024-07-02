@@ -16,6 +16,10 @@
 
 import datetime as dt
 import time
+
+# import os
+# os.path.insert(1,'/home/pi/my_python_utils/')
+
 from spi_mutex import SPI_Mutex
 
 DT_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
@@ -31,9 +35,13 @@ def main():
 
         try:
             spi_mutex.acquire()
+            # This is where code goes that uses the SPI bus
+
+            # Simulated stuff to do while have the SPI mutex
             dtstr = dt.datetime.now().strftime(DT_FORMAT)
             print(dtstr,"|",USER,": I got the mutex")
             time.sleep(1)
+
         except KeyboardInterrupt:
             print("\n")
             doit = False
