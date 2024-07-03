@@ -1,34 +1,32 @@
 #!/usr/bin/env python3
 
 """
-    FILE:  2nd_SPI_user.py
+    FILE:  di_mutex_user.py
 
 
-    Example to test SPI_Mutex class
+    Example to test the DI_Mutex class from the GoPiGo3 API
+    - Built from RFR_Tools/miscellaneous/di_mutex.py
+    - Found in RFR_Tools egg
 
-    Terminal 1: ./spi_mutex.py
-    Terminal 2: ./2nd_SPI_user.py
+    Test Usage:
+    Terminal 1: ./di_mutex_user.py
+    Terminal 2: ./d2_mutex_user.py
 
-    spi_mutex.py will hold mutex for 5 seconds
-    2nd_SPI_user.py will hold mutex for 1 second
+    di_mutex_user.py will hold mutex for 5 seconds
+    d2_mutex_user.py will hold mutex for 1 second
 
 """
 
 import datetime as dt
 import time
 
-# import os
-# os.path.insert(1,'/home/pi/my_python_utils/')
-
-from spi_mutex import SPI_Mutex
+from di_mutex import DI_Mutex
 
 DT_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
 
-USER = "2nd_SPI_user"
-
 def main():
 
-    spi_mutex = SPI_Mutex()
+    spi_mutex = DI_Mutex(name="SPI")
 
     doit = True
     while doit:
@@ -39,8 +37,8 @@ def main():
 
             # Simulated stuff to do while have the SPI mutex
             dtstr = dt.datetime.now().strftime(DT_FORMAT)
-            print(dtstr,"|",USER,": I got the mutex")
-            time.sleep(1)
+            print(dtstr,"|", __file__, ": I got the mutex")
+            time.sleep(5)
 
         except KeyboardInterrupt:
             print("\n")
@@ -48,7 +46,7 @@ def main():
         finally:
             spi_mutex.release()
             dtstr = dt.datetime.now().strftime(DT_FORMAT)
-            print(dtstr,"|",USER,": I released the mutex\n")
+            print(dtstr,"|", __file__, ": I released the mutex\n")
 
 
 if __name__ == '__main__':
