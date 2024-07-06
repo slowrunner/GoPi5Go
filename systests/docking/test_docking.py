@@ -3,7 +3,7 @@
 # FILE:  test_docking.py
 
 """
-   USAGE:  Set NUM_OF_DOCKING_TESTS and then execute ./test_docking.py
+   USAGE:  ./test_docking.py
 
    PROCESS:  Monitor INA219 current and voltage sensor
              Undock when charging current falls below cutoff target (175mA)
@@ -18,7 +18,7 @@
        3.5h - 28.5Wh - 20mA       + 8m (xtra hour charge =  8m xtra playtime)
 
        Charge till 175mA = 2.3h
-       Playtime till 9.9v = 3.8h
+       Playtime till 9.9v = 3.6-3.8h
 """
 
 
@@ -42,9 +42,6 @@ import datetime as dt
 UNDOCK_CHARGING_CURRENT_mA = 175
 DOCK_VOLTAGE = 9.90
 
-
-UNDOCKED_SLEEP = 10
-DOCKED_SLEEP = 30
 
 SPEED_MPS = 0.05  # m/s
 DOCKING_BIAS = 0.0  # m/s  add angular to make drive straight
@@ -71,9 +68,7 @@ def do_charging(eina,egpg):
             dtLastStartCharging = dt.datetime.strptime(daveDataJson.getData("lastDockingTime"),DT_FORMAT)
             dtLastStartPlaytime = dt.datetime.strptime(daveDataJson.getData("lastDismountTime"),DT_FORMAT)
             batt_pct = battery.pctRemaining(egpg)
-            # charging_current = -1 * ina.current()  # mA
             charging_current = -1 * eina.milliamps()  # mA
-            # charging_voltage = ina.supply_voltage()
             charging_voltage = eina.volts()
             while (charging_current > UNDOCK_CHARGING_CURRENT_mA):
               try:
@@ -81,9 +76,7 @@ def do_charging(eina,egpg):
                 print("{:s} Charging at {:.2f}v {:.0f}mA, Waiting for current < {:.0f}mA      ".format(
                        tnow,charging_voltage,charging_current,UNDOCK_CHARGING_CURRENT_mA),end="\r")
                 time.sleep(6)
-                # charging_current = -1 * ina.current()  # mA
                 charging_current = -1 * eina.milliamps()  # mA
-                # charging_voltage = ina.supply_voltage()
                 charging_voltage = eina.volts()
               except DeviceRangeError as e:
                 print("\n",e)
@@ -91,7 +84,6 @@ def do_charging(eina,egpg):
             print("\n")
             tnow = time.strftime(DT_FORMAT)
             dtLastStartPlaytime = dt.datetime.now()
-            # charging_voltage = ina.supply_voltage()
             charging_voltage = eina.volts()
             lastChargeTimeInSeconds = (dtLastStartPlaytime - dtLastStartCharging).total_seconds()
             lastChargeTimeInDays = divmod(lastChargeTimeInSeconds, 86400)
@@ -117,7 +109,6 @@ def do_playtime(eina,egpg):
             daveDataJson.saveData('dockingState',"undocked")
             daveDataJson.saveData('chargingState',"discharging")
             batt_pct = battery.pctRemaining(egpg)
-            # batt_voltage = ina.supply_voltage()
             batt_voltage = eina.volts()
             while (batt_voltage > DOCK_VOLTAGE):
               try:
@@ -126,7 +117,6 @@ def do_playtime(eina,egpg):
                        tnow,batt_pct*100,batt_voltage,DOCK_VOLTAGE),end="\r")
                 time.sleep(6)
                 batt_pct = battery.pctRemaining(egpg)
-                # batt_voltage = ina.supply_voltage()
                 batt_voltage = eina.volts()
               except DeviceRangeError as e:
                 print("\n",e)
@@ -212,11 +202,8 @@ def do_playtime(eina,egpg):
                         speak.say("Docking Failure.  Docking Failure Detected.  Test Stopped Early.  Docking Failure.")
 
                         try:
-                            # current_now = battery.ave_current(ina)
                             current_now = eina.ave_milliamps()
-                            # voltage_now = battery.ave_voltage(ina)
                             voltage_now = eina.ave_volts()
-                            # power_now =   battery.ave_power(ina)
                             power_now =   eina.ave_watts()
                             tnow = time.strftime("%Y-%m-%d %H:%M:%S")
                             print("{} Docking Failed - Reading: {:.2f} V  {:.3f} A  {:.2f} W    ".format(tnow,voltage_now, current_now, power_now ))
@@ -230,9 +217,7 @@ def do_playtime(eina,egpg):
 def main():
 
     egpg = EasyGoPiGo3(use_mutex=True, noinit=True)
-    # ina = ina219.INA219(SHUNT_OHMS,MAX_EXPECTED_AMPS, log_level=None)
     eina = EasyINA219()
-    # ina.configure(ina.RANGE_16V,bus_adc=ina.ADC_128SAMP,shunt_adc=ina.ADC_128SAMP)
     test = 1
 
     try:
