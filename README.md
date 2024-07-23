@@ -46,7 +46,7 @@ GoPi5Go-Dave Specs:
   * MPU9250 Inertial Measurement Unit
     also provides ambient temperature 
   * Oak-D-W-97: RGB Center camera, Stereo Grayscale Depth cameras  
-    HFOV: 150 VFOV: 80 deg   
+    HFOV: 150 VFOV: 80 deg Resolution: 1Mpx 1280x800  
   
 - Actuators/Effectors (GoPiGo3 Intrinsic)
   * Wheel Motors
