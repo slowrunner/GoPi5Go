@@ -45,7 +45,8 @@ GoPi5Go-Dave Specs:
   * YDLIDAR X4 - 360 degrees, 12cm-10m range on half degree increment, ~8Hz scanning
   * MPU9250 Inertial Measurement Unit
     also provides ambient temperature 
-  * Oak-D-Lite: RGB Center camera with Stereo Grayscale Depth cameras 
+  * Oak-D-W-97: RGB Center camera, Stereo Grayscale Depth cameras  
+    HFOV: 150 VFOV: 80 deg   
   
 - Actuators/Effectors (GoPiGo3 Intrinsic)
   * Wheel Motors
@@ -69,25 +70,31 @@ GoPi5Go-Dave Specs:
   * Roughly 25wH
   * Charger never reaches trickle charge due to powering Pololu 5v circuit 
 
-- Run Time: (Using 9.75v 15minutes left "need to shutdown" limit) 
+- Run Time: (Using 10v 15minutes left "need to shutdown" limit) 
   * "Thinking" 3.8 hours  (averages 6.5w 25wH)
   * "100% wandering" TBD hours
 
 - Recharger:  
   * ModRobotics Li-ion Battery Charging adapter
   * 12.6v 1A output with charging/charged LED
-  * About 3 hours recharge from safety shutdown
+  * About 2.3 hours recharge from 10v docking
 
 - Physical:
   * 2.5 lbs Total
   * 7" wide x 9" Long x 12" High
 
-- Total Cost: $454
+- Total Cost: $782
 
 - First "Life as GoPi5Go-Dave": March 2024
 - First "Life as Humble-Dave": 
 - First "Life as ROSbot Dave": 
 
+- GoPiGo3 API Modifications for Bookworm/Raspberry Pi 5
+  * Reduced SPI transfer rate to 250 khz for Pi5
+  * Removed Software I2C for Bookworm
+  * Removed all pigpio dependancy (Was configuring SPI for ALT0 - no longer needed)
+  * Changed distance sensor and distance sensor examples to default to hardware I2C
+  * Changed power monitor to gpiod (was RPi.GPIO)
 
 # SETUP:  
 [Setup Document](config/SETUP.md) 
