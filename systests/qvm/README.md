@@ -25,15 +25,15 @@ cd examples
 ```
 (qvmvenv) pi@GoPi5Go:~/GoPi5Go/systests/qvm/qvmvenv/examples $ ./first_qisket_circuit.py 
 
-Simulating Two 2-bit qubits
+Simulating Two 2-qubit circuits
 expectation values : psi1 = [ 1.53564065 -1.10584991], psi2 = 0.17500806267478156
 time: 2.51 ms
 
-Simulating 128 shots of one 2-bit qubit
+Simulating 128 shots of a 2-qubit circuit
 counts for Bell circuit : {'00': 66, '11': 62}
 time: 1.03 ms
 
-Simulating one 2-bit qubit
+Simulating one 2-qubit circuit
 counts for parameterized circuit : {'01': 399, '11': 394, '10': 94, '00': 137}
 time: 1.49 ms
 
