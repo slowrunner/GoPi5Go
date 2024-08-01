@@ -64,6 +64,8 @@ Required-by: qiskit-aer
 ```
 # Install Latest Qiskit Version
 
+REF: https://github.com/Qiskit/qiskit/tree/main
+
 ```
 python3 -m venv qiskit1 --prompt qiskit1
 cd qiskit1
