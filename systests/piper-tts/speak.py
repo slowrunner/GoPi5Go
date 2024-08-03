@@ -8,6 +8,8 @@
 #            includes optional vol parameter (range 10-500 useful)
 #            includes optional ignore (quietTime) parameter 
 
+#  Aug2024: Changed to use piper-tts
+
 #  Oct2019: increased volume for MonkMakes Amplified Speaker
 #           reduced speed to 150wpm (default was 175)
 #           switched to espeak-ng (supported, better quality)
@@ -94,25 +96,37 @@ def say_piper(phrase,vol=100,anytime=False):
         # subprocess.check_output(['espeak-ng -s150 -ven-us+f5 -a'+str(vol)+' "%s"' % phrase], stderr=subprocess.STDOUT, shell=True)
         # subprocess.check_output(['espeak-ng -a'+str(vol)+' "%s"' % phrase], stderr=subprocess.STDOUT, shell=True)
         # subprocess.check_output(['echo "%s" | piper --model /home/pi/GoPi5Go/models/piper-tts/en_US-arctic-medium.onnx    --output_raw | aplay -D plughw:2,0 -r 22050 -f S16_LE -t raw -' % phrase], stderr=subprocess.STDOUT, shell=True)
-        subprocess.check_output(['./piper.sh "%s"' % phrase], stderr=subprocess.STDOUT, shell=True)
+        # subprocess.check_output(['./piper.sh "%s"' % phrase], stderr=subprocess.STDOUT, shell=True)
+        cmd = "amixer -D pulse sset Master {:d}%".format(int(vol/3))
+        # print("cmd:",cmd)
+        subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
+
+        cmd = '~/GoPi5Go/plib/piper.sh "%s"' % phrase
+        subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
+        # reset mixer to whisper level
+        cmd = "amixer -D pulse sset Master {:d}%".format(40)
+        subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
+
     logger.info(phrase+spoken)
 
 def say(phrase,vol=200,anytime=False):
-    say_espeak(phrase,vol,anytime)
+    # say_espeak(phrase,vol,anytime)
     # vol = 50 for HP amplified spkr
     # vol = vol + 40  # adjust for flite
     # say_flite(phrase,vol,anytime)
     say_piper(phrase,vol,anytime)
 
 def shout(phrase,vol=500,anytime=False):
-    say_espeak(phrase,vol,anytime)
+    # say_espeak(phrase,vol,anytime)
     # vol = vol - 50  # adjust for flite
     # say_flite(phrase,vol,anytime)
+    say_piper(phrase,vol,anytime)
 
 def whisper(phrase,vol=40,anytime=False):
-    say_espeak(phrase,vol,anytime)
+    # say_espeak(phrase,vol,anytime)
     # vol = vol + 30  # adjust for flite
     # say_flite(phrase,vol,anytime=False)
+    say_piper(phrase,vol,anytime)
 
 # ##### MAIN ####
 # @runLog.logRun
@@ -136,7 +150,8 @@ def main():
         say("Just saying. This phrase contained an apostrophe which isn't allowed")
         whisper('I need to whisper.  This phrase contains "a quoted word" ')
         shout("I feel like shouting.  My name is Go Pi 5 Go Dave. ")
-        whisper("Whisper at 20. I don't know Pogo.  Never met the little bot",20,True)
+        # whisper("Whisper at 20. I don't know Pogo.  Never met the little bot",20,True)
+        whisper("Whisper at 30. I don't know Pogo.  Never met the little bot",30,True)
 
 if __name__ == "__main__":
     main()
