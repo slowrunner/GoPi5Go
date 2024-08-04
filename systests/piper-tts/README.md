@@ -1,5 +1,7 @@
 TTS Piper
 
+### GoPi5Go-Dave is using en_US arctic-medium voice
+
 REF: https://github.com/rhasspy/piper  
 REF: https://www.youtube.com/watch?v=rjq5eZoWWSo  
 
@@ -16,10 +18,10 @@ sudo pip3 install piper-tts --break-system-packages
 Try it (will download the voices to the cwd:  
 ```
 echo 'Welcome to the world of speech synthesis!' | piper \  
-  --model en_US-lessac-medium \  
+  --model en_US-arctic-medium \  
   --output_file welcome.wav   
 
-echo 'Welcome to the world of speech synthesis!' | piper   --model en_US-lessac-medium.onnx    --output_raw | aplay -r 22050 -f S16_LE -t raw -   
+echo 'Welcome to the world of speech synthesis!' | piper   --model en_US-arctic-medium.onnx    --output_raw | aplay -r 22050 -f S16_LE -t raw -   
 
 
 $ piper -h  
@@ -80,22 +82,22 @@ Simple mixer control 'Capture',0
   amixer -D pulse sset Master 80%
 ```
 
-** get arctic-medium voice for wali  (downloads it then uses it)  
+** get arctic-medium voice for Dave  (downloads it then uses it)  
 ```
 echo 'Welcome to the world of speech synthesis!' | piper  --model en_US-arctic-medium     --output_file arctic-medium.wav
 ```
 
-** cmds/say.sh to play arctic voice   
+** plib/piper.sh "hello"to play arctic voice   
 
 ```
 #!/bin/bash  
 
 if [ "$#" -ne 1 ] ;
-	then echo 'Usage:  ./say.sh "string to speak" '
+	then echo 'Usage:  ./piper.sh "string to speak" '
 	exit
 fi
 
-echo $1 | piper   --model /home/pi/wali_pi5/c3ws/models/piper-tts/en_US-arctic-medium.onnx  --output_raw | aplay -D plughw:2,0 -r 22050 -f S16_LE -t raw - 
+echo $1 | piper   --model /home/pi/GoPi5Go/models/piper-tts/en_US-arctic-medium.onnx  --output_raw | aplay -D plughw:2,0 -r 22050 -f S16_LE -t raw - 
 ```
 
 ** ALSO CAN INSTALL DIRECT  
