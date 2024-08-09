@@ -6,16 +6,23 @@
 ```
 
 - Log File:  build.log
+- Check disk space for docker image
+
+```
+sudo du -sh /var/lib/docker
+df -h /
+```
 
 ### Run
 ```
 ./run_gopigo3buster.sh
 ```
 
-### Remove the Docker image and local GoPiGo3 repo
+### Remove the Docker image, build cache, and local GoPiGo3 repo
 ```
 ./rm_gpg3buster_image.sh
 rm -rf GoPiGo3
+docker buildx prune
 ```
 
 ### Result
