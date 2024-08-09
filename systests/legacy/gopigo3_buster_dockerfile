@@ -1,0 +1,56 @@
+FROM python:3.7-buster
+
+RUN  apt-get update 
+RUN  apt-get install -y \
+    python3-serial \
+    i2c-tools \
+    sudo \
+    swig
+#    libraspberrypi-bin \
+
+# Install the GoPiGo3 API
+
+COPY 99-com.rules /etc/udev/rules.d
+
+RUN  groupadd spi --system -f -g 995
+RUN  groupadd netdev --system -f -g 106
+RUN  groupadd i2c --system -f -g 994
+RUN  groupadd gpio --system -f -g 993
+
+# Because this is running on PiOS setup user pi 
+# evdev needs /home/pi for install
+RUN useradd -ms /bin/bash pi
+RUN echo 'pi:pi' | chpasswd 
+RUN adduser pi sudo
+RUN echo '%pi ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+RUN  usermod -a -G adm pi
+RUN  usermod -a -G dialout pi
+RUN  usermod -a -G video pi
+RUN  usermod -a -G plugdev pi
+RUN  usermod -a -G input pi
+RUN  usermod -a -G render pi
+RUN  usermod -a -G netdev pi
+RUN  usermod -a -G users pi
+
+# Allow pi user access to joystick
+# Cannot do here - run in bash script
+# RUN  chgrp input /dev/input/js0
+# RUN  chgrp input /dev/input/event*
+
+
+# RUN apt install python-dev 
+RUN  pip3 install spidev
+RUN  pip3 install smbus-cffi     
+RUN  pip3 install python-periphery     
+
+# Switch to pi user
+USER pi
+
+# Copy the GoPiGo3 API into container and install
+ADD GoPiGo3 /home/pi/Dexter/GoPiGo3
+RUN bash /home/pi/Dexter/GoPiGo3/Install/update_gopigo3.sh
+
+
+# CMD source start_rosbot_gopi5go-dave.sh
+CMD bash
