@@ -287,6 +287,7 @@ class GoPiGo3(object):
         reply = self.spi_transfer_array(outArray)
         if(reply[3] == 0xA5):
             return int(reply[4])
+        self.spi_errors +=1
         raise IOError("No SPI response")
         return 0
 
@@ -304,6 +305,7 @@ class GoPiGo3(object):
         reply = self.spi_transfer_array(outArray)
         if(reply[3] == 0xA5):
             return int((reply[4] << 8) | reply[5])
+        self.spi_errors +=1
         raise IOError("No SPI response")
         return 0
 
@@ -321,6 +323,7 @@ class GoPiGo3(object):
         reply = self.spi_transfer_array(outArray)
         if(reply[3] == 0xA5):
             return int((reply[4] << 24) | (reply[5] << 16) | (reply[6] << 8) | reply[7])
+        self.spi_errors +=1
         raise IOError("No SPI response")
         return 0
 

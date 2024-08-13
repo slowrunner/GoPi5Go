@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# spitest.py    Test SPI errors with battery voltage
+# spitest2.py    Test SPI errors with battery voltage with slightly different loop sleep
 
 
 
@@ -52,12 +52,13 @@ def main():
 
     try:
         while True:
-            time.sleep(.001)
+            time.sleep(.0013)
             loopCnt+=1
             if (loopCnt % 5000) == 1:  
                 printStatus(gpg,loopCnt)
             else:
                 vcc = gpg.get_voltage_battery()+DIODE_DROP
+
 
             if (loopFlag is False):
                 break
