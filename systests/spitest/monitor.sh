@@ -10,6 +10,7 @@ vcgencmd measure_temp && vcgencmd measure_clock arm && vcgencmd get_throttled; \
 free -h; \
 echo -e "\n"; \
 pgrep -a safe
+pgrep -a spi
 sleep 10; \
 echo " "; \
 done

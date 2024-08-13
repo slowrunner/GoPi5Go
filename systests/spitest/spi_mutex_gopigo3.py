@@ -1,4 +1,6 @@
-# FILE: spi_gopigo3.py
+# FILE: spi_mutex_gopigo3.py
+
+# GoPiGo3 class with MUTEX Protected SPI transfer_array()
 
 # https://www.dexterindustries.com/GoPiGo/
 # https://github.com/DexterInd/GoPiGo3
@@ -16,6 +18,7 @@ hardware_connected = True
 __version__ = "1.3.2"
 
 import subprocess # for executing system calls
+from di_mutex import DI_Mutex
 
 try:
     import spidev
@@ -237,6 +240,7 @@ class GoPiGo3(object):
         # pi_gpio.set_mode(11, pigpio.ALT0)
         # pi_gpio.stop()
 
+        self.spi_mutex = DI_Mutex(name="SPI")
         self.SPI_Address = addr
         if detect == True:
             try:
@@ -271,7 +275,10 @@ class GoPiGo3(object):
 
         Returns a list of the bytes read.
         """
+        self.spi_mutex.acquire()
+        time.sleep(0.0001)
         result = GPG_SPI.xfer2(data_out)
+        self.spi_mutex.release()
         return result
 
     def spi_read_8(self, MessageType):
