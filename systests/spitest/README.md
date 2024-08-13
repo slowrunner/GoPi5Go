@@ -12,5 +12,5 @@
 - Test 1 with spitest2.py in ROS2/Ubuntu22 Docker container, spitest.py in PiOS Bookworm:  
   21 SPI errors reported in 800,000 voltage checks between the two processes.  
 
-- Test 2 with both spitest.py and spitest2.py in PiOS Bookworm
+- Test 2 with both spitest.py and spitest2.py in PiOS Bookworm  
   29 SPI errors reported in 820,000 voltage checks between the two processes.  
