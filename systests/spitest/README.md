@@ -30,15 +30,15 @@
 
 - Test 1  
   - both spi_mutex_user.py and spi_mutex_user2.py in PiOS Bookworm  
-  - only acquire() and release() (no delay after acquire)
+  - only acquire() and release() (no delay after acquire)  
   11 SPI errors reported in 800,000 voltage checks between the two processes.  
 
 - Test 2  
   - both spi_mutex_user.py and spi_mutex_user2.py in PiOS Bookworm  
-  - 0.001s delay after acquire()
+  - 0.001s delay after acquire()  
    9 SPI errors reported in 800,000 voltage checks between the two processes.  
 
 - Test 3  
   - both spi_mutex_user.py and spi_mutex_user2.py in PiOS Bookworm  
-  - 0.0001s delay after acquire()
+  - 0.0001s delay after acquire()  
   11 SPI errors reported in 800,000 voltage checks between the two processes.  
