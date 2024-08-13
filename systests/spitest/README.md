@@ -3,8 +3,9 @@
 ### Two programs are launched:
 - spitest.py  checks gopigo3.get_voltage_battery() every 0.001  seconds
 - spitest2.py checks gopigo3.get_voltage_battery() every 0.0013 seconds
-- use special instrumented spi_gopigo3.py that counts "No SPI RESPONSE" errors in spi_read_8(), spi_read_16(), and spi_read32()  
-  get_voltage_battery() uses spi_read_16()
+- use special instrumented spi_gopigo3.py that counts "No SPI RESPONSE" errors  
+  in spi_read_8(), spi_read_16(), and spi_read32()  
+  get_voltage_battery() uses spi_read_16()  
 
 
 ### Results
