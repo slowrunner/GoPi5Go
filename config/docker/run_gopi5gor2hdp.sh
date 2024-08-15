@@ -10,6 +10,8 @@ docker run -it --net=host \
  -v /dev/input:/dev/input \
  -v /home/pi:/home/pi \
  -v /dev/bus/usb:/dev/bus/usb \
+ -v /dev/ttyUSB0:/dev/ttyUSB0 \
+ -v /var/lock:/var/lock \
  -e TZ=America/New_York \
  -w /home/pi/GoPi5Go/ros2ws \
  --privileged \
