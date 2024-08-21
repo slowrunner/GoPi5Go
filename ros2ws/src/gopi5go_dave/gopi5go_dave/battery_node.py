@@ -107,10 +107,10 @@ class Battery(Node):
             self.charging = (self.milliamps < 0)
             self.volts = self.eINA219.ave_volts()
             self.watts = self.eINA219.ave_watts()
-            if not (self.charging == self.last_charging):
-                if self.last_charging == True:
+            if not (self.charging == self.last_charging):  # debounce chargeing transitions
+                if (self.last_charging == True) and (abs(self.power_meter) > 1):
                     self.last_charge = self.power_meter
-                else:
+                elif (self.last_charging == False) and (abs(self.power_meter) > 1):
                     self.last_discharge = self.power_meter
                 self.last_charging = self.charging
                 self.power_meter = 0
