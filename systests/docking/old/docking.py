@@ -14,7 +14,7 @@
        docking.dock(egpg)
 
    ABOUT:
-       These functions use drive-with-bias with values
+       These functions use drive-with-bias with values 
        from empirical testing.
 
        The docking simply drives backward 17.4 cm, nothing more.
@@ -28,42 +28,33 @@ from noinit_easygopigo3 import EasyGoPiGo3
 import time
 import biasdrive
 
-
-SPEED_MPS = 0.05  # m/s
-
-DOCKING_BIAS = 0.0 # was -0.01  # m/s  add angular to make drive straight
-UNDOCKING_BIAS = 0.0 # was 0.03  # m/s  add angular to make drive straight
-
-DOCKING_DIST_CM = -17.4  # cm
-UNDOCKING_DIST_CM = 17.0  # cm
-
-DT_FORMAT = "%Y-%m-%d %H:%M:%S.$f"
-
-DEBUG = True
-
-def undock(egpg):
-    if DEBUG:
-        tnow = time.strftime(DT_FORMAT)[:-3]
-        print("\n{:s} Undocking Begins - dist:{:.1f} bias:{:.2f} speed:{:.2f}".format(tnow,UNDOCKING_DIST_CM, UNDOCKING_BIAS, SPEED_MPS))
-    biasdrive.drive_cm_bias(UNDOCKING_DIST_CM,UNDOCKING_BIAS,SPEED_MPS,egpg)
-    if DEBUG:
-        tnow = time.strftime(DT_FORMAT)[:-3]
-        print("{:s} Undocking Complete".format(tnow))
-
-def dock(egpg):
-    if DEBUG:
-        tnow = time.strftime(DT_FORMAT)[:-3]
-        print("\n{:s} Docking Begins - dist:{:.1f} bias:{:.2f} speed:{:.2f}".format(tnow,DOCKING_DIST_CM,DOCKING_BIAS,-SPEED_MPS))
-    biasdrive.drive_cm_bias(DOCKING_DIST_CM,DOCKING_BIAS,-SPEED_MPS,egpg)
-    if DEBUG:
-        tnow = time.strftime(DT_FORMAT)[:-3]
-        print("{:s} Docking Complete".format(tnow))
-
-
-# Only used for test main
 NUM_OF_DOCKING_TESTS = 10
 UNDOCKED_SLEEP = 10
 DOCKED_SLEEP = 30
+
+SPEED_MPS = 0.05  # m/s
+# DOCKING_BIAS = -0.01  # m/s  add angular to make drive straight
+DOCKING_BIAS = -0.00  # m/s  add angular to make drive straight
+DOCKING_DIST_CM = -17.4  # cm
+# UNDOCKING_BIAS = 0.03  # m/s  add angular to make drive straight
+UNDOCKING_BIAS = 0.00  # m/s  add angular to make drive straight
+UNDOCKING_DIST_CM = 17.0  # cm
+
+
+def undock(egpg):
+    tnow = time.strftime("%Y-%m-%d %H:%M:%S")
+    print("\n{:s} Undocking Begins - dist:{:.1f} bias:{:.2f} speed:{:.2f}".format(tnow,UNDOCKING_DIST_CM, UNDOCKING_BIAS, SPEED_MPS))
+    biasdrive.drive_cm_bias(UNDOCKING_DIST_CM,UNDOCKING_BIAS,SPEED_MPS,egpg)
+    tnow = time.strftime("%Y-%m-%d %H:%M:%S")
+    print("{:s} Undocking Complete".format(tnow))
+
+def dock(egpg):
+    tnow = time.strftime("%Y-%m-%d %H:%M:%S")
+    print("\n{:s} Docking Begins - dist:{:.1f} bias:{:.2f} speed:{:.2f}".format(tnow,DOCKING_DIST_CM,DOCKING_BIAS,-SPEED_MPS))
+    biasdrive.drive_cm_bias(DOCKING_DIST_CM,DOCKING_BIAS,-SPEED_MPS,egpg)
+    tnow = time.strftime("%Y-%m-%d %H:%M:%S")
+    print("{:s} Docking Complete".format(tnow))
+
 
 def main():
 

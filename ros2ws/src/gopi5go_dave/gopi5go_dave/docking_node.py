@@ -38,7 +38,11 @@
 
 from dave_interfaces.srv import Dock, Undock
 from dave_interfaces.msg import BatteryState, DockStatus
-import dock, undock
+import sys
+sys.path.insert(1,'/home/pi/GoPi5Go/plib')
+from noinit_easygopigo3 import EasyGoPiGo3
+from math import pi
+
 from time import sleep
 import datetime as dt
 
@@ -50,6 +54,10 @@ from rclpy.callback_groups import MutuallyExclusiveCallbackGroup, ReentrantCallb
 import threading
 
 
+DOCKING_SPEED_MPS = 0.05  # Docking speed in m/s
+DOCKING_DIST_CM = -17.4  # cm
+UNDOCKING_DIST_CM = 17.0 # cm
+
 DT_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
 
 
@@ -60,6 +68,9 @@ class Docking(Node):
         sub_cb_grp = None
         svc_cb_grp = None
         main_cb_grp = None
+
+        # instantiate an EasyGoPiGo3 object without initializing default speed
+        self.egpg = EasyGoPiGo3(use_mutex=True, noinit=True)
 
         self.battery_sub = self.create_subscription(BatteryState, 'battery_state', self.battery_state_cb, callback_group=sub_cb_grp, qos_profile=qos_profile_sensor_data)
         self.dock_status_pub = self.create_publisher(DockStatus, 'dock_status', qos_profile_sensor_data )
@@ -74,6 +85,7 @@ class Docking(Node):
         dtstr = dt.datetime.now().strftime(DT_FORMAT)[:-3]
         printMsg = 'docking_node.init(): is_charging: {}  is_docked: {}'.format(self.is_charging, self.is_docked)
         print(dtstr,printMsg)
+
 
     def battery_state_cb(self,battery_state_msg):
         self.is_charging = battery_state_msg.charging
@@ -96,8 +108,10 @@ class Docking(Node):
         printMsg = 'docking_node.dock_cb() entry: is_charging: {}  is_docked: {}'.format(self.is_charging, self.is_docked)
         print(dtstr,printMsg)
         # self.get_logger().info('docking_node.dock_cb() entry')
-
-        dock.main()
+        wheel_dia_in_meters = self.egpg.WHEEL_CIRCUMFERENCE / 1000.0
+        docking_speed_dps = int(DOCKING_SPEED_MPS * 360.0 / wheel_dia_in_meters )
+        self.egpg.set_speed(docking_speed_dps)
+        self.egpg.drive_cm(DOCKING_DIST_CM)
 
         self.is_docked = True
 
@@ -117,7 +131,10 @@ class Docking(Node):
         print(dtstr,printMsg)
         # self.get_logger().info('docking_node.undock_cb() entry')
 
-        undock.main()
+        wheel_dia_in_meters = self.egpg.WHEEL_CIRCUMFERENCE / 1000.0
+        docking_speed_dps = int(DOCKING_SPEED_MPS * 360.0 / wheel_dia_in_meters )
+        self.egpg.set_speed(docking_speed_dps)
+        self.egpg.drive_cm(UNDOCKING_DIST_CM)
         self.is_docked = False
 
         response.is_docked = self.is_docked
