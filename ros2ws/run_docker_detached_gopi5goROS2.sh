@@ -1,6 +1,9 @@
 #!/bin/bash
 
-cd ~/GoPi5Go/ros2ws
+# FILE:  run_docker_detached_gopi5goROS2.sh
+
+
+cd /home/pi/GoPi5Go/ros2ws
 # --rm    remove container after running
 # Prob not need
 # --device /dev/gpiochip4 \

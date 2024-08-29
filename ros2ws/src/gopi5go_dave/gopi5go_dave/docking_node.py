@@ -58,6 +58,8 @@ DOCKING_SPEED_MPS = 0.05  # Docking speed in m/s
 DOCKING_DIST_CM = -17.4  # cm
 UNDOCKING_DIST_CM = 17.0 # cm
 
+DEBUG = False
+
 DT_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
 
 
@@ -84,7 +86,7 @@ class Docking(Node):
         # self.get_logger().info('docking_node.init()')
         dtstr = dt.datetime.now().strftime(DT_FORMAT)[:-3]
         printMsg = 'docking_node.init(): is_charging: {}  is_docked: {}'.format(self.is_charging, self.is_docked)
-        print(dtstr,printMsg)
+        if DEBUG: print(dtstr,printMsg)
 
 
     def battery_state_cb(self,battery_state_msg):
@@ -100,20 +102,21 @@ class Docking(Node):
         # self.get_logger().info('docking_node.battery_state_cb()')
         dtstr = dt.datetime.now().strftime(DT_FORMAT)[:-3]
         printMsg = 'docking_node.battery_state_cb(): is_charging: {}  is_docked: {}'.format(self.is_charging, self.is_docked)
-        print(dtstr,printMsg)
+        if DEBUG: print(dtstr,printMsg)
 
     def dock_cb(self, request, response):
 
         dtstr = dt.datetime.now().strftime(DT_FORMAT)[:-3]
         printMsg = 'docking_node.dock_cb() entry: is_charging: {}  is_docked: {}'.format(self.is_charging, self.is_docked)
-        print(dtstr,printMsg)
+        if DEBUG: print(dtstr,printMsg)
         # self.get_logger().info('docking_node.dock_cb() entry')
         wheel_dia_in_meters = self.egpg.WHEEL_CIRCUMFERENCE / 1000.0
         docking_speed_dps = int(DOCKING_SPEED_MPS * 360.0 / wheel_dia_in_meters )
         self.egpg.set_speed(docking_speed_dps)
         self.egpg.drive_cm(DOCKING_DIST_CM)
-
         self.is_docked = True
+
+        sleep(10)  # allow charging to start
 
         response.is_docked = self.is_docked
         response.is_charging = self.is_charging
@@ -121,14 +124,14 @@ class Docking(Node):
         # self.get_logger().info('docking_node.dock_cb() return')
         dtstr = dt.datetime.now().strftime(DT_FORMAT)[:-3]
         printMsg = 'docking_node.dock_cb() exit: success: {} : is_charging: {}  is_docked: {}'.format(response.success, self.is_charging, self.is_docked)
-        print(dtstr,printMsg)
+        if DEBUG: print(dtstr,printMsg)
 
         return response
 
     def undock_cb(self, request, response):
         dtstr = dt.datetime.now().strftime(DT_FORMAT)[:-3]
         printMsg = 'docking_node.undock_cb() entry: is_charging: {}  is_docked: {}'.format(self.is_charging, self.is_docked)
-        print(dtstr,printMsg)
+        if DEBUG: print(dtstr,printMsg)
         # self.get_logger().info('docking_node.undock_cb() entry')
 
         wheel_dia_in_meters = self.egpg.WHEEL_CIRCUMFERENCE / 1000.0
@@ -142,7 +145,7 @@ class Docking(Node):
         # self.get_logger().info('docking_node.undock_cb() return')
         dtstr = dt.datetime.now().strftime(DT_FORMAT)[:-3]
         printMsg = 'docking_node.undock_cb() exit: success: {} : is_charging: {}  is_docked: {}'.format(response.success, self.is_charging, self.is_docked)
-        print(dtstr,printMsg)
+        if DEBUG: print(dtstr,printMsg)
 
         return response
 
@@ -150,7 +153,7 @@ class Docking(Node):
         # self.get_logger().info('docking_node.main_cb() entry')
         dtstr = dt.datetime.now().strftime(DT_FORMAT)[:-3]
         printMsg = 'docking_node.main_cb() entry: is_charging: {}  is_docked: {}'.format(self.is_charging, self.is_docked)
-        print(dtstr,printMsg)
+        if DEBUG: print(dtstr,printMsg)
 
         try:
             dock_status = DockStatus()
@@ -159,10 +162,10 @@ class Docking(Node):
             self.dock_status_pub.publish(dock_status)
             dtstr = dt.datetime.now().strftime(DT_FORMAT)[:-3]
             printMsg = 'docking_node.main_cb() publishing dock_status: is_charging: {}  is_docked: {}'.format(self.is_charging, self.is_docked)
-            print(dtstr,printMsg)
+            if DEBUG: print(dtstr,printMsg)
 
         except Exception as e:
-            print("docking_main_cb: ",str(e))
+            if DEBUG: print("docking_main_cb: ",str(e))
             sys.exit(1)
 
         # self.get_logger().info('docking_node.main_cb() done')

@@ -1,0 +1,20 @@
+[Unit]
+Description=ROS 2 Humble Desktop Plus For GoPi5Go-Dave Service
+After=syslog.target network.target
+
+
+[Service]
+Type=simple
+user=pi
+WorkingDirectory=/home/pi/GoPi5Go/ros2ws
+# Stop r2hdp container (if running)
+ExecStartPre=-/usr/bin/docker stop gopi5goROS2
+# Remove the r2hdp container (if exists)
+ExecStartPre=-/usr/bin/docker rm gopi5goROS2
+# Wait to allow life logging to start up at boot time
+ExecStartPre=/bin/sleep 60
+# Start r2hdp detached (which runs start_wali.sh)
+ExecStart=/bin/bash /home/pi/GoPi5Go/ros2ws/run_docker_detached_gopi5goROS2.sh
+
+[Install]
+WantedBy=multi-user.target

@@ -63,5 +63,6 @@ ADD gopigo3 /home/pi/gopigo3_wheels
 RUN sudo pip3 install --no-index --find-links=/home/pi/gopigo3_wheels -r /home/pi/gopigo3_wheels/requirements.txt
 
 
-# CMD source start_rosbot_gopi5go-dave.sh
-CMD bash
+# CMD bash
+# Start nodes
+CMD bash -c "source start_GoPi5Go-Dave.sh"

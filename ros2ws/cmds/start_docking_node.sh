@@ -10,6 +10,6 @@ echo -e "\n*** Sourcing install/setup.bash"
 . ~/$basedir/ros2ws/install/setup.bash
 
 echo -e "\n*** Start Docking Node"
-echo -e "*** ros2 run gopi5go_dave docking_node "
-ros2 run gopi5go_dave docking_node 
+echo -e "*** ros2 run gopi5go_dave docking_node & "
+ros2 run gopi5go_dave docking_node &
 

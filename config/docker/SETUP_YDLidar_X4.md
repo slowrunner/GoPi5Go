@@ -1,6 +1,6 @@
 # Setup YDLIDAR X4 in Docker on GoPi5Go-Dave
 
-2024-05-20
+2024-08-14
 
 
 === Prereqs
@@ -9,8 +9,6 @@
 - External 5v power connected to microUSB of Interface Card  
 - USB A to USB C cable from RPi to Interface Card  
 
-
-Add to dockerfile: sudo apt install -y swig
 
 
 Add to dockerfile: 
@@ -53,11 +51,11 @@ chmod +x mk_ydlidar_rules.sh
 
 
 
-Build ydlidar Docker container - 8_build_ydlidar.sh
+Add to 7_build_gopi5gor2hdp.sh
 ```
 #!/bin/bash
 
-# FILE: 8_build_ydlidar.sh
+# FILE: 7_build_gopi5gor2hdp.sh
 
 # This is an extention of 7_build_gopi5gor2hdp.sh that adds the GoPi5Go API and the YDLidar-SDK to the base r2hdp container
 
@@ -74,18 +72,15 @@ cp ~/GoPi5Go/systests/myYDLidar-SDK/ydlidar_test_interactive.cpp YDLidar-SDK/exa
 
 
 # build a ros humble desktop plus navigation, slam-toolbox, localization, GoPi5Go API, with ydlidar sdk installed, tagged ydlidar
-sudo docker build --no-cache . -t ydlidar -f docker_files/ydlidar_dockerfile
+sudo docker build --no-cache . -t gopi5goROS2 -f docker_files/gopi5go_r2hdp_dockerfile
 
 ```
 
-Run 8_build_ydlidar.sh
-```
-chmod +x 8_build_ydlidar.sh
-./8_build_ydlidar.sh
+./7_build_gopi5gor2hdp.sh
 ```
 
 
-run_ydlidar.sh:
+run_[detached_]gopigo3r2hdp.sh:
 ```
 #!/bin/bash
 
@@ -98,6 +93,7 @@ docker run -it --net=host \
  -v /home/pi:/home/pi \
  -v /dev/bus/usb:/dev/bus/usb \
  -v /dev/ttyUSB0:/dev/ttyUSB0 \           <<-- added for ydlidar
+ -v /var/lock:/var/lock  \
  -e TZ=America/New_York \
  -w /home/pi/GoPi5Go/ros2ws \
  --privileged \

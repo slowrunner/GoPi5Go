@@ -10,6 +10,6 @@ echo -e "\n*** Sourcing /opt/ros/humble/setup.bash"
 echo -e "\n*** Sourcing install/setup.bash"
 . ~/$basedir/ros2ws/install/setup.bash
 
-echo -e "\n*** Capturing one battery voltage topic"
-echo "*** ros2 topic echo --once /battery_voltage"
-ros2 topic echo --once /battery_voltage
+echo -e "\n*** Capturing one battery state topic"
+echo "*** ros2 topic echo --once /battery_state"
+ros2 topic echo --once /battery_state

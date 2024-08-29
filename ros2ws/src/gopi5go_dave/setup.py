@@ -25,6 +25,8 @@ setup(
             'docking_node = gopi5go_dave.docking_node:main',
             'dave_node = gopi5go_dave.dave_node:main',
             'test_dock = gopi5go_dave.test_dock:main',
+            'say_client = gopi5go_dave.say_svc_client:main',
+
         ],
     },
 )
