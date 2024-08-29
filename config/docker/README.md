@@ -6,6 +6,7 @@ Boot starts /etc/systemd/system/docker.gopi5goROS2.service
 - after 60s invokes /home/pi/GoPi5Go/ros2ws/run_docker_detached_gopi5goROS2.sh  
 - which runs /home/pi/GoPi5Go/ros2ws/start_GoPi5Go-Dave.sh
 - which starts:  
+  - ros2_gopigo3_node  GoPiGo3 ROS2 publishes odom, offers /cmd_vel etc
   - battery_node:  publishes /battery_state  
   - docking_node:  publishes /dock_status, offers /dock and /undock services  
   - dave_node:     calls /dock when vBatt<10v, and calls /undock when charge current < -175mA  

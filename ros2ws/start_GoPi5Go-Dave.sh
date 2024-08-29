@@ -4,6 +4,7 @@
     FILE:  /home/pi/GoPi5Go/ros2ws/start_GoPi5Go-Dave.sh
 
 This file starts the needed GoPi5Go-Dave nodes:
+- ros2_gopigo3_node  GoPiGo3 ROS2 publishes odom, offers /cmd_vel etc
 - battery_node  publishes /batter_state
 - docking_node  publishes /dock_status, offers /dock and /undock services
 - dave_node     calls /dock when vBatt<10v, and calls /undock when charge current < -175mA
@@ -22,6 +23,22 @@ echo -e "\n*** Sourcing /opt/ros/humble/setup.bash"
 
 echo -e "\n*** Sourcing install/setup.bash"
 . ~/$basedir/ros2ws/install/setup.bash
+
+
+echo -e "\n*** Start ROS2 GoPiGo3 node"
+echo "*** ros2 run ros2_gopigo3_node gopigo3_node --ros-args -p S1LPW:=2094 -p S1RPW:=750 -p S1SECTOR:=2.443 &"
+ros2 run ros2_gopigo3_node gopigo3_node --ros-args -p S1LPW:=2094 -p S1RPW:=750 -p S1SECTOR:=2.443 &
+
+# Example starting with a yaml file for parameters
+# ros2 run ros2_gopigo3_node gopigo3_node --ros-args --params-file ./src/ros2_gopigo3_node/gopigo3_node_params.yaml &
+
+sleep 5
+
+echo -e "\n*** Starting Robot_State and Joint_State Publishers"
+echo "*** with URDF file: dave.urdf"
+ros2 launch ros2_gopigo3_node ros2_dave_state_and_joint.launch.py &
+
+sleep 5
 
 echo -e "\n*** Starting Battery Node"
 echo -e "*** ros2 run gopi5go_dave battery_node &"
