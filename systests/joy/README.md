@@ -87,7 +87,8 @@ ID : GUID                             : GamePad : Mapped : Joystick Device Name
  0 : 030000006d0400001fc2000005030000 :    true :   true : Logitech F710 Gamepad (XInput)
 ```
 
-# Setup 2.4GHz Wireless USB SNES Gamepad
+
+# [OBSOLETE] Setup 2.4GHz Wireless USB SNES Gamepad
 
 
 1) Plugged in USB WiFi Gamepad adapter
