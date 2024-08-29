@@ -3,6 +3,17 @@
 
 ### Base GoPi5Go-Dave Processor Utilization
 
+Base GoPi5Go-Dave ROS 2 configuration is:  
+- ros2_gopigo3_node GoPiGo3 ROS2 publishes odom, offers /cmd_vel etc  
+- battery_node: publishes /battery_state  
+- docking_node: publishes /dock_status, offers /dock and /undock services  
+- dave_node: calls /dock when vBatt<10v, and calls /undock when charge current < -175mA  
+- odometer: logs all /cmd_vel movement (does not record dock/undock movement)  
+- joy_node: handles wireless F710 joy controller to publish /cmd_vel  
+- say_node: TTS speech server offers /say {"phrase"} service  
+
+
+
 ```
 top - 11:00:17 up 13:16,  0 users,  load average: 0.21, 0.26, 0.27
 Tasks:  23 total,   1 running,  22 sleeping,   0 stopped,   0 zombie
