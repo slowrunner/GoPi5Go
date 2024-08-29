@@ -18,7 +18,7 @@ for key in ldaveData:
     prompt = "Keep value \"{}\" y/n? ".format(value)
     if input(prompt) == "n": 
         while True:
-            val = input("Enter New Value: ")
+            val = input("Enter New Value (without quotes): ")
             prompt = "Use value \"{}\" y/n? ".format(val)
             if input(prompt) == "y": break
 

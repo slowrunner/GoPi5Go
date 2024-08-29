@@ -190,6 +190,10 @@ class DaveNode(Node):
                             self.lifeLog.info(printMsg)
                             dtstr = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                             print(dtstr, printMsg)
+                            daveDataJson.saveData('lastDockingTime', dtstr)
+                            daveDataJson.saveData('lastPlaytimeDuration', playtimeDurationInHours)
+                            daveDataJson.saveData('chargingState',"charging")
+                        daveDataJson.saveData('dockingState',"docked")
                         self.prior_state = self.state
                         self.state = "docked"
 
