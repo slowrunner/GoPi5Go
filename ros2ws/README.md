@@ -1,7 +1,7 @@
 # GoPi5Go-Dave ROS 2 Workspace
 
 
-### Base GoPi5Go-Dave Processor Utilization
+### Base GoPi5Go-Dave Raspberry Pi 5 Processor Utilization
 
 Base GoPi5Go-Dave ROS 2 configuration is:  
 - ros2_gopigo3_node GoPiGo3 ROS2 publishes odom, offers /cmd_vel etc  
@@ -36,3 +36,16 @@ Base GoPi5Go-Dave Processor Utilization:
 - Total Load (15 min uptime / 4 cores): 7%   
 - Instantaneous Load (sum of top %CPU): 14%  
 
+```
+********** ROS2 GoPiGo3 MONITOR ******************************
+Thursday 08/29/24
+ 11:12:34 up 13:29,  3 users,  load average: 0.14, 0.19, 0.23
+temp=47.7'C
+frequency(0)=1600017024
+throttled=0x0
+               total        used        free      shared  buff/cache   available
+Mem:           4.0Gi       1.0Gi       1.4Gi        22Mi       1.5Gi       2.9Gi
+Swap:          199Mi          0B       199Mi
+GoPiGo3 Battery Voltage: 10.2 volts
+
+```
