@@ -78,6 +78,10 @@ ros2 launch teleop_twist_joy teleop-launch.py joy_config:="F710" &
 
 sleep 5
 
+# DEBUG - sleep to keep detached ROS Docker container alive
+# echo -e "\n*** DEBUG: NOT STARTING DAVE NODE ***"
+# sleep 36000
+
 # Start the last node in foreground to keep detached docker terminal running:
 echo -e "\n*** Start Dave Node"
 echo -e "*** ros2 run gopi5go_dave dave_node "

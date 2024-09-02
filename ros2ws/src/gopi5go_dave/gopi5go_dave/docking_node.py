@@ -58,6 +58,7 @@ DOCKING_SPEED_MPS = 0.05  # Docking speed in m/s
 DOCKING_DIST_CM = -17.4  # cm
 UNDOCKING_DIST_CM = 17.0 # cm
 
+# DEBUG = True
 DEBUG = False
 
 DT_FORMAT = "%Y-%m-%d %H:%M:%S.%f"

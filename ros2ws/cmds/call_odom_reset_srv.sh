@@ -29,4 +29,4 @@ ros2 topic echo --once --flow-style /odom
 
 # Log reset
 dt=$(date +"%Y-%m-%d %H:%M:%S")
-echo -e "${dt}|RESET **** -  x:  0.000 y:  0.000 z:  0.000 heading:    0 - RESET" >> /home/pi/GoPi5Go/logs/odometer.log
+echo -e "${dt}|RESET **** -  x:  0.000 y:  0.000 z:  0.000 heading:    0 - Manual RESET" >> /home/pi/GoPi5Go/logs/odometer.log

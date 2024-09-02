@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ -f /usr/bin/docker ]; then
+    echo -e "rebuild.sh must be run in Docker term"; \
+    exit 1;  
+fi
+
 echo -e "\n*** REBUILDING ROS2 GoPi5Go ***"
 
 echo "*** Executing rebuild.sh ***"

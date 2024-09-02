@@ -39,6 +39,8 @@
 
 """
 
+# DEBUG = True
+DEBUG = False
 
 from dave_interfaces.srv import Say
 
@@ -49,14 +51,21 @@ import logging
 import wave
 import os
 from piper.voice import PiperVoice
-
+from time import sleep
 import subprocess
+import datetime as dt
 
-filename = 'temp.wav'
 
-voicedir = os.path.expanduser('~/GoPi5Go/models/piper-tts/') #Where onnx model files are stored on my machine
+filename = 'temp.say_node.wav'
+
+DT_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
+
+# voicedir = os.path.expanduser('~/GoPi5Go/models/piper-tts/') #Where onnx model files are stored on my machine
+voicedir = '/home/pi/GoPi5Go/models/piper-tts/'  # Where onnx model files are stored on my machine
 model = voicedir+"en_US-arctic-medium.onnx"
+if DEBUG: print("say_node: model=",model)
 voice = PiperVoice.load(model)
+if DEBUG: print("PiperVoice Object Created")
 
 
 class SayService(Node):
@@ -80,12 +89,29 @@ class SayService(Node):
 
     def say_cb(self, request, response):
         text = request.saystring
-        self.get_logger().info('Say request:"{}"'.format(text))
+        logStr='Say request:"{}"'.format(text)
+        self.get_logger().info(logStr)
+        if DEBUG: 
+            dtstr = dt.datetime.now().strftime(DT_FORMAT)
+            print(dtstr,logStr)
+
         wav_file = wave.open(filename, 'w')
         audio = voice.synthesize(text,wav_file)
+        if DEBUG:
+            dtstr = dt.datetime.now().strftime(DT_FORMAT)
+            print(dtstr,"say_node: file written, speaking phrase")
 
         subprocess.check_output(['aplay -D plughw:2,0 -r 22050 -f S16_LE ' + filename], stderr=subprocess.STDOUT, shell=True)
+
+        if DEBUG:
+            dtstr = dt.datetime.now().strftime(DT_FORMAT)
+            print(dtstr,"say_node: after aplay")
+
         os.remove(filename)
+        if DEBUG:
+            dtstr = dt.datetime.now().strftime(DT_FORMAT)
+            print(dtstr,"say_node: file removed")
+
         response.spoken = True
         self.logger.info(text + " - spoken: " + str(response.spoken) )
 

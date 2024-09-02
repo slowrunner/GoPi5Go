@@ -7,6 +7,20 @@
 	Undock when charging current is <175ma
         Dock when voltage is < 10v
 
+        Resets odometry to {0,0,0,1} after successful docking
+           (ros2 service call /odom/reset std_srvs/srv/Trigger)
+           std_srvs/Trigger.srv:
+             # Request (null)
+             ---
+             # Response
+             bool success   # indicate successful run of triggered service
+             string message # informational, e.g. for error messages
+
+
+        Uses dave_interfaces.srv Say.srv to request say_node speak with Piper-TTS
+            string saystring
+            ---
+            bool spoken
 """
 
 import rclpy
@@ -20,6 +34,8 @@ from threading import Event,Thread
 
 from dave_interfaces.srv import Dock, Undock
 from dave_interfaces.msg import BatteryState, DockStatus
+from dave_interfaces.srv import Say
+from std_srvs.srv import Trigger
 
 import sys
 sys.path.insert(1,'/home/pi/GoPi5Go/plib')
@@ -36,6 +52,7 @@ DEBUG = False
 
 
 LIFELOGFILE = "/home/pi/GoPi5Go/logs/life.log"
+ODOLOGFILE = '/home/pi/GoPi5Go/logs/odometer.log'
 
 
 UNDOCK_AT_MILLIAMPS =  -175
@@ -65,6 +82,14 @@ class DaveNode(Node):
         print(dtstr,printMsg)
         self.lifeLog.info(printMsg)
 
+        self.odoLog = logging.getLogger('odoLog')
+        self.odoLog.setLevel(logging.INFO)
+
+        self.odologhandler = logging.FileHandler(ODOLOGFILE)
+        self.odologformatter = logging.Formatter('%(asctime)s|%(message)s',"%Y-%m-%d %H:%M:%S")
+        self.odologhandler.setFormatter(self.odologformatter)
+        self.odoLog.addHandler(self.odologhandler)
+
         self.battery_state_sub = self.create_subscription(
             BatteryState,
             'battery_state',
@@ -86,12 +111,21 @@ class DaveNode(Node):
 
         # service clients
         self.dock_svc_client = self.create_client(Dock, 'dock')
-        self.dock_svc_request = None
+        self.dock_svc_req = None
         self.dock_svc_future = None
 
         self.undock_svc_client = self.create_client(Undock, 'undock')
-        self.undock_svc_request = None
+        self.undock_svc_req = None
         self.undock_svc_future = None
+
+        self.odom_reset_svc_client = self.create_client(Trigger, 'odom/reset')
+        self.odom_reset_svc_req = None
+        self.odom_reset_svc_future = None
+
+        self.say_svc_client = self.create_client(Say, 'say')
+        self.say_svc_req = None
+        self.say_svc_future = None
+
 
         self.hz = 1   # execute dave_cb once every second
         self.timer = self.create_timer(1.0/self.hz, self.dave_main_cb)   # call dave_main_cb once every period
@@ -137,6 +171,24 @@ class DaveNode(Node):
             print(dtstr, printMsg)
         self.dock_svc_req = Dock.Request()
         self.dock_svc_future = self.dock_svc_client.call_async(self.dock_svc_req)
+
+    def send_odom_reset_svc_req(self):
+        if DEBUG:
+            dtstr = dt.datetime.now().strftime(DT_FORMAT)[:-3]
+            printMsg = "send_odom_reset_svc_req()"
+            print(dtstr, printMsg)
+        self.odom_reset_svc_req = Trigger.Request()
+        self.odom_reset_svc_future = self.odom_reset_svc_client.call_async(self.odom_reset_svc_req)
+
+    def send_say_svc_req(self,phrase):
+        if DEBUG:
+            dtstr = dt.datetime.now().strftime(DT_FORMAT)[:-3]
+            printMsg = "send_say_svc_req({})".format(phrase)
+            print(dtstr, printMsg)
+        self.say_svc_req = Say.Request()
+        self.say_svc_req.saystring = phrase
+        # future is not needed but must be captured
+        self.say_svc_future = self.say_svc_client.call_async(self.say_svc_req)
 
 
 
@@ -194,6 +246,9 @@ class DaveNode(Node):
                             daveDataJson.saveData('lastDockingTime', dtstr)
                             daveDataJson.saveData('lastPlaytimeDuration', playtimeDurationInHours)
                             daveDataJson.saveData('chargingState',"charging")
+                            # call odom_reset service
+                            if self.odom_reset_svc_client.service_is_ready():
+                                self.send_odom_reset_svc_req()
                         daveDataJson.saveData('dockingState',"docked")
                         self.prior_state = self.state
                         self.state = "docked"
@@ -223,6 +278,12 @@ class DaveNode(Node):
                         dtstr = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                         printMsg = "dave_main_cb(): battery_status.milliamps {:.0f} mA, calling undock service ".format(self.battery_state.milliamps)
                         print(dtstr, printMsg)
+
+                    # Announce Undocking with say service
+                    if self.say_svc_client.service_is_ready():
+                        sayMsg = "charging at {:.0f} mA, calling undock service ".format(self.battery_state.milliamps)
+                        self.send_say_svc_req(sayMsg)
+
                     # call undock service
                     if self.undock_svc_client.service_is_ready():
                         self.send_undock_svc_req()
@@ -233,6 +294,18 @@ class DaveNode(Node):
                         dtstr = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                         printMsg = "dave_main_cb(): docked and charging: battery_status {:.1f}v {:.0f} mA {:.1f}W".format(self.battery_state.volts,self.battery_state.milliamps,self.battery_state.watts)
                         print(dtstr, printMsg)
+                    if (self.odom_reset_svc_future != None):
+                        if (self.odom_reset_svc_future.done() == True):
+                            if (self.odom_reset_svc_future.result().success == True):  
+                                printMsg = "---- Successful docking - odometry reset to {0,0,0,1}"
+                                self.lifeLog.info(printMsg)
+                                dtstr = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                                if DEBUG:
+                                    print(dtstr,printMsg)
+                                printMsg = "RESET **** -  x:  0.000 y:  0.000 z:  0.000 heading:    0 - RESET by dave_node"
+                                self.odoLog.info(printMsg)
+                            # odom_reset done so no longer need future - null it so know not to check it next time through
+                            self.odom_reset_svc_future = None
 
             elif self.state == "undocking":
                 if DEBUG:
@@ -262,6 +335,10 @@ class DaveNode(Node):
                         dtstr = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                         printMsg = "dave_main_cb(): battery_status.volts {:.1f}v calling dock service ".format(self.battery_state.volts)
                         print(dtstr, printMsg)
+                    # Announce Docking with say service
+                    if self.say_svc_client.service_is_ready():
+                        sayMsg = "battery_status.volts {:.1f}v calling dock service ".format(self.battery_state.volts)
+                        self.send_say_svc_req(sayMsg)
                     # call dock service
                     if self.dock_svc_client.service_is_ready():
                         self.send_dock_svc_req()
