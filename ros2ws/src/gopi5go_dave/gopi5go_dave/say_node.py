@@ -101,7 +101,8 @@ class SayService(Node):
             dtstr = dt.datetime.now().strftime(DT_FORMAT)
             print(dtstr,"say_node: file written, speaking phrase")
 
-        subprocess.check_output(['aplay -D plughw:2,0 -r 22050 -f S16_LE ' + filename], stderr=subprocess.STDOUT, shell=True)
+        # subprocess.check_output(['aplay -D plughw:2,0 -r 22050 -f S16_LE ' + filename], stderr=subprocess.STDOUT, shell=True)
+        os.system('aplay -D plughw:2,0 -r 22050 -f S16_LE ' + filename)
 
         if DEBUG:
             dtstr = dt.datetime.now().strftime(DT_FORMAT)
