@@ -5,7 +5,8 @@
 
 """
 	Undock when charging current is <175ma
-        Dock when voltage is < 10v
+        Dock when voltage is < 10.1v 
+            (10.0v gives 6 min before 9.75v shutdown)
 
         Resets odometry to {0,0,0,1} after successful docking
            (ros2 service call /odom/reset std_srvs/srv/Trigger)
@@ -55,8 +56,8 @@ LIFELOGFILE = "/home/pi/GoPi5Go/logs/life.log"
 ODOLOGFILE = '/home/pi/GoPi5Go/logs/odometer.log'
 
 
-UNDOCK_AT_MILLIAMPS =  -175
-DOCK_AT_VOLTS       =   10
+UNDOCK_AT_MILLIAMPS =  -150
+DOCK_AT_VOLTS       =   10.1
 # Testing
 # UNDOCK_AT_MILLIAMPS =  -700
 # DOCK_AT_VOLTS       =   11.2
@@ -279,10 +280,17 @@ class DaveNode(Node):
                         printMsg = "dave_main_cb(): battery_status.milliamps {:.0f} mA, calling undock service ".format(self.battery_state.milliamps)
                         print(dtstr, printMsg)
 
-                    # Announce Undocking with say service
-                    if self.say_svc_client.service_is_ready():
-                        sayMsg = "charging at {:.0f} mA, calling undock service ".format(self.battery_state.milliamps)
-                        self.send_say_svc_req(sayMsg)
+
+                    try:
+                        # Announce Undocking with say service
+                        if self.say_svc_client.service_is_ready():
+                            sayMsg = "charging at {:.0f} mA, calling undock service ".format(self.battery_state.milliamps)
+                            self.send_say_svc_req(sayMsg)
+                    except Exception as e:
+                        dtstr = dt.datetime.now().strftime(DT_FORMAT)
+                        printMsg = "Exception with say service: {}".format(str(e))
+                        self.lifeLog.info(printMsg)
+                        print(dtstr, printMsg)
 
                     # call undock service
                     if self.undock_svc_client.service_is_ready():
@@ -328,20 +336,37 @@ class DaveNode(Node):
                 """
             elif (self.state in ["ready_to_dock"]):
                 if (self.battery_state.volts < DOCK_AT_VOLTS):
-                    self.prior_state = self.state
-                    self.state = "docking"
-                    self.docked_at_Vbatt = self.battery_state.volts
-                    if DEBUG:
-                        dtstr = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                        printMsg = "dave_main_cb(): battery_status.volts {:.1f}v calling dock service ".format(self.battery_state.volts)
+
+                    try:
+                        # Announce Docking with say service
+                        if self.say_svc_client.service_is_ready():
+                            sayMsg = "battery_status.volts {:.1f}v calling dock service ".format(self.battery_state.volts)
+                            self.send_say_svc_req(sayMsg)
+                    except Exception as e:
+                        dtstr = dt.datetime.now().strftime(DT_FORMAT)
+                        printMsg = "Exception with say service: {}".format(str(e))
+                        self.lifeLog.info(printMsg)
                         print(dtstr, printMsg)
-                    # Announce Docking with say service
-                    if self.say_svc_client.service_is_ready():
-                        sayMsg = "battery_status.volts {:.1f}v calling dock service ".format(self.battery_state.volts)
-                        self.send_say_svc_req(sayMsg)
+
                     # call dock service
                     if self.dock_svc_client.service_is_ready():
+                        self.docked_at_Vbatt = self.battery_state.volts
+                        if DEBUG:
+                            dtstr = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                            printMsg = "dave_main_cb(): battery_status.volts {:.1f}v calling dock service ".format(self.battery_state.volts)
+                            print(dtstr, printMsg)
                         self.send_dock_svc_req()
+                        self.prior_state = self.state
+                        self.state = "docking"
+
+                    else:
+                        dtstr = dt.datetime.now().strftime(DT_FORMAT)
+                        printMsg = "PROBLEM: dock_svc not ready"
+                        self.lifeLog.info(printMsg)
+                        print(dtstr, printMsg)
+                        # will try again next main_cb
+
+
                 else:  # playtime and no need to dock
                     if DEBUG:
                         dtstr = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")

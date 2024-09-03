@@ -1,14 +1,35 @@
+# /home/pi/.bashrc: Comment out check for not running interactive 
+
+# Commented out for attaching to Docker container starting bash
+# If not running interactively, don't do anything
+# case $- in
+#     *i*) ;;
+#       *) return;;
+# esac
+
+
+
+
+
 # ADD TO /home/pi/.bashrc FOR ROS2 Humble GoPi5Go-Dave Robot
 
 # ADDED FOR ROS2 Humble GoPi5Go-Dave Robot
+# Note: commented out check for not running interactive at beginning of file
+
 if [ -f /opt/ros/humble/setup.bash ]; then 
     source /opt/ros/humble/setup.bash
     export ROS_DOMAIN_ID=0
     export ROS_LOG_DIR="/home/pi/GoPi5Go/ros2ws/roslogs"
 fi
+
 if [ -f /usr/share/colcon_cd/function/colcon_cd.sh ]; then
     source /usr/share/colcon_cd/function/colcon_cd.sh
     export _colcon_cd_root=/home/pi/GoPi5Go/ros2ws
+fi
+
+if [ -f ~/GoPi5Go/ros2ws/install/setup.bash ]; then
+    echo -e "\n*** Sourcing install/setup.bash"
+    source ~/GoPi5Go/ros2ws/install/setup.bash
 fi
 
 # Add DOCKER: to prompt when in container
@@ -16,3 +37,8 @@ fi
 if [ ! -f /usr/bin/docker ]; then
     export PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:DOCKER:\[\033[01;34m\]\w \$ \[\033[00m\]"
 fi
+
+
+
+
+
