@@ -27,7 +27,7 @@ if [ -f /usr/share/colcon_cd/function/colcon_cd.sh ]; then
     export _colcon_cd_root=/home/pi/GoPi5Go/ros2ws
 fi
 
-if [ -f ~/GoPi5Go/ros2ws/install/setup.bash ]; then
+if [  ! -f /usr/bin/docker ]; then
     echo -e "\n*** Sourcing install/setup.bash"
     source ~/GoPi5Go/ros2ws/install/setup.bash
 fi
