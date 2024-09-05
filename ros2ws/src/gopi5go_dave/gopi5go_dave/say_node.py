@@ -99,21 +99,26 @@ class SayService(Node):
         audio = voice.synthesize(text,wav_file)
         if DEBUG:
             dtstr = dt.datetime.now().strftime(DT_FORMAT)
-            print(dtstr,"say_node: file written, speaking phrase")
+            print(dtstr,"say_node: file written, calling aplay")
 
         # subprocess.check_output(['aplay -D plughw:2,0 -r 22050 -f S16_LE ' + filename], stderr=subprocess.STDOUT, shell=True)
-        os.system('aplay -D plughw:2,0 -r 22050 -f S16_LE ' + filename)
-
+        try:
+            os.system('aplay -D plughw:2,0 -r 22050 -f S16_LE ' + filename)
+            response.spoken = True
+        except Exception as e:
+            logStr = "Exception: {}".format(str(e))
+            self.get_logger().info(logStr)
+            response.spoken = False
         if DEBUG:
             dtstr = dt.datetime.now().strftime(DT_FORMAT)
             print(dtstr,"say_node: after aplay")
 
-        os.remove(filename)
-        if DEBUG:
-            dtstr = dt.datetime.now().strftime(DT_FORMAT)
-            print(dtstr,"say_node: file removed")
+        if os.path.isfile(filename):  
+            os.remove(filename)
+            if DEBUG:
+                dtstr = dt.datetime.now().strftime(DT_FORMAT)
+                print(dtstr,"say_node: file removed")
 
-        response.spoken = True
         self.logger.info(text + " - spoken: " + str(response.spoken) )
 
         return response

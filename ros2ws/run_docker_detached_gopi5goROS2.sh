@@ -4,7 +4,7 @@
 
 
 cd /home/pi/GoPi5Go/ros2ws
-# --rm    remove container after running
+# --rm \    remove container after running
 # Prob not need
 # --device /dev/gpiochip4 \
 
@@ -18,6 +18,5 @@ docker run -dt --net=host \
  -e TZ=America/New_York \
  -w /home/pi/GoPi5Go/ros2ws \
  --privileged \
- --rm \
  --name gopi5goROS2 \
  gopi5gor2hdp

@@ -71,8 +71,10 @@ def main():
   str_to_log = "'Starting safetyShutdown.py at {:.2f} volts.'".format(egpg.volt()+battery.REV_PROTECT_DIODE)
   os.system("/home/pi/GoPi5Go/utils/logMaintenance.py " + str_to_log)
 
-  try:
-    while True:
+  doloop = True
+
+  while doloop:
+      try:
         status.printStatus(egpg)
         if (battery.too_low(egpg)):
             batteryLowCount += 1
@@ -109,15 +111,23 @@ def main():
           sys.exit(0)
         time.sleep(10)    # check battery status every 10 seconds
                           # important to make four checks low V quickly
-    #end while
-  except SystemExit:
-    print("safetyShutdown.py: exiting")
+      except SystemExit:
+          doloop = False
 
-  except Exception as e:
-      print("safetyShutdown.py exiting with exception: ",type(e).__name__,",",str(e))
-      str_to_log="Exiting with Exception "+type(e).__name__+": "+str(e)+"\n"
-      print(str_to_log)
-      lifeLog.logger.info(str_to_log)
+      except Exception as e:
+          print("safetyShutdown.py exception: ",type(e).__name__,",",str(e))
+          str_to_log="Continuing after Exception "+type(e).__name__+": "+str(e)
+          print(str_to_log)
+          lifeLog.logger.info(str_to_log)
+
+      #end try
+  #end while
+  print("safetyShutdown.py: exiting")
+  str_to_log="Normal Exit"
+  lifeLog.logger.info(str_to_log)
+
+
+
 if __name__ == "__main__":
     main()
 

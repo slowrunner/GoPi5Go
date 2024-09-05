@@ -284,7 +284,7 @@ class DaveNode(Node):
                     try:
                         # Announce Undocking with say service
                         if self.say_svc_client.service_is_ready():
-                            sayMsg = "charging at {:.0f} mA, calling undock service ".format(self.battery_state.milliamps)
+                            sayMsg = "charging at {:d} milliamps, calling undock service ".format(int(abs(self.battery_state.milliamps)))
                             self.send_say_svc_req(sayMsg)
                     except Exception as e:
                         dtstr = dt.datetime.now().strftime(DT_FORMAT)
@@ -340,7 +340,7 @@ class DaveNode(Node):
                     try:
                         # Announce Docking with say service
                         if self.say_svc_client.service_is_ready():
-                            sayMsg = "battery_status.volts {:.1f}v calling dock service ".format(self.battery_state.volts)
+                            sayMsg = "battery at {:.1f} volts, calling dock service ".format(self.battery_state.volts)
                             self.send_say_svc_req(sayMsg)
                     except Exception as e:
                         dtstr = dt.datetime.now().strftime(DT_FORMAT)
