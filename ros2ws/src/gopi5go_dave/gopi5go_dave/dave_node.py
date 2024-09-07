@@ -4,12 +4,26 @@
 
 
 """
-	Undock when charging current is <175ma
+
+        Implements ROS 2 Humble autonomous mobile robot (GoPi5Go-Dave) using  
+        - a multithreaded executor node (dave_node) written (in Python)
+        - with a "one second main callback" 
+        - that implements a state machine with states:
+          - init  (until battery state and dock status known)
+          - docked  (until charge current < 100 mA)
+          - undocking
+          - playtime  (until battery voltage < 10.5v)
+          - ready_to_dock (until battery voltage < 10.1v)
+          - docking
+
+
+	Undock when charging current is <100ma
         Dock when voltage is < 10.1v 
             (10.0v gives 6 min before 9.75v shutdown)
 
         Resets odometry to {0,0,0,1} after successful docking
            (ros2 service call /odom/reset std_srvs/srv/Trigger)
+
            std_srvs/Trigger.srv:
              # Request (null)
              ---
@@ -56,11 +70,9 @@ LIFELOGFILE = "/home/pi/GoPi5Go/logs/life.log"
 ODOLOGFILE = '/home/pi/GoPi5Go/logs/odometer.log'
 
 
-UNDOCK_AT_MILLIAMPS =  -150
+UNDOCK_AT_MILLIAMPS =  -100
 DOCK_AT_VOLTS       =   10.1
-# Testing
-# UNDOCK_AT_MILLIAMPS =  -700
-# DOCK_AT_VOLTS       =   11.2
+GET_READY_TO_DOCK_AT_VOLTS = 10.5
 
 DT_FORMAT = "%Y-%m-%d %H:%M:%S"
 
@@ -216,9 +228,13 @@ class DaveNode(Node):
                 elif self.battery_state.charging:     # init and all subcribers have received topics
                     self.prior_state = self.state
                     self.state = "docked"
-                else:                              # PROBABLY UNDOCKED - Cannot be certain from only charging status
+                elif (self.battery_state.volts < GET_READY_TO_DOCK_AT_VOLTS):  
                     self.prior_state = self.state
                     self.state = "ready_to_dock"
+                else: 
+                    self.prior_state = self.state
+                    self.state = "playtime"
+
 
             elif (self.state == "docking"):
                 if DEBUG:
@@ -314,6 +330,17 @@ class DaveNode(Node):
                                 self.odoLog.info(printMsg)
                             # odom_reset done so no longer need future - null it so know not to check it next time through
                             self.odom_reset_svc_future = None
+                            try:
+                                # Announce odometry reset with say service
+                                if self.say_svc_client.service_is_ready():
+                                    sayMsg = "docking success, odometry reset to 0 0"
+                                    self.send_say_svc_req(sayMsg)
+                            except Exception as e:
+                                dtstr = dt.datetime.now().strftime(DT_FORMAT)
+                                printMsg = "Exception with say service at odometry reset: {}".format(str(e))
+                                self.lifeLog.info(printMsg)
+                                print(dtstr, printMsg)
+
 
             elif self.state == "undocking":
                 if DEBUG:
@@ -323,17 +350,41 @@ class DaveNode(Node):
                 if self.undock_svc_future._done == True:  # print("self.undock_svc_future:", self.undock_svc_future.__dict__)
                     if DEBUG:
                         print("undock_svc_future.result._success {}  is_docked: {}".format(self.undock_svc_future._result.success, self.undock_svc_future._result.is_docked))
-                    if self.undock_svc_future._result.success == True:
-                        self.prior_state = self.state
-                        self.state = "ready_to_dock"
-                """
+                    try:
+                        # Announce transition to playtime with say service
+                        if self.say_svc_client.service_is_ready():
+                            sayMsg = "transition to playtime, battery at {:.1f} volts".format(self.battery_state.volts)
+                            self.send_say_svc_req(sayMsg)
+                    except Exception as e:
+                        dtstr = dt.datetime.now().strftime(DT_FORMAT)
+                        printMsg = "undocking: Exception with say service: {}".format(str(e))
+                        self.lifeLog.info(printMsg)
+                        print(dtstr, printMsg)
+
+                    self.prior_state = self.state
+                    self.state = "playtime"
+
+            elif (self.state == "playtime"):
+                if (self.battery_state.volts < GET_READY_TO_DOCK_AT_VOLTS):
+                    try:
+                        # Announce Docking with say service
+                        if self.say_svc_client.service_is_ready():
+                            sayMsg = "battery at {:.1f} volts, get ready to dock ".format(self.battery_state.volts)
+                            self.send_say_svc_req(sayMsg)
+                    except Exception as e:
+                        dtstr = dt.datetime.now().strftime(DT_FORMAT)
+                        printMsg = "playtime: Exception with say service: {}".format(str(e))
+                        self.lifeLog.info(printMsg)
+                        print(dtstr, printMsg)
+                    self.prior_state = self.state
+                    self.state = "ready_to_dock"
                 else:
-                    if self.dock_status.is_docked == False:
-                        self.state = "ready_to_dock"
-                        if DEBUG:
-                            printMsg = "dave_main_cb: undock_svc_future not done, but self.dock_status.is_docked is False - forcing 'ready_to_dock' state"
-                            print(dtstr, printMsg)
-                """
+                    if DEBUG:
+                        printMsg = "dave_main_cb: playtime"
+                        dtstr = dt.datetime.now().strftime(DT_FORMAT)
+                        print(dtstr, printMsg)
+
+
             elif (self.state in ["ready_to_dock"]):
                 if (self.battery_state.volts < DOCK_AT_VOLTS):
 
@@ -367,7 +418,7 @@ class DaveNode(Node):
                         # will try again next main_cb
 
 
-                else:  # playtime and no need to dock
+                else:  # ready to dock -  no need to dock yet
                     if DEBUG:
                         dtstr = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                         printMsg = "dave_main_cb(): playtime: battery_status {:.1f}v {:.0f} mA {:.1f}W".format(self.battery_state.volts,self.battery_state.milliamps,self.battery_state.watts)

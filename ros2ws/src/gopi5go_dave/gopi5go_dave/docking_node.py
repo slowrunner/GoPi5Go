@@ -54,8 +54,8 @@ from rclpy.callback_groups import MutuallyExclusiveCallbackGroup, ReentrantCallb
 import threading
 
 
-DOCKING_SPEED_MPS = 0.05  # Docking speed in m/s
-DOCKING_DIST_CM = -17.4  # cm
+DOCKING_SPEED_MPS = 0.07  # Docking speed in m/s
+DOCKING_DIST_CM = -17.5  # cm
 UNDOCKING_DIST_CM = 17.0 # cm
 
 # DEBUG = True
