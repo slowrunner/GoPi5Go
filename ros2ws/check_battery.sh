@@ -10,4 +10,5 @@ if [ ! -f /usr/bin/docker ]; then
     ros2 topic echo --once /battery_state; \
 fi
 
+echo -e "\n*** Checking Battery from PiOS"
 python3 /home/pi/GoPi5Go/plib/battery.py

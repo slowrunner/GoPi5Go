@@ -33,15 +33,21 @@ BATTERY_CLASS_RATE_PER_HOUR = 360     # update once every 10 seconds
 # 2024-4-2 Data  4h19m 12.5v to 8.91v at cutoff - To Cutoff: 9.84v = 5m, 10.15v = 5% 13m, 10.29v = 10% 26m, 10.32v = 12% 20m
 # VOLTAGE_POINTS = \
 #    [8.5, 10.15, 10.29, 10.42, 10.56, 10.64,  10.69, 10.75,  10.81,  10.87,   10.9,  11.0,  11.14,  11.31,  11.42,  11.56,  11.68,  11.87,   12.0, 12.13,  12.36, 12.5]
-VOLTAGE_POINTS = \
-  [10.10,  10.12, 10.20, 10.29, 10.36, 10.42,  10.47, 10.52,  10.57,  10.61,   10.67,  10.74,  10.83, 10.93,  11.04,  11.16,  11.27,  11.39,  11.52, 11.67,  11.80, 11.90]
+# 2024-09-08 Data points average three INA219 voltages:  charge till -100mA, dock at 10.1v
+DISCHARGING_VOLTAGE_POINTS = \
+        [10.10, 10.12, 10.20, 10.29, 10.36, 10.42,  10.47, 10.52,  10.57,  10.61,   10.67,  10.74,  10.83, 10.93,  11.04,  11.16,  11.27,  11.39,   11.52,  11.67,  11.80, 11.90]
+CHARGING_VOLTAGE_POINTS = \
+        [10.96, 11.14, 11.19, 11.27, 11.38, 11.49,  11.58, 11.65,  11.72,  11.83,   11.87,  11.91,  11.95, 11.98,  12.01,  12.03,  12.05,  12.06,   12.08,  12.09,  12.10, 12.15]
 BATTERY_REMAINING = \
     [0.0,   0.05,  0.10,  0.15,  0.20,  0.25,   0.30,  0.35,   0.40,   0.45,    0.50,   0.55,   0.60,  0.65,   0.70,   0.75,   0.80,   0.85,   0.90,  0.95,   0.99,  1.00]
 
-def pctRemaining_from_vBatt(vBatt):
+def pctRemaining_from_vBatt(vBatt,charging=False):
       FULL_CHARGE = 1.0
       PROTECTION_CUTOFF = 0.0
-      pctRemaining = np.interp(vBatt,VOLTAGE_POINTS,BATTERY_REMAINING, right=FULL_CHARGE, left=PROTECTION_CUTOFF)
+      if charging:
+          pctRemaining = np.interp(vBatt,CHARGING_VOLTAGE_POINTS,BATTERY_REMAINING, right=FULL_CHARGE, left=PROTECTION_CUTOFF)
+      else:
+          pctRemaining = np.interp(vBatt,DISCHARGING_VOLTAGE_POINTS,BATTERY_REMAINING, right=FULL_CHARGE, left=PROTECTION_CUTOFF)
       return pctRemaining
 
 def vBatt_vReading(egpg):
@@ -190,15 +196,20 @@ class Battery(Thread):
         # VOLTAGE_POINTS = \
         #     [8.5,   9.74,  9.88, 10.04, 10.16, 10.22,  10.25, 10.26,  10.38,  10.43,  10.46, 11.53,  11.59,  10.69,  10.79,  10.89,  11.00,  11.17,  11.29, 11.44,  11.53, 11.55]
         # 2024-09-08 INA219 measured discharging till 10.1v, charged till current < 100mA
-        VOLTAGE_POINTS = \
-          [10.10,  10.12, 10.20, 10.29, 10.36, 10.42,  10.47, 10.52,  10.57,  10.61,   10.67,  10.74,  10.83, 10.93,  11.04,  11.16,  11.27,  11.39,  11.52, 11.67,  11.80, 11.90]
+        DISCHARGING_VOLTAGE_POINTS = \
+            [10.10, 10.12, 10.20, 10.29, 10.36, 10.42,  10.47, 10.52,  10.57,  10.61,   10.67,  10.74,  10.83, 10.93,  11.04,  11.16,  11.27,  11.39,   11.52,  11.67,  11.80, 11.90]
+        CHARGING_VOLTAGE_POINTS = \
+            [10.96, 11.14, 11.19, 11.27, 11.38, 11.49,  11.58, 11.65,  11.72,  11.83,   11.87,  11.91,  11.95, 11.98,  12.01,  12.03,  12.05,  12.06,   12.08,  12.09,  12.10, 12.15]
         BATTERY_REMAINING = \
             [0.0,   0.05,  0.10,  0.15,  0.20,  0.25,   0.30,  0.35,   0.40,   0.45,   0.50,  0.55,   0.60,   0.65,   0.70,   0.75,   0.80,   0.85,   0.90,  0.95,   0.99,  1.00]
 
         FULL_CHARGE = 1.0
         PROTECTION_CUTOFF = 0.0
         vBatt = self.eina.ave_volts()
-        pctRemaining = np.interp(vBatt,VOLTAGE_POINTS,BATTERY_REMAINING, right=FULL_CHARGE, left=PROTECTION_CUTOFF) * 100
+        if self.charging():
+            pctRemaining = np.interp(vBatt,CHARGING_VOLTAGE_POINTS,BATTERY_REMAINING, right=FULL_CHARGE, left=PROTECTION_CUTOFF) * 100
+        else:
+            pctRemaining = np.interp(vBatt,DISCHARGING_VOLTAGE_POINTS,BATTERY_REMAINING, right=FULL_CHARGE, left=PROTECTION_CUTOFF) * 100
         return pctRemaining
 
     def too_low(self):
