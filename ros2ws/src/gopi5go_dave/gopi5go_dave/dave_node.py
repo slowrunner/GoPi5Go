@@ -91,7 +91,7 @@ class DaveNode(Node):
         self.lifeLog.addHandler(self.loghandler)
 
         dtstr = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        printMsg = '---- GoPi5Go-Dave node started - Undock:{:d} mA  Ready:{.1f}v  Dock:{:.1f}v'.format(int(UNDOCK_AT_MILLIAMPS), GET_READY_TO_DOCK_AT_VOLTS,  DOCK_AT_VOLTS )
+        printMsg = '---- GoPi5Go-Dave node started - Undock:{:d} mA  Ready:{:.1f}v  Dock:{:.1f}v'.format(int(UNDOCK_AT_MILLIAMPS), GET_READY_TO_DOCK_AT_VOLTS,  DOCK_AT_VOLTS )
         print(dtstr,printMsg)
         self.lifeLog.info(printMsg)
 
