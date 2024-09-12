@@ -31,7 +31,7 @@ import time
 debug = False
 import math
 import logging
-
+import os
 
 # create logger
 logger = logging.getLogger('speakLog')
@@ -99,13 +99,15 @@ def say_piper(phrase,vol=100,anytime=False):
         # subprocess.check_output(['./piper.sh "%s"' % phrase], stderr=subprocess.STDOUT, shell=True)
         cmd = "amixer -D pulse set Master {:d}%".format(int(vol/3))
         # print("cmd:",cmd)
-        subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
+        # subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
+        os.system(cmd)
 
         cmd = '~/GoPi5Go/plib/piper.sh "%s"' % phrase
-        subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
+        # subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
+        os.system(cmd)
         # reset mixer to whisper level
-        cmd = "amixer -D pulse set Master {:d}%".format(40)
-        subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
+        # cmd = "amixer -D pulse set Master {:d}%".format(40)
+        # subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
 
     logger.info(phrase+spoken)
 

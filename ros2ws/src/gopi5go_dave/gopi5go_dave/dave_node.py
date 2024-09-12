@@ -255,7 +255,7 @@ class DaveNode(Node):
                         daveDataJson.saveData('chargeCycles', chargeCycles)
 
                         if (playtimeDurationInHours > 0.1):
-                            printMsg = "---- GoPi5Go-Dave ROS Docking {} : success at battery {:.0f}v after {:.1f} h playtime ".format(chargeCycles, self.docked_at_Vbatt, playtimeDurationInHours)
+                            printMsg = "---- GoPi5Go-Dave ROS 2 Docking {} : success at battery {:.1f}v after {:.1f} h playtime ".format(chargeCycles, self.docked_at_Vbatt, playtimeDurationInHours)
                             self.lifeLog.info(printMsg)
                             dtstr = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                             print(dtstr, printMsg)
@@ -269,6 +269,20 @@ class DaveNode(Node):
                         daveDataJson.saveData('dockingState',"docked")
                         self.prior_state = self.state
                         self.state = "docked"
+                    else:  # self.battery_state.charging == False
+                        last_dock_time = dt.datetime.now()
+                        playtimeDurationInSeconds = (last_dock_time - self.last_undock_time).total_seconds()
+                        playtimeDurationInDays = divmod(playtimeDurationInSeconds, 86400)
+                        playtimeDurationInHours = round( (playtimeDurationInDays[1] / 3600.0), 1)
+
+                        if (playtimeDurationInHours > 0.1):
+                            printMsg = "---- GoPi5Go-Dave ROS 2 Docking : failure at battery {:.1f}v after {:.1f} h playtime ".format(self.docked_at_Vbatt, playtimeDurationInHours)
+                            self.lifeLog.info(printMsg)
+                            dtstr = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                            print(dtstr, printMsg)
+                        self.prior_state = self.state
+                        self.state = "docking_failure"
+
 
             elif (self.state in ["docked"]):
                 if (self.battery_state.milliamps > UNDOCK_AT_MILLIAMPS):
@@ -425,8 +439,10 @@ class DaveNode(Node):
                         print(dtstr, printMsg)
 
             else:    # PROBLEM IF HERE
-                printMsg = "dave_main_cb: exec else (self.state not a handled value)"
+                printMsg = "dave_main_cb: else (self.state {} not a handled value), terminating dave_node".format(self.state)
                 print(dtstr, printMsg)
+                self.lifeLog.info(printMsg)
+                sys.exit(1)
 
 
         except Exception as e:
