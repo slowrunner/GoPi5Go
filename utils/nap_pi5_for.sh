@@ -8,13 +8,14 @@ if [ "$#" -ne 1 ] ;
 	then echo "Usage:  ./nap_pi5_for.sh NN.n (NN.n hours) "
 	exit
 fi
-echo "WaLiPi5 is going to nap for $1 hours"
-~/GoPi5Go/utils/logMaintenance.py 'WaLiPi5 is going to nap for '$1' hours'
+batt=`(/home/pi/GoPi5Go/plib/battery.py)`
+echo "GoPi5Go-Dave is going to nap for $1 hours, vBatt: $batt"
+~/GoPi5Go/utils/logMaintenance.py 'GoPi5Go-Dave is going to nap for '$1' hours, vBatt: $batt'
 
 #espeak-ng -a 200 "I'm going to take a nap for "$1" hours"
 
 # Speak at volume 200 ignore quietTime
-~/GoPi5Go/plib/speak.py "I'm going to take a nap for ${1} hours" 200 True
+~/GoPi5Go/plib/speak.py "Battery at ${batt} volts, I'm going to take a nap for ${1} hours" 200 True
 
 # Convert hours to seconds to set alarm - "/ 1" converts to integer
 napsecs=`(echo "scale=0; ($1 * 3600) / 1" | bc)`
