@@ -60,24 +60,24 @@ GoPi5Go-Dave Specs:
 - Available GoPiGo3 Ports
   * I2C: MPU9250 IMU  
   * I2C: Unused  
-  * Grove Analog/Digital I/O AD1: Unused
-  * Grove Analog/Digital I/O AD2: Unused 
-  * SERVO1: Unused
-  * SERVO2: Unused
+  * Grove Analog/Digital I/O AD1: Unused  
+  * Grove Analog/Digital I/O AD2: Unused   
+  * SERVO1: Unused  
+  * SERVO2: Unused  
 
-- Power Source: ModRobotics 3000mAH 11.1v Rechargeable Battery
-  * 12.3v to protection circuit cutoff at 8.1-8.4v! 
-  * Roughly 25wH
-  * Charger never reaches trickle charge due to powering Pololu 5v circuit 
+- Power Source: ModRobotics 3000mAH 11.1v Rechargeable Battery  
+  * 12.3v to protection circuit cutoff at 8.1-8.4v!   
+  * Roughly 25wH  
+  * Charger never reaches trickle charge due to powering Pololu 5v circuit  
 
-- Run Time: (Using 10v 15minutes left "need to shutdown" limit) 
-  * "Thinking" 3.8 hours  (averages 6.5w 25wH)
-  * "100% wandering" TBD hours
+- Play Time: (Using 10.1v 15minutes left "need to shutdown" limit)  
+  * "GoPi5Go-Dave ROSbot" 2.8 hours  (averages 7.5w 20wH)  
+  * "100% wandering" TBD hours  
 
 - Recharger:  
-  * ModRobotics Li-ion Battery Charging adapter
-  * 12.6v 1A output with charging/charged LED
-  * About 2.3 hours recharge from 10v docking
+  * ModRobotics Li-ion Battery Charging adapter  
+  * 12.6v 1A output with charging/charged LED  
+  * About 2.4 hours recharge from 10.1v docking to 100mA charging current  
 
 - Physical:
   * 2.5 lbs Total
@@ -85,9 +85,10 @@ GoPi5Go-Dave Specs:
 
 - Total Cost: $782
 
-- First "Life as GoPi5Go-Dave": March 2024
-- First "Life as Humble-Dave": 
-- First "Life as ROSbot Dave": 
+- First "Life as GoPi5Go-Dave": March 2024    (PiOS Bookworm, ROS 2 Humble over Ubuntu 22.04 in Docker)  
+- First "Life as Humble-Dave": Oct 7, 2022    (ROS 2 Humble, Ubuntu 22.04)  
+- First "Life as ROSbot Dave": June 12, 2021  (ROS 2 Foxy, Ubuntu 20.04)  
+- First "Life as ROS-GoPiGo3": Apr 2019       (Robot Carl, ROS Kinetic, Raspbian Stretch)  
 
 - GoPiGo3 API Modifications for Bookworm/Raspberry Pi 5
   * Reduced SPI transfer rate to 250 khz for Pi5
