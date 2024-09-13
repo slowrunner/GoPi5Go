@@ -30,7 +30,7 @@
 image: floorplan.map.pgm
 mode: trinary
 resolution: 0.05
-origin: [-7.363, -2.538, 0]
+origin: [-0.2, -2.658, 0]
 negate: 0
 occupied_thresh: 0.65
 free_thresh: 0.25
@@ -40,16 +40,6 @@ free_thresh: 0.25
 - The "origin" is the bottom left corner
 - odom {0,0} is the center of the robot on the dock, 
 - so origin: [ -Corner_from_dock_X, -Corner_from_dock_Y, 0]
-
-5) scp the file to Create3-Wali:
-```
-- Open terminal at folder with floorplan.map.pgm and .yaml
-- scp files      
-```
- scp floorplan.map.* pi@10.0.0.xxx:/home/pi/wali_pi5/c3ws/maps/
-```
-- copy the files to src/create3_navigation/maps/
-
 
 
 

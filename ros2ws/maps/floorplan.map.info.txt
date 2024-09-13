@@ -1,25 +1,25 @@
+
+floorplan.map.yaml:
+
 image: floorplan.map.pgm
 mode: trinary
 resolution: 0.05
-origin: [-7.664, -2.658, 0]
+origin: [-0.2, -2.658, 0]
 negate: 0
 occupied_thresh: 0.65
 free_thresh: 0.25
 
 
+Description:
 
-Floorplan is outside of house dimensions 19.248m by 12.450m  (12.006 actual by survey)
+Floorplan is outside of house dimensions 385x240 pixels at 0.05 meter resolution = 19.25m by 12.00m  (12.006 actual by survey)
 
-North is roughly negative X axis.
+North is roughly negative X axis
 
-Map "Origin" (bottom left corner) is roughly -7.664m X (horizontal), and -2.757m Y (vertical)
+Map "Origin" (bottom left corner) is roughly -0.2m X (horizontal), and -2.658m Y (vertical)
 
-(0,0) is Wali's dock in dining room, X to right in floor plan, Y up in floor plan
+(0,0) is GoPi5Go-Dave's dock in office room, X to right in floor plan, Y up in floor plan
 
-Map is resized to 385 pixels wide which made 249 px high (should be 240 for 12.006) with each pixel
-representing 0.05m (resolution) 
-
-(Should have unlocked aspect ratio, enabling resize to 385 by 240 to keep accurate Y dimensions)
 
 
  
