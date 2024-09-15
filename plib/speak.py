@@ -79,7 +79,7 @@ def say_espeak(phrase,vol=100,anytime=False):
         subprocess.check_output(['espeak-ng -a'+str(vol)+' "%s"' % phrase], stderr=subprocess.STDOUT, shell=True)
     logger.info(phrase+spoken)
 
-def say_piper(phrase,vol=100,anytime=False):
+def say_piper(phrase,vol=75,anytime=False):
 
     phrase = phrase.replace("I'm","I m")
     phrase = phrase.replace("'","")
@@ -97,7 +97,7 @@ def say_piper(phrase,vol=100,anytime=False):
         # subprocess.check_output(['espeak-ng -a'+str(vol)+' "%s"' % phrase], stderr=subprocess.STDOUT, shell=True)
         # subprocess.check_output(['echo "%s" | piper --model /home/pi/GoPi5Go/models/piper-tts/en_US-arctic-medium.onnx    --output_raw | aplay -D plughw:2,0 -r 22050 -f S16_LE -t raw -' % phrase], stderr=subprocess.STDOUT, shell=True)
         # subprocess.check_output(['./piper.sh "%s"' % phrase], stderr=subprocess.STDOUT, shell=True)
-        cmd = "amixer -D pulse set Master {:d}%".format(int(vol/3))
+        cmd = "amixer -D pulse set Master {:d}%".format(int(vol))
         # print("cmd:",cmd)
         # subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
         os.system(cmd)
@@ -111,20 +111,20 @@ def say_piper(phrase,vol=100,anytime=False):
 
     logger.info(phrase+spoken)
 
-def say(phrase,vol=200,anytime=False):
+def say(phrase,vol=75,anytime=False):
     # say_espeak(phrase,vol,anytime)
     # vol = 50 for HP amplified spkr
     # vol = vol + 40  # adjust for flite
     # say_flite(phrase,vol,anytime)
     say_piper(phrase,vol,anytime)
 
-def shout(phrase,vol=500,anytime=False):
+def shout(phrase,vol=100,anytime=False):
     # say_espeak(phrase,vol,anytime)
     # vol = vol - 50  # adjust for flite
     # say_flite(phrase,vol,anytime)
     say_piper(phrase,vol,anytime)
 
-def whisper(phrase,vol=40,anytime=False):
+def whisper(phrase,vol=45,anytime=False):
     # say_espeak(phrase,vol,anytime)
     # vol = vol + 30  # adjust for flite
     # say_flite(phrase,vol,anytime=False)
@@ -141,7 +141,7 @@ def main():
         if ( len(sys.argv)>2 ):
             vol=int(sys.argv[2])
         else:
-            vol=50
+            vol=80
         if ( len(sys.argv)>3 ):
             ignore= ( sys.argv[3] == "True" )
         else:
