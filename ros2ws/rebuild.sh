@@ -46,6 +46,12 @@ colcon build --symlink-install --packages-select explorer_wanderer
 echo "** colcon build --symlink-install --packages-select gopi5go_dave"
 colcon build --symlink-install --packages-select gopi5go_dave
 
+echo "** colcon build --symlink-install --packages-select gpg3_cartographer"
+colcon build --symlink-install --packages-select gpg3_cartographer
+
+echo "** colcon build --symlink-install --packages-select gpg3_navigation2"
+colcon build --symlink-install --packages-select gpg3_navigation2
+
 echo -e "\n*** . install/setup.bash"
 . install/setup.bash
 
