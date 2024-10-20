@@ -13,7 +13,9 @@ Boot starts /etc/systemd/system/docker.gopi5goROS2.service
   - odometer:      records ROS all /cmd_vel movement (does not record dock/undock movement)  
   - joy_node:      handles wireless F710 joy controller to publish /cmd_vel  
   - say_node:      TTS speech server offers /say {"phrase"} service  
-
+  - robot_state_publisher:  Publishes /robot_description and /tf_static (from URDF)  
+    and updated /tf when any joint states are published  
+  - joint_state_publisher:  Publishes updated joint states as wheels turn  
 
 ## Setup Process:  
 
@@ -86,7 +88,8 @@ This file should start the needed GoPi5Go-Dave nodes:
 - odometer      records ROS all /cmd_vel movement (does not record dock/undock movement)  
 - say_node      TTS speech server offers /say {"phrase"} service  
 - joy_node      handles wireless F710 joy controller to publish /cmd_vel  
-
+- robot_state_publisher
+- joint_state_publisher
 
 ## Setup to start GoPi5Go-Dave nodes when gopi5goROS2 container starts  
 

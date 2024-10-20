@@ -7,6 +7,10 @@ RUN sudo apt-get install -y \
     libraspberrypi-bin \
     swig 
 
+RUN sudo apt-get install -y \
+    ros-humble-cartographer-ros \
+    ros-humble-cartographer-msgs
+
 # Install the GoPiGo3 API
 
 COPY 99-com.rules /etc/udev/rules.d
