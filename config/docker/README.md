@@ -181,4 +181,21 @@ docker run -it --net=host  -v /home/pi:/home/pi -v /dev/input:/dev/input \
 - run_r2hdp.sh
 - run_gopi5goROS2.sh
 - restart_gopi5goROS2.sh
+- 7_build_gopi5gor2hdp_image.sh  
+- kill_docker_gopi5goROS2.sh                 stops (and prunes) running gopi5goROS2 container              
+- delete_gopi5gor2hdp_image.sh               removes image used for gopi5goROS2 container
+- install_docker_gopi5goROS2_dot_service.sh      
+- restart_docker_detached_gopi5goROS2.sh
+
+
+# REBUILD GoPi5Go-Dave Docker
+
+1) utils/logMaintenance.sh "stopping GoPi5Go-Dave to rebuild Docker for ___"  
+2) ./kill_docker_gopi5goROS2.sh  
+3) ./delete_gopi5gor2hdp_image.sh  
+4) ./7_build_gopi5gor2hdp_image.sh  
+5) .restart_docker_detached_gopi5goROS2.sh  
+   or  
+   ./run_gopi5goROS2.sh  
+
 
