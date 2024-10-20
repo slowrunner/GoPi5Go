@@ -127,6 +127,10 @@ class DaveNode(Node):
         self.dock_svc_req = None
         self.dock_svc_future = None
 
+        self.fixdock_svc_client = self.create_client(Dock, 'fixdock')
+        self.dock_svc_req = None
+        self.dock_svc_future = None
+
         self.undock_svc_client = self.create_client(Undock, 'undock')
         self.undock_svc_req = None
         self.undock_svc_future = None
@@ -184,6 +188,15 @@ class DaveNode(Node):
             print(dtstr, printMsg)
         self.dock_svc_req = Dock.Request()
         self.dock_svc_future = self.dock_svc_client.call_async(self.dock_svc_req)
+
+    def send_fixdock_svc_req(self):
+        if DEBUG:
+            dtstr = dt.datetime.now().strftime(DT_FORMAT)[:-3]
+            printMsg = "send_fixdock_svc_req()"
+            print(dtstr, printMsg)
+            self.lifeLog.info(printMsg)
+        self.dock_svc_req = Dock.Request()
+        self.dock_svc_future = self.fixdock_svc_client.call_async(self.dock_svc_req)
 
     def send_odom_reset_svc_req(self):
         if DEBUG:
@@ -293,7 +306,7 @@ class DaveNode(Node):
                     chargeDurationInDays = divmod(chargeDurationInSeconds, 86400)
                     chargeDurationInHours = round( (chargeDurationInDays[1] / 3600.0), 1)
                     if (chargeDurationInHours > 0.1):
-                        printMsg = "---- GoPi5Go-Dave ROS 2 Undocking at Charge Current {:d} mA {:.2f}v after {:.1f} h charging".format(UNDOCK_AT_MILLIAMPS,self.battery_state.volts, chargeDurationInHours)
+                        printMsg = "---- GoPi5Go-Dave ROS 2 Undocking, Charge Current {:d} mA   {:.1f}v after {:.1f} h charging".format(int(abs(self.battery_state.milliamps)),self.battery_state.volts, chargeDurationInHours)
                         self.lifeLog.info(printMsg)
                         dtstr = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                         if DEBUG:
@@ -437,6 +450,38 @@ class DaveNode(Node):
                         dtstr = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                         printMsg = "dave_main_cb(): playtime: battery_status {:.1f}v {:.0f} mA {:.1f}W".format(self.battery_state.volts,self.battery_state.milliamps,self.battery_state.watts)
                         print(dtstr, printMsg)
+
+            elif (self.state in ["docking_failure"]):
+                    try:
+                        # Announce Docking with say service
+                        if self.say_svc_client.service_is_ready():
+                            sayMsg = "docking failure at {:.1f} volts, attempting fix".format(self.battery_state.volts)
+                            self.send_say_svc_req(sayMsg)
+                    except Exception as e:
+                        dtstr = dt.datetime.now().strftime(DT_FORMAT)
+                        printMsg = "Exception with say service: {}".format(str(e))
+                        self.lifeLog.info(printMsg)
+                        print(dtstr, printMsg)
+
+                    # call fixdock service
+                    if self.fixdock_svc_client.service_is_ready():
+                        self.docked_at_Vbatt = self.battery_state.volts
+                        if DEBUG:
+                            dtstr = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                            printMsg = "dave_main_cb(): battery_status.volts {:.1f}v calling fixdock service ".format(self.battery_state.volts)
+                            print(dtstr, printMsg)
+                            self.lifeLog.info(printMsg)
+                        self.send_fixdock_svc_req()
+                        self.prior_state = self.state
+                        self.state = "docking"
+
+                    else:
+                        dtstr = dt.datetime.now().strftime(DT_FORMAT)
+                        printMsg = "PROBLEM: dock_svc not ready"
+                        self.lifeLog.info(printMsg)
+                        print(dtstr, printMsg)
+                        # will try again next main_cb
+
 
             else:    # PROBLEM IF HERE
                 printMsg = "dave_main_cb: else (self.state {} not a handled value), terminating dave_node".format(self.state)

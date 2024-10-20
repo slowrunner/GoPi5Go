@@ -18,4 +18,4 @@ echo -e "\n*** STARTING NAV2 NAVIGATION ***"
 
 # Start Nav2 with local params_file
 echo -e "\n*** ros2 launch nav2_bringup navigation_launch.py params_file:=gopigo3_nav2_params.yaml"
-ros2 launch nav2_bringup navigation_launch.py params_file:=gopigo3_nav2_params.yaml
+ros2 launch nav2_bringup navigation_launch.py params_file:=params/gopigo3_nav2_params.yaml

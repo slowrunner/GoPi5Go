@@ -15,7 +15,7 @@ slam_toolbox:
     mode: localization # mapping #localization
 
     # if you'd like to start localizing on bringup in a map and pose
-    map_file_name: xyzzy
+    map_file_name: floorplan_map
     map_start_pose: [0.0, 0.0, 0.0]
 
     debug_logging: true # was false

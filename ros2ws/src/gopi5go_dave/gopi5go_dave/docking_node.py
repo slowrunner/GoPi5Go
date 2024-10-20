@@ -56,6 +56,7 @@ import threading
 
 DOCKING_SPEED_MPS = 0.07  # Docking speed in m/s
 DOCKING_DIST_CM = -17.5  # cm
+FIXDOCKING_DIST_CM = -1.0
 UNDOCKING_DIST_CM = 17.0 # cm
 
 # DEBUG = True
@@ -78,6 +79,7 @@ class Docking(Node):
         self.battery_sub = self.create_subscription(BatteryState, 'battery_state', self.battery_state_cb, callback_group=sub_cb_grp, qos_profile=qos_profile_sensor_data)
         self.dock_status_pub = self.create_publisher(DockStatus, 'dock_status', qos_profile_sensor_data )
         self.dock_srv = self.create_service(Dock, 'dock', self.dock_cb, callback_group=svc_cb_grp)
+        self.fixdock_srv = self.create_service(Dock, 'fixdock', self.fixdock_cb, callback_group=svc_cb_grp)
         self.undock_srv = self.create_service(Undock, 'undock', self.undock_cb, callback_group=svc_cb_grp)
         self.hz = 1  # once per second
         self.timer = self.create_timer( 1.0/self.hz, self.docking_main_cb, callback_group=main_cb_grp)
@@ -125,6 +127,31 @@ class Docking(Node):
         # self.get_logger().info('docking_node.dock_cb() return')
         dtstr = dt.datetime.now().strftime(DT_FORMAT)[:-3]
         printMsg = 'docking_node.dock_cb() exit: success: {} : is_charging: {}  is_docked: {}'.format(response.success, self.is_charging, self.is_docked)
+        if DEBUG: print(dtstr,printMsg)
+
+        return response
+
+
+    def fixdock_cb(self, request, response):
+
+        dtstr = dt.datetime.now().strftime(DT_FORMAT)[:-3]
+        printMsg = 'docking_node.fixdock_cb() entry: is_charging: {}  is_docked: {}'.format(self.is_charging, self.is_docked)
+        if DEBUG: print(dtstr,printMsg)
+        # self.get_logger().info('docking_node.dock_cb() entry')
+        wheel_dia_in_meters = self.egpg.WHEEL_CIRCUMFERENCE / 1000.0
+        docking_speed_dps = int(DOCKING_SPEED_MPS * 360.0 / wheel_dia_in_meters )
+        self.egpg.set_speed(docking_speed_dps)
+        self.egpg.drive_cm(FIXDOCKING_DIST_CM)
+        self.is_docked = True
+
+        sleep(10)  # allow charging to start
+
+        response.is_docked = self.is_docked
+        response.is_charging = self.is_charging
+        response.success= (self.is_docked and self.is_charging)
+        # self.get_logger().info('docking_node.dock_cb() return')
+        dtstr = dt.datetime.now().strftime(DT_FORMAT)[:-3]
+        printMsg = 'docking_node.fixdock_cb() exit: success: {} : is_charging: {}  is_docked: {}'.format(response.success, self.is_charging, self.is_docked)
         if DEBUG: print(dtstr,printMsg)
 
         return response
