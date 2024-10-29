@@ -1,7 +1,7 @@
 # FILE: ros2_gopi5go_dave_state_and_joint.launch.py
 # PURPOSE:  Launch robot and joint state publishers 
 
-# USES:  urdf/gpg3_gopi5go_dave.urdf developed for gopi5go_desktop:simws/src/gpg3_gazebo package
+# USES:  urdf/gopi5go_dave.urdf
 
 
 import os
@@ -16,7 +16,7 @@ def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time', default='false')
 
     # URDF File to publish from
-    urdf_file_name = 'gpg3_gopi5go_dave.urdf'
+    urdf_file_name = 'gopi5go_dave.urdf'
 
 
     urdf = os.path.join(

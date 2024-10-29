@@ -48,7 +48,7 @@ def generate_launch_description():
             [
                 FindPackageShare('gpg3_navigation2'),
                 'map',
-                'cart_floorplan.yaml'
+                'house_tile_cart.yaml'
             ]
         )
     )

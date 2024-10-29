@@ -130,10 +130,11 @@ class ScanClientNode(Node):
             print('\n*** range[{}] index - left {} front {} back {} right {}'.format(
                 num_ranges, i_left_range, i_front_range, i_back_range, i_right_range))
 
-            print('\nleft: {:.3f} cnt: {}'.format(scan_msg.ranges[i_left_range], self.left_count))
-            print('\nfront: {:.3f} cnt: {}'.format(scan_msg.ranges[i_front_range],self.front_count))
-            print('\nback: {:.3f} cnt: {}'.format(scan_msg.ranges[i_back_range], self.back_count))
-            print('\nright: {:.3f} cnt: {}'.format(scan_msg.ranges[i_right_range],self.right_count))
+            self.max_count=max(self.left_count, self.front_count, self.back_count, self.right_count)
+            print('\nleft: {:.3f} cnt: {} non-zero: {:.1f}'.format(scan_msg.ranges[i_left_range], self.left_count, self.left_count/self.max_count*100.0))
+            print('\nfront: {:.3f} cnt: {} non-zero: {:.1f}'.format(scan_msg.ranges[i_front_range],self.front_count, self.front_count/self.max_count*100))
+            print('\nback: {:.3f} cnt: {} non-zero: {:.1f}'.format(scan_msg.ranges[i_back_range], self.back_count, self.back_count/self.max_count*100.0))
+            print('\nright: {:.3f} cnt: {} non-zero: {:.1f}'.format(scan_msg.ranges[i_right_range],self.right_count, self.right_count/self.max_count*100.0))
 
             lc2 = int(num_ranges/2)-3
             lc1 = lc2+1

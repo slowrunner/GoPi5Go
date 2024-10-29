@@ -1,0 +1,437 @@
+<?xml version='1.0'?>
+
+<!-- FILE: gopi5go_dave.urdf -->
+
+<!-- maintainer: slowrunner@users.noreply.github.com -->
+
+<!-- GoPiGo3 as 216mm long,  103mm wide, 4mm thick plates (blue) -->
+<!--   with a 3/4 inch caster holding the chassis level (blue) -->
+<!--   with (effective) 66.77mm dia 25mm wide wheels (black) and 106.14mm wheel base -->
+<!--   NOTE: The center of rotation must be at xyz="0 0 X" of the base link -->
+<!--         therefore the wheel joints' x value must be 0 -->
+<!--   The chassis center is 17mm back of the center of rotation (wheels) -->
+<!--   The LIDAR is ~22mm behind the center of rotation (wheels) -->
+<!--       (A bit hard to measure after assembled.) -->
+
+<!-- NOTE: Caster is modeled as a static body_link part; (Could not keep attached) -->
+<!--       Caster joint would be type "fixed" for simplification -->
+<!--       Caster joint of type "ball" requires three links with inertia -->
+<!--       and three joints (one for each axis) -->
+<!--       Caster is the American word, Castor the British term -->
+
+<robot name="gopi5go_dave">
+
+  <material name="yellow">
+     <color rgba="1 1 0 0.5"/>
+  </material>
+
+  <material name="blue">
+    <color rgba="0 0.5 1 0.5"/>
+  </material>
+
+  <material name="solid_yellow">
+     <color rgba="1 1 0 1"/>
+  </material>
+
+  <material name="solid_blue">
+    <color rgba="0 0.5 1 1"/>
+  </material>
+
+  <material name="solid_black">
+    <color rgba="0 0 0 1"/>
+  </material>
+
+  <material name="black">
+    <color rgba="0.05 0.05 0.05 0.5"/>
+  </material>
+
+  <material name="red" >
+      <color rgba="1.0 0.0 0.0 0.5" />
+  </material>
+
+  <material name="green" >
+      <color rgba="0 1 0.0 0.5" />
+  </material>
+
+
+  <material name="white" >
+      <color rgba="1 1 1 0.5" />
+  </material>
+
+  <link name="base_footprint">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+          <sphere radius="0.001"/>
+      </geometry>
+      <material name="yellow"/>
+    </visual>
+
+  </link>
+
+  <joint name="base_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </joint>
+
+  <!-- Base Link - (origin is center of wheels 33mm above floor) -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+          <sphere radius="0.001"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+  
+    <!-- Base Plate - z value is cL of plate -->
+    <visual name="base_plate">
+      <origin xyz="-0.017 0 0.047" rpy="0 0 0" />
+      <geometry>
+          <box size="0.216 0.103 0.004"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+
+    <!-- Level 2 Plate -->
+    <visual name="level_2_plate">
+      <origin xyz="-0.017 0 0.096" rpy="0 0 0" />
+      <geometry>
+          <box size="0.216 0.103 0.004"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+
+    <!-- caster Plate -->
+    <visual name="caster_plate">
+        <origin xyz="-0.114 0.0 0.022" rpy="0 0 0" />
+        <geometry>
+          <box size="0.025 0.055 0.002" />
+        </geometry>
+      <material name="blue"/>
+    </visual>
+
+    <!-- caster Standoff Left -->
+    <visual name="caster_standoff_left">
+        <origin xyz="-0.114 -0.018 0.035" rpy="0 0 0" />
+        <geometry>
+          <cylinder length="0.025" radius="0.004" />
+        </geometry>
+        <material name="blue"/>
+    </visual>
+
+    <!-- Caster Standoff Right -->
+    <visual name="caster_standoff_right">
+        <origin xyz="-0.114 0.018 0.035" rpy="0 0 0" />
+        <geometry>
+          <cylinder length="0.025" radius="0.004" />
+        </geometry>
+        <material name="blue"/>
+    </visual>
+
+  <!-- Caster - inside base_link to keep attached to body -->
+    <visual name="caster">
+      <origin xyz="-0.114 0 0.01" rpy="0 0 0" />
+      <geometry>
+        <sphere radius="0.01" />
+      </geometry>
+      <material name="blue"/>
+    </visual>
+
+    
+    <!-- Level 3 Plate -->
+    <visual name="level_3_plate">
+        <origin xyz="0 0 0.148" rpy="0 0 0" />
+        <geometry>
+          <box size="0.128 0.104 0.004" />
+        </geometry>
+        <material name="blue"/>
+    </visual>
+
+    <!-- Level 4 Plate-->
+    <visual>
+        <origin xyz="0 0 0.223" rpy="0 0 0" />
+        <geometry>
+          <box size="0.128 0.104 0.004" />
+        </geometry>
+       <material name="blue"/>
+    </visual>
+
+     <!-- Mass 2.5lbs 1.13kg and m*(dim/2)^2 in kg/m2 -->
+      <inertial name="base_inertia">
+        <pose>0 0 0 0 0 0</pose>
+        <inertia
+          ixx="0.018"
+          ixy="0.000"
+          ixz="0.000"
+          iyy="0.004"
+          iyz="0.000"
+          izz="0.041"
+        />
+        <mass value="1.13"/>
+      </inertial>
+
+      <collision name="base_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <box size="0.23 0.14 0.37" />
+        </geometry>
+      </collision>
+
+
+  </link>
+  <!-- END of base_link -->
+
+
+  <!-- moved caster inside base_link, had difficulty keeping it attached when separate-->
+  <!-- Caster -->
+  <!-- <link name="rear_caster_link">
+    <visual name="caster">
+      <origin xyz="-0.114 0 0.01" rpy="0 0 0" />
+      <geometry>
+        <sphere radius="0.01" />
+      </geometry>
+      <material name="blue"/>
+    </visual>
+  </link>
+
+  <joint name="rear_caster_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="rear_caster_link"/>
+    <origin xyz="-0.114 0 0.01" rpy="0 0 0" /> 
+  </joint>
+  -->
+
+
+  <!-- Right Wheel -->
+  <link name="wheel_right_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="-1.570795 0 0" />
+      <geometry>
+          <cylinder length="0.025" radius="0.033385" />
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+
+  <joint name="wheel_right_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_right_link"/>
+    <origin xyz="0 -0.058 0.033385" rpy="0 0 0" /> 
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <!-- Left Wheel -->
+  <link name="wheel_left_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="-1.570795 0 0" />
+      <geometry>
+          <cylinder length="0.025" radius="0.03385" />
+      </geometry>
+      <material name="red"/>
+    </visual>
+
+      <inertial name="wheel_left_inertia">
+        <pose>0.0 0.058 0.033385 -1.57 0 0</pose>
+        <inertia
+          ixx="0.001"
+          ixy="0.000"
+          ixz="0.000"
+          iyy="0.001"
+          iyz="0.000"
+          izz="0.001"
+        />
+        <mass value="0.1"/>
+      </inertial>
+
+      <collision name="left_wheel_collision">
+        <pose>0.0 0.058 0.033385 -1.57 0 0</pose>
+        <geometry>
+          <cylinder radius="0.03385" length="0.025" />
+        </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>100000.0</mu>
+                <mu2>100000.0</mu2>
+                <fdir1>0 0 0</fdir1>
+                <slip1>0.0</slip1>
+                <slip2>0.0</slip2>
+              </ode>
+          </friction>
+        </surface>
+      </collision>
+
+
+
+  </link>
+  
+  <joint name="wheel_left_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_left_link"/>
+    <origin xyz="0 0.058 0.033385" rpy="0 0 0" /> 
+    <axis xyz="0 1 0" />
+  </joint>
+
+
+
+  <!-- LIDAR -->
+  <link name="base_scan">
+  <!-- <link name="laser_frame"> -->
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+          <cylinder length="0.020" radius="0.0325" />
+      </geometry>
+      <material name="yellow" />
+    </visual>
+  </link>
+  
+  <joint name="joint_ydlidar" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_scan"/>
+    <!-- <child link="laser_frame"/> -->
+    <origin xyz="-0.014 0 0.200" rpy="0 0 0" /> 
+  </joint>
+
+  <!-- Oak-D-W Stereo Camera -->
+  <link name="camera_link">
+    <visual>
+      <!-- <origin xyz="0.08 0 0.162" rpy="0 0 0" /> -->
+      <geometry>
+          <box size="0.022 0.097 0.030" />
+      </geometry>
+      <material name="yellow" />
+    </visual>
+    <collision>
+      <!-- <origin xyz="0.08 0 0.162" rpy="0 0 0" /> -->
+      <geometry>
+          <box size="0.022 0.097 0.030" />
+      </geometry>
+      <material name="yellow" />
+    </collision>
+  </link>
+  
+  <joint name="camera_joint" type="fixed">
+    <origin xyz="0.08 0 0.162" rpy="0 0 0" />
+    <parent link="base_link"/>
+    <child link="camera_link"/>
+  </joint>
+
+  <joint name="camera_rgb_joint" type="fixed">
+    <parent link="camera_link"/>
+    <child link="camera_rgb_frame"/>
+  </joint>
+  <link name="camera_rgb_frame"/>
+
+<!--  <joint name="camera_rgb_optical_joint" type="fixed">
+    <parent link="camera_rgb_frame"/>
+    <child link="camera_rgb_optical_frame"/>
+  </joint>
+  <link name="camera_rgb_optical_frame"/>  -->
+
+<!--  <joint name="camera_depth_joint" type="fixed">
+    <parent link="camera_link"/>
+    <child link="camera_depth_frame"/>
+  </joint>
+  <link name="camera_depth_frame"/>
+
+  <joint name="camera_depth_optical_joint" type="fixed">
+    <parent link="camera_depth_frame"/>
+    <child link="camera_depth_optical_frame"/>
+  </joint>
+  <link name="camera_depth_optical_frame"/>
+
+-->
+  <!-- IMU -->
+  <link name="imu_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.023 0.035 0.002" />
+      </geometry>
+      <material name="white" />
+    </visual>
+  </link>
+  
+  <joint name="joint_imu" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="0.070 0.035 0.104" rpy="0 0 0" /> 
+  </joint>
+
+  <!-- DAVE -->
+  <link name="gopi5go_dave_link">
+    <visual name="bottom_half_dave" >
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <cylinder length="0.045" radius="0.0375" />
+      </geometry>
+      <material name="solid_yellow" />
+    </visual>
+
+    <visual name="top_half_dave" >
+      <origin xyz="0 0 0.045" rpy="0 0 0" />
+      <geometry>
+        <cylinder length="0.045" radius="0.0375" />
+      </geometry>
+    </visual>
+
+    <visual name="head_dave" >
+      <origin xyz="0 0 0.0625" rpy="0 0 0" />
+      <geometry>
+        <sphere radius="0.0375" />
+      </geometry>
+    </visual>
+
+    <visual name="right_goggle_dave" >
+      <origin xyz="0.0375 -0.0075 0.0625" rpy="0 1.57 0" />
+      <geometry>
+        <cylinder length="0.008" radius="0.015" />
+      </geometry>
+    </visual>
+
+    <visual name="left_goggle_dave" >
+      <origin xyz="0.0375 0.0075 0.0625" rpy="0 1.57 0" />
+      <geometry>
+        <cylinder length="0.008" radius="0.015" />
+      </geometry>
+    </visual>
+
+  </link>
+  
+  <joint name="joint_dave" type="fixed">
+    <parent link="base_link"/>
+    <child link="gopi5go_dave_link"/>
+    <origin xyz="-0.04 0 0.250" rpy="0 0 0" /> 
+  </joint>
+
+
+  <!-- DAVE EYES-->
+  <link name="dave_eyes_link">
+
+    <visual name="right_eye_dave" >
+      <origin xyz="0.042 -0.006 0.0625" rpy="0 1.57 0" />
+      <geometry>
+        <cylinder length="0.001" radius="0.005" />
+      </geometry>
+      <material name="solid_black" />
+    </visual>
+
+    <visual name="left_eye_dave" >
+      <origin xyz="0.042 0.006 0.0625" rpy="0 1.57 0" />
+      <geometry>
+        <cylinder length="0.001" radius="0.005" />
+      </geometry>
+    </visual>
+
+  </link>
+  
+  <joint name="joint_dave_eyes" type="fixed">
+    <parent link="base_link"/>
+    <child link="dave_eyes_link"/>
+    <origin xyz="-0.04 0 0.250" rpy="0 0 0" /> 
+  </joint>
+  
+</robot>

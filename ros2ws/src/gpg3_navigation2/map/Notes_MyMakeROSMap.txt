@@ -1,0 +1,28 @@
+NOTES for MyMakeROSMap.py
+
+REF: https://www.youtube.com/watch?v=ySlU5CIXUKE
+     https://drive.google.com/file/d/0B2AcDRX3bKLVdjhPU1B2UUNRaDA/
+
+
+* My mods:
+- change all prints to print( ) for python3
+- removed all tabs of mixed space and tab indentation
+
+
+* Installation:
+- tar -xvf MakeROSMap.tar.gz
+- pip3 install --upgrade pip
+- pip3 install opencv-python
+
+* MyMakeROSMap.py
+
+Updated 
+- to Python3 print() and input(), 
+- to accept either grayscale or rgb floorplan original files, 
+- to single click to work well on MacOS, 
+- fixed mixed tab and space indents:  
+https://drive.google.com/file/d/16WsOIcjBfJtcBv075PmbRbzSXPpXh5kM/view?usp=sharing
+
+Major issue I have with the program is not allowing for setting the origin - I want the origin to be my robot's dock so have to manually edit the origin in yaml file with -x,-y of dock.  
+
+Another issue is cannot click at the outside edge or even very close to edges of displayed floorplan if there is no white space around the plan.
