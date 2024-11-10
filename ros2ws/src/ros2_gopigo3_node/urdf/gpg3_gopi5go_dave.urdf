@@ -82,7 +82,7 @@
   
     <!-- Base Plate - z value is cL of plate -->
     <visual name="base_plate">
-      <origin xyz="-0.017 0 0.047" rpy="0 0 0" />
+      <origin xyz="-0.017 0 0.015615" rpy="0 0 0" />
       <geometry>
           <box size="0.216 0.103 0.004"/>
       </geometry>
@@ -91,7 +91,7 @@
 
     <!-- Level 2 Plate -->
     <visual name="level_2_plate">
-      <origin xyz="-0.017 0 0.096" rpy="0 0 0" />
+      <origin xyz="-0.017 0 0.0505615" rpy="0 0 0" />
       <geometry>
           <box size="0.216 0.103 0.004"/>
       </geometry>
@@ -100,7 +100,7 @@
 
     <!-- caster Plate -->
     <visual name="caster_plate">
-        <origin xyz="-0.114 0.0 0.022" rpy="0 0 0" />
+        <origin xyz="-0.114 0.0 -0.0234385" rpy="0 0 0" />
         <geometry>
           <box size="0.025 0.055 0.002" />
         </geometry>
@@ -109,7 +109,7 @@
 
     <!-- caster Standoff Left -->
     <visual name="caster_standoff_left">
-        <origin xyz="-0.114 -0.018 0.035" rpy="0 0 0" />
+        <origin xyz="-0.114 -0.018 -0.0104385" rpy="0 0 0" />
         <geometry>
           <cylinder length="0.025" radius="0.004" />
         </geometry>
@@ -118,7 +118,7 @@
 
     <!-- Caster Standoff Right -->
     <visual name="caster_standoff_right">
-        <origin xyz="-0.114 0.018 0.035" rpy="0 0 0" />
+        <origin xyz="-0.114 0.018 -0.0104385" rpy="0 0 0" />
         <geometry>
           <cylinder length="0.025" radius="0.004" />
         </geometry>
@@ -127,7 +127,7 @@
 
   <!-- Caster - inside base_link to keep attached to body -->
     <visual name="caster">
-      <origin xyz="-0.114 0 0.01" rpy="0 0 0" />
+      <origin xyz="-0.114 0 -0.0354385" rpy="0 0 0" />
       <geometry>
         <sphere radius="0.01" />
       </geometry>
@@ -137,7 +137,7 @@
     
     <!-- Level 3 Plate -->
     <visual name="level_3_plate">
-        <origin xyz="0 0 0.148" rpy="0 0 0" />
+        <origin xyz="0 0 0.1025615" rpy="0 0 0" />
         <geometry>
           <box size="0.128 0.104 0.004" />
         </geometry>
@@ -146,7 +146,7 @@
 
     <!-- Level 4 Plate-->
     <visual>
-        <origin xyz="0 0 0.223" rpy="0 0 0" />
+        <origin xyz="0 0 0.1775615" rpy="0 0 0" />
         <geometry>
           <box size="0.128 0.104 0.004" />
         </geometry>
@@ -228,7 +228,7 @@
     </visual>
 
       <inertial name="wheel_left_inertia">
-        <pose>0.0 0.058 0.033385 -1.57 0 0</pose>
+        <pose>0.0 0.058 0.0 -1.57 0 0</pose>
         <inertia
           ixx="0.001"
           ixy="0.000"
@@ -241,7 +241,7 @@
       </inertial>
 
       <collision name="left_wheel_collision">
-        <pose>0.0 0.058 0.033385 -1.57 0 0</pose>
+        <pose>0.0 0.058 0.0 -1.57 0 0</pose>
         <geometry>
           <cylinder radius="0.03385" length="0.025" />
         </geometry>
@@ -399,7 +399,7 @@
   <joint name="joint_dave" type="fixed">
     <parent link="base_link"/>
     <child link="gopi5go_dave_link"/>
-    <origin xyz="-0.04 0 0.250" rpy="0 0 0" /> 
+    <origin xyz="-0.04 0 0.2045615" rpy="0 0 0" /> 
   </joint>
 
 
@@ -426,7 +426,7 @@
   <joint name="joint_dave_eyes" type="fixed">
     <parent link="base_link"/>
     <child link="dave_eyes_link"/>
-    <origin xyz="-0.04 0 0.250" rpy="0 0 0" /> 
+    <origin xyz="-0.04 0 0.2045615" rpy="0 0 0" /> 
   </joint>
   
 </robot>
