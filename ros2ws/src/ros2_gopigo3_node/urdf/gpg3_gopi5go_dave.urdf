@@ -1,14 +1,14 @@
 <?xml version='1.0'?>
 
-<!-- FILE: gopi5go_dave.urdf -->
+<!-- FILE: gpg3_gopi5go_dave.urdf -->
 
 <!-- maintainer: slowrunner@users.noreply.github.com -->
 
 <!-- GoPiGo3 as 216mm long,  103mm wide, 4mm thick plates (blue) -->
 <!--   with a 3/4 inch caster holding the chassis level (blue) -->
 <!--   with (effective) 66.77mm dia 25mm wide wheels (black) and 106.14mm wheel base -->
-<!--   NOTE: The center of rotation must be at xyz="0 0 X" of the base link -->
-<!--         therefore the wheel joints' x value must be 0 -->
+<!--   NOTE: The center of rotation must be at xyz="0 0 Z" of the base link -->
+<!--         therefore the wheel joints' Z value must be 0 -->
 <!--   The chassis center is 17mm back of the center of rotation (wheels) -->
 <!--   The LIDAR is ~22mm behind the center of rotation (wheels) -->
 <!--       (A bit hard to measure after assembled.) -->
@@ -19,7 +19,13 @@
 <!--       and three joints (one for each axis) -->
 <!--       Caster is the American word, Castor the British term -->
 
-<robot name="gopi5go_dave">
+<robot name="gopi5go_dave_v24.11.10">
+
+<!-- Define robot constants -->
+
+  <xacro:property name="wheel_radius" value="0.033385"/>
+  <xacro:property name="wheel_zoff" value="0"/>
+
 
   <material name="yellow">
      <color rgba="1 1 0 0.5"/>
@@ -58,21 +64,12 @@
       <color rgba="1 1 1 0.5" />
   </material>
 
-  <link name="base_footprint">
-    <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
-      <geometry>
-          <sphere radius="0.001"/>
-      </geometry>
-      <material name="yellow"/>
-    </visual>
-
-  </link>
+  <link name="base_footprint"/>
 
   <joint name="base_joint" type="fixed">
-    <parent link="base_footprint"/>
-    <child link="base_link"/>
-    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="base_link"/>
+    <child link="base_footprint"/>
+    <origin xyz="0 0 ${-(wheel_radius+wheel_zoff)}" rpy="0 0 0" />
   </joint>
 
   <!-- Base Link - (origin is center of wheels 33mm above floor) -->

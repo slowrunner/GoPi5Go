@@ -41,7 +41,7 @@ echo "Total Naps:    " $totalNaps " hrs"
 echo "Total Life:   " $totalLife " hrs (since Mar 17, 2024)"
 echo "GoPi5Go-Dave Playtimes (Undocked-Docked):" `(grep -c ": success" $fn)`
 echo "Total Dockings: " $totalDockings
-echo "New Battery Installed At Cycle:" $newBatteryAtCycle
+echo "New Battery Installed At Docking:" $newBatteryAtCycle
 echo "This Battery At Cycle: " $currentBattCycles
 last3playtimes=`(grep " h playtime" $fn | tail -3 | awk -F" after "  '{sum+=$2}END{print sum;}' )`
 last3avePlaytime=`(echo "scale=1; $last3playtimes / 3" | bc)`
