@@ -153,20 +153,6 @@
        <material name="blue"/>
     </visual>
 
-     <!-- Mass 2.5lbs 1.13kg and m*(dim/2)^2 in kg/m2 -->
-      <inertial name="base_inertia">
-        <pose>0 0 0 0 0 0</pose>
-        <inertia
-          ixx="0.018"
-          ixy="0.000"
-          ixz="0.000"
-          iyy="0.004"
-          iyz="0.000"
-          izz="0.041"
-        />
-        <mass value="1.13"/>
-      </inertial>
-
       <collision name="base_collision">
         <pose>0 0 0 0 0 0</pose>
         <geometry>
