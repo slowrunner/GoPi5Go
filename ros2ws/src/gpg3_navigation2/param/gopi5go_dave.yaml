@@ -176,6 +176,8 @@ controller_server:
       RotateToGoal.slowing_factor: 5.0
       RotateToGoal.lookahead_time: -1.0
 
+
+
 local_costmap:
   local_costmap:
     ros__parameters:
@@ -188,12 +190,16 @@ local_costmap:
       width: 3
       height: 3
       resolution: 0.05
-      robot_radius: 0.22
+      # Change from Waffle radius to GoPiGo3 radius
+      # robot_radius: 0.22
+      robot_radius: 0.15
       plugins: ["voxel_layer", "inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 3.0
-        inflation_radius: 0.55
+        # Trying lower inflation radius for GoPiGo3
+        # inflation_radius: 0.55
+        inflation_radius: 0.30
       voxel_layer:
         plugin: "nav2_costmap_2d::VoxelLayer"
         enabled: True
@@ -227,7 +233,9 @@ global_costmap:
       global_frame: map
       robot_base_frame: base_link
       use_sim_time: False
-      robot_radius: 0.22
+      # Change from Waffle to GoPiGo3
+      # robot_radius: 0.22
+      robot_radius: 0.15
       resolution: 0.05
       track_unknown_space: true
       plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
@@ -251,7 +259,9 @@ global_costmap:
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 3.0
-        inflation_radius: 0.55
+        # Trying for GoPiGo3
+        # inflation_radius: 0.55
+        inflation_radius: 0.30
       always_send_full_costmap: True
 
 map_server:

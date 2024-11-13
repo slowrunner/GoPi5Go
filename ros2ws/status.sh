@@ -6,7 +6,9 @@ echo -n `date +"%A %D"`;
 echo ""; 
 uptime; 
 if [ -f /usr/bin/docker ]; then
-    vcgencmd measure_temp && vcgencmd measure_clock arm && vcgencmd get_throttled;
+    vcgencmd measure_temp && vcgencmd measure_clock arm && vcgencmd get_throttled; \
+    python3 /home/pi/GoPi5Go/plib/battery.py;
+
 fi; 
 free -h; 
 python3 /home/pi/GoPi5Go/ros2ws/gopigo3_battery.py; 
