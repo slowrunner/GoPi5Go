@@ -72,7 +72,7 @@ GoPi5Go-Dave Specs:
 
 - Play Time: (Using 10.1v 15minutes left "need to shutdown" limit)  
   * "GoPi5Go-Dave ROSbot" 2.8 hours  (averages 7.5w 20wH)  
-  * "100% wandering" TBD hours  
+  * "100% wandering" 2.5 hours  
 
 - Recharger:  
   * ModRobotics Li-ion Battery Charging adapter  
@@ -100,3 +100,15 @@ GoPi5Go-Dave Specs:
 # SETUP:  
 [Setup Document](config/SETUP.md) 
 
+# Power and Load Statistics  
+# ROS2 Humble / Ubuntu 22.04 in Docker on Raspberry Pi 5 running PiOS Bookworm 64-bit Desktop 
+- Undocked: 7.7W 1.0GB Load 0.26 = 5% of Pi5 CPU  
+- + LIDAR: 8.4W 1.0GB Load 0.30  = 7% CPU  
+- + Nav2:  8.8W  1.2GB Load 0.95 = 25% CPU  
+- To Nav2 Goal:  10.4W 1.2GB Load 0.98 = 25% CPU  
+- (lost) 1.3GB Load 1.20 = 30% CPU
+ 
+# FINAL DISPOSITION
+- I believe poor odometry accuracy messes up the LIDAR localization.  Don't know enough to fix it.
+- After three years of working with ROS 2, I'm giving up on GoPiGo3 robot as a ROS platform
+- (Create3-Wali almost met the bill, but suffered from a severely underpowered processor.)  
