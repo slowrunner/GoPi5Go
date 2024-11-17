@@ -139,9 +139,13 @@ controller_server:
       debug_trajectory_details: True
       min_vel_x: 0.0
       min_vel_y: 0.0
-      max_vel_x: 0.22
+      # 0.083 m/s = 150DPI GoPi5Go-Dave calibration speed 
+      # max_vel_x: 0.22
+      max_vel_x: 0.175
       max_vel_y: 0.0
-      max_vel_theta: 2.84
+      # 1 rad/s = 57 deg turn/sec normal GoPi5Go-Dave rate
+      # max_vel_theta: 2.84
+      max_vel_theta: 1.0
       min_speed_xy: 0.0
       max_speed_xy: 0.22
       min_speed_theta: 0.0
@@ -344,8 +348,11 @@ velocity_smoother:
     smoothing_frequency: 20.0
     scale_velocities: False
     feedback: "OPEN_LOOP"
-    max_velocity: [0.26, 0.0, 1.0]
-    min_velocity: [-0.26, 0.0, -1.0]
+    # GoPi5Go-Dave timid to calibrated speeds
+    # max_velocity: [0.26, 0.0, 1.0]
+    # min_velocity: [-0.26, 0.0, -1.0]
+    max_velocity: [0.08, 0.0, 0.175]
+    min_velocity: [-0.08, 0.0, -0.175]
     max_accel: [2.5, 0.0, 3.2]
     max_decel: [-2.5, 0.0, -3.2]
     odom_topic: "odom"
