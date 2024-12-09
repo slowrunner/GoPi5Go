@@ -2,6 +2,7 @@
 
 - Change Dock location out of "bad for navigation" office  
 - Fix driving accuracy (dY < 1cm, dHeading < 2 deg, for dX of 1m)  
+- Add wrap-around bumper  
 - Programmatic Nav2 set Initial Pose, publish location goals  
 - Use ros_control  
 - Get Oak-D-W ROS Driver up  

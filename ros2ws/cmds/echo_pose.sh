@@ -15,5 +15,5 @@ echo -e "\n*** Sourcing install/setup.bash"
 # echo "*** ros2 topic echo --once --flow-style /pose"
 # ros2 topic echo --once --flow-style /pose
 # ros2 topic hz /pose
-ros2 topic echo --flow-style /pose
+ros2 topic echo --flow-style --once /amcl_pose
 
