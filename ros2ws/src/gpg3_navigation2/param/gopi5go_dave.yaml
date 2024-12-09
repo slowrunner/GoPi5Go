@@ -203,7 +203,7 @@ local_costmap:
         cost_scaling_factor: 3.0
         # Trying lower inflation radius for GoPiGo3
         # inflation_radius: 0.55
-        inflation_radius: 0.30
+        inflation_radius: 0.40
       voxel_layer:
         plugin: "nav2_costmap_2d::VoxelLayer"
         enabled: True
