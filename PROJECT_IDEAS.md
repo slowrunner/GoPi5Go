@@ -10,6 +10,7 @@
 - Investigate Nav2 Docking Behavior
 - Get MPU9250 ROS Driver up  
 - Investigate RTABmap with GoPi5Go-Dave  
+- Create C++ version of ros2_gopigo3_node  
 - Migrate simualation to Gazebo Harmonic  
 - Migrate everything to Ubuntu 24.04 Noble and ROS 2 Jazzy Jalisco  
 
