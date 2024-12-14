@@ -85,10 +85,11 @@ GoPi5Go-Dave Specs:
 
 - Total Cost: $782
 
-- First "Life as GoPi5Go-Dave": March 2024    (PiOS Bookworm, ROS 2 Humble over Ubuntu 22.04 in Docker)  
-- First "Life as Humble-Dave": Oct 7, 2022    (ROS 2 Humble, Ubuntu 22.04)  
-- First "Life as ROSbot Dave": June 12, 2021  (ROS 2 Foxy, Ubuntu 20.04)  
-- First "Life as ROS-GoPiGo3": Apr 2019       (Robot Carl, ROS Kinetic, Raspbian Stretch)  
+- First "Life as 24/7 ROSbot": Aug 2024  
+- First "Life as 24/7 GoPi5Go-Dave": March 2024    (PiOS Bookworm, ROS 2 Humble over Ubuntu 22.04 in Docker)  
+- First "Life as Humble-Dave": Oct 7, 2022         (ROS 2 Humble, Ubuntu 22.04)  1940 hrs in 344 sessions 3312m traveled  
+- First "Life as ROSbot Dave": June 12, 2021       (ROS 2 Foxy, Ubuntu 20.04)  
+- First "Life as ROS-GoPiGo3": Apr 2019            (Robot Carl, ROS Kinetic, Raspbian Stretch)  
 
 - GoPiGo3 API Modifications for Bookworm/Raspberry Pi 5
   * Reduced SPI transfer rate to 250 khz for Pi5
