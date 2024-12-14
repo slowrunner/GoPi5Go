@@ -108,53 +108,44 @@ GoPi5Go-Dave Specs:
 - To Nav2 Goal:  10.4W 1.2GB Load 0.98 = 25% CPU  
 - (lost) 1.3GB Load 1.20 = 30% CPU
  
-# FINAL DISPOSITION
-- I believe poor odometry accuracy messes up the LIDAR localization.  Don't know enough to fix it.
-- After three years of working with ROS 2, I'm giving up on GoPiGo3 robot as a ROS platform
-- (Create3-Wali almost met the bill, but suffered from a severely underpowered processor.)  
+### Life Status as of Dec 14, 2024
 
 ```
 *** GoPi5Go Dave TOTAL LIFE STATISTICS ***
-Total Awake:   5623.3  hrs
+Total Awake:   5763.25  hrs
 Total Naps:     57.05  hrs
-Total Life:    5680.35  hrs (since Mar 17, 2024)
-GoPi5Go-Dave Playtimes (Undocked-Docked): 878
-Total Dockings:  1276
+Total Life:    5820.30  hrs (since Mar 17, 2024)
+GoPi5Go-Dave Playtimes (Undocked-Docked): 904
+Total Dockings:  1302
 New Battery Installed At Docking: 416
-This Battery At Cycle:  860
-Average playtime (last three) 2.6 hrs 
+This Battery At Cycle:  886
+Average playtime (last three) 2.5 hrs 
 Average docked time (last three) 2.6 hrs 
-Sessions (boot):  93
-Average Session:  60.4 hrs
-Safety Shutdowns:  20
-Total Travel:  1134.0 meters 3720.4 feet
+Sessions (boot):  100
+Average Session:  57.6 hrs
+Safety Shutdowns:  22
+Total Travel:  1482.4 meters 4863.5 feet
  
-Last Undocking String:  2024-11-12 20:25|dave_node.py| ---- GoPi5Go-Dave ROS 2 Undocking, Charge Current 99 mA 12.1v after 2.6 h charging
-Last Docking   String:  2024-11-12 17:49|dave_node.py| ---- GoPi5Go-Dave ROS 2 Docking 1276 : success at battery 10.1v after 2.7 h playtime +
+Last Undocking String:  2024-12-14 11:57|dave_node.py| ---- GoPi5Go-Dave ROS 2 Undocking, Charge Current 98 mA 12.1v after 2.6 h charging
+Last Docking   String:  2024-12-14 09:22|dave_node.py| ---- GoPi5Go-Dave ROS 2 Docking 1302 : success at battery 10.1v after 2.6 h playtime +
+pi@GoPi5Go:DOCKER:~/GoPi5Go/ros2ws $ ./status.sh
 
 ********** ROS2 GoPiGo3 Status ******************************
-Tuesday 11/12/24
- 22:06:54 up 31 days,  3:19,  3 users,  load average: 0.17, 0.30, 0.34
-temp=45.0'C
-frequency(0)=1500019456
-throttled=0x0
-Current Battery 10.55v  37.8% Load: 724mA 7.6W
+Saturday 12/14/24
+ 12:02:50 up 1 day,  3:58,  0 users,  load average: 0.15, 0.21, 0.24
                total        used        free      shared  buff/cache   available
-Mem:           4.0Gi       1.1Gi       685Mi        13Mi       2.3Gi       2.9Gi
-Swap:          199Mi       145Mi        54Mi
-GoPiGo3 Battery Voltage: 10.6 volts
+Mem:           4.0Gi       1.1Gi       1.9Gi        22Mi       1.0Gi       2.8Gi
+Swap:          199Mi          0B       199Mi
+GoPiGo3 Battery Voltage: 11.7 volts
 
 
 ROS 2 NODES
-pi       2246409 2246387  0 15:08 pts/0    00:00:00 /usr/bin/python3 /opt/ros/humble/bin/ros2 run ros2_gopigo3_node gopigo3_node
-pi       2246468 2246387  0 15:08 pts/0    00:00:00 /usr/bin/python3 /opt/ros/humble/bin/ros2 run gopi5go_dave battery_node
-pi       2246500 2246387  0 15:08 pts/0    00:00:00 /usr/bin/python3 /opt/ros/humble/bin/ros2 run gopi5go_dave docking_node
-pi       2246514 2246387  0 15:08 pts/0    00:00:00 /usr/bin/python3 /opt/ros/humble/bin/ros2 run ros2_gopigo3_node odometer
-pi       2246553 2246387  0 15:08 pts/0    00:00:00 /usr/bin/python3 /opt/ros/humble/bin/ros2 run gopi5go_dave say_node
-pi       2246617 2246387  0 15:08 pts/0    00:00:00 /usr/bin/python3 /opt/ros/humble/bin/ros2 run gopi5go_dave dave_node
-pi       2246433 2246387  0 15:08 pts/0    00:00:00 /usr/bin/python3 /opt/ros/humble/bin/ros2 launch ros2_gopigo3_node ros2_gopi5go_dave_state_and_joint.launch.py
-pi       2246576 2246387  0 15:08 pts/0    00:00:00 /usr/bin/python3 /opt/ros/humble/bin/ros2 launch teleop_twist_joy teleop-launch.py joy_config:=F710
-
-
+pi            66      44  0 Dec13 pts/0    00:00:00 /usr/bin/python3 /opt/ros/humble/bin/ros2 run ros2_gopigo3_node gopigo3_node
+pi           108      44  0 Dec13 pts/0    00:00:00 /usr/bin/python3 /opt/ros/humble/bin/ros2 run gopi5go_dave docking_node
+pi           122      44  0 Dec13 pts/0    00:00:00 /usr/bin/python3 /opt/ros/humble/bin/ros2 run ros2_gopigo3_node odometer
+pi           137      44  0 Dec13 pts/0    00:00:00 /usr/bin/python3 /opt/ros/humble/bin/ros2 run gopi5go_dave say_node
+pi           198      44  0 Dec13 pts/0    00:00:00 /usr/bin/python3 /opt/ros/humble/bin/ros2 run gopi5go_dave dave_node
+pi           477       1  0 Dec13 pts/2    00:00:00 /usr/bin/python3 /opt/ros/humble/bin/ros2 run gopi5go_dave battery_node
+pi            81      44  0 Dec13 pts/0    00:00:00 /usr/bin/python3 /opt/ros/humble/bin/ros2 launch ros2_gopigo3_node ros2_gopi5go_dave_state_and_joint.launch.py
+pi           158      44  0 Dec13 pts/0    00:00:00 /usr/bin/python3 /opt/ros/humble/bin/ros2 launch teleop_twist_joy teleop-launch.py joy_config:=F710
 ```
-
