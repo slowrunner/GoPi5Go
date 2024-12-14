@@ -102,14 +102,14 @@ GoPi5Go-Dave Specs:
 [Setup Document](config/SETUP.md) 
 
 # Power and Load Statistics  
-# ROS2 Humble / Ubuntu 22.04 in Docker on Raspberry Pi 5 running PiOS Bookworm 64-bit Desktop 
+### ROS2 Humble / Ubuntu 22.04 in Docker on Raspberry Pi 5 running PiOS Bookworm 64-bit Desktop 
 - Undocked: 7.7W 1.0GB Load 0.26 = 5% of Pi5 CPU  
 - + LIDAR: 8.4W 1.0GB Load 0.30  = 7% CPU  
 - + Nav2:  8.8W  1.2GB Load 0.95 = 25% CPU  
 - To Nav2 Goal:  10.4W 1.2GB Load 0.98 = 25% CPU  
 - (lost) 1.3GB Load 1.20 = 30% CPU
  
-### Life Status as of Dec 14, 2024
+# Life Status as of Dec 14, 2024
 
 ```
 *** GoPi5Go Dave TOTAL LIFE STATISTICS ***
