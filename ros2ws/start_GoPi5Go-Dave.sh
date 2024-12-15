@@ -3,7 +3,7 @@
 << ////
     FILE:  /home/pi/GoPi5Go/ros2ws/start_GoPi5Go-Dave.sh
 
-This file starts the needed GoPi5Go-Dave nodes:
+This file starts the needed 9 GoPi5Go-Dave nodes (8 python processes in status.sh):
 - ros2_gopigo3_node  GoPiGo3 ROS2 publishes odom, offers /cmd_vel etc
 - battery_node  publishes /batter_state
 - docking_node  publishes /dock_status, offers /dock and /undock services
@@ -11,6 +11,8 @@ This file starts the needed GoPi5Go-Dave nodes:
 - odometer      records ROS all /cmd_vel movement (does not record dock/undock movement)
 - joy_node      handles wireless F710 joy controller to publish /cmd_vel
 - say_node      TTS speech server offers /say {"phrase"} service
+- robot_state_publisher
+  joint_state_publisher both started by ros2_gopi5go_dave_state_and_joint.launch.py
 
 ////
 
@@ -40,11 +42,7 @@ echo -e "\n*** Starting Robot_State and Joint_State Publishers"
 echo "*** with URDF file: gopi5go_dave.urdf"
 ros2 launch ros2_gopigo3_node ros2_gopi5go_dave_state_and_joint.launch.py &
 
-sleep 5
-
-echo -e "\n*** Starting Battery Node"
-echo -e "*** ros2 run gopi5go_dave battery_node &"
-ros2 run gopi5go_dave battery_node &
+# was getting error 121 i2c error starting battery here
 
 sleep 5
 
@@ -79,6 +77,23 @@ echo '*** ros2 launch teleop_twist_joy teleop-launch.py joy_config:="F710" & '
 ros2 launch teleop_twist_joy teleop-launch.py joy_config:="F710" &
 
 sleep 5
+
+echo -e "\n*** Starting Battery Node"
+echo -e "*** ros2 run gopi5go_dave battery_node &"
+ros2 run gopi5go_dave battery_node &
+
+sleep 5
+
+pgrep_lines="$(ps -ef | grep battery_node | wc -l)"
+
+if [ $pgrep_lines -eq 1 ]; then
+    echo -e "\n*** Trying a second time to start Battery Node" ;
+    echo -e "*** ros2 run gopi5go_dave battery_node &" ;
+    ros2 run gopi5go_dave battery_node & 
+    sleep 5
+    ps -ef | grep battery_node
+fi
+
 
 # DEBUG - sleep to keep detached ROS Docker container alive
 # echo -e "\n*** DEBUG: NOT STARTING DAVE NODE ***"

@@ -1,0 +1,8 @@
+/oak:
+  ros__parameters:
+    camera:
+      i_enable_imu: true
+      i_enable_ir: false
+      cam_pos_x: 0.08
+      cam_pos_z: 0.162
+      use_rviz: false

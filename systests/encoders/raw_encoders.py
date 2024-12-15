@@ -53,8 +53,8 @@ def dHeading_API_in_degrees(end_l, end_r, start_l, start_r, gpg):
 
 def dHeading_raw_in_radians(end_l, end_r, start_l, start_r, gpg):
 
-    dl = (end_l - start_l) / 1920 * gpg.WHEEL_CIRCUMFERENCE
-    dr = (end_r - start_r) / 1920 * gpg.WHEEL_CIRCUMFERENCE
+    dl = (end_l - start_l) / gpg.ENCODER_TICKS_PER_ROTATION * gpg.MOTOR_GEAR_RATIO * gpg.WHEEL_CIRCUMFERENCE
+    dr = (end_r - start_r) / gpg.ENCODER_TICKS_PER_ROTATION * gpg.MOTOR_GEAR_RATIO * gpg.WHEEL_CIRCUMFERENCE
     dHeading_rad = (dr-dl) / gpg.WHEEL_BASE_WIDTH
     return dHeading_rad
 

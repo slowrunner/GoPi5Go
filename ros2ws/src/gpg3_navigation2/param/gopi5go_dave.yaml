@@ -200,10 +200,12 @@ local_costmap:
       plugins: ["voxel_layer", "inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
+        # Trying different cost_scaling_factor (formerly cost_factor?)
+        # Default: cost_scaling_factor: 3.0
         cost_scaling_factor: 3.0
-        # Trying lower inflation radius for GoPiGo3
-        # inflation_radius: 0.55
-        inflation_radius: 0.40
+        # Trying different inflation radius for GoPiGo3
+        # Default: inflation_radius: 0.55
+        inflation_radius: 2.0
       voxel_layer:
         plugin: "nav2_costmap_2d::VoxelLayer"
         enabled: True
