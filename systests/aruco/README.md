@@ -46,6 +46,10 @@ Launch aruco tracker:
 
 ```
 
+<img src="https://github.com/slowrunner/GoPi5Go/blob/main/systests/aruco/Dave_Looking_At_ArUco_Dock_Marker.jpg" width="400" />
+<img src="https://github.com/slowrunner/GoPi5Go/blob/main/systests/aruco/Dave_Oak-D-W_image.jpg" width="400" />
+
+
 
 ```
 pi@GoPi5Go:DOCKER:~/GoPi5Go/ros2ws $ ros2 topic echo /aruco_detections 
