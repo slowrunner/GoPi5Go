@@ -10,3 +10,11 @@
       use_rviz: false
     nn:
       i_nn_config_path: depthai_ros_driver/mobilenet
+    rgb:
+      i_low_bandwidth: true
+    left:
+      i_low_bandwidth: true
+    right:
+      i_low_bandwidth: true
+    stereo:
+      i_low_bandwidth: true
