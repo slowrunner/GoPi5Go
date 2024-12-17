@@ -1,6 +1,19 @@
 # ROS2 Aruco Markers
 
-REF: https://github.com/fictionlab/ros_aruco_opencv
+REF: https://github.com/fictionlab/ros_aruco_opencv  
+
+Quick lesson in history (might not be 100% correct).  
+The original ArUco library was developed in 2015 by Univeristy of Cordoba. 
+
+Based on this, other library implementation were created. Most notably:  
+- aruco_ros packages, maintained by PAL robotics: https://github.com/pal-robotics/aruco_ros
+- aruco OpenCV module, https://docs.opencv.org/4.9.0/d9/d6d/tutorial_table_of_content_aruco.html
+
+All three implementations diverged as the time went,  
+especially the opencv module after the original library changed the license to GPLv3, which made it incompatible with OpenCV,  
+and the developers needed to reimplement new features from the original library.  
+
+aruco_opencv package, which was developed by fictionlab, provides ROS wrappers for the aruco OpenCV module.
 
 ```
 sudo apt install ros-humble-aruco-opencv ros-humble-aruco-opencv-msgs
