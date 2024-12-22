@@ -52,6 +52,10 @@ colcon build --symlink-install --packages-select gpg3_cartographer
 echo "** colcon build --symlink-install --packages-select gpg3_navigation2"
 colcon build --symlink-install --packages-select gpg3_navigation2
 
+echo "** colcon build --packages-select apriltag_ros apriltag_msgs"
+colcon build --packages-select apriltag_ros apriltag_msgs
+
+
 echo -e "\n*** . install/setup.bash"
 . install/setup.bash
 

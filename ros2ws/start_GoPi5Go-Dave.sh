@@ -76,7 +76,8 @@ echo -e "\n*** Start F710 game controller node"
 echo '*** ros2 launch teleop_twist_joy teleop-launch.py joy_config:="F710" & '
 ros2 launch teleop_twist_joy teleop-launch.py joy_config:="F710" &
 
-sleep 5
+echo -e "\n*** SLEEPING 30 before starting battery node"
+sleep 30
 
 echo -e "\n*** Starting Battery Node"
 echo -e "*** ros2 run gopi5go_dave battery_node &"
@@ -88,6 +89,8 @@ pgrep_lines="$(ps -ef | grep battery_node | wc -l)"
 
 if [ $pgrep_lines -eq 1 ]; then
     echo -e "\n*** Trying a second time to start Battery Node" ;
+    echo -e "\n*** SLEEPING 30 before 2nd attempt to start battery node"
+    sleep 30
     echo -e "*** ros2 run gopi5go_dave battery_node &" ;
     ros2 run gopi5go_dave battery_node & 
     sleep 5
