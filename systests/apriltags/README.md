@@ -1,6 +1,6 @@
 # AprilTags For ROS 2 GoPi5Go-Dave Robot  
 
-<img src="https://github.com/slowrunner/GoPi5Go/blob/main/systests/apriltags/Dave_Looking_At_AprilTag.jpg" width="400" />  
+<img src="https://github.com/slowrunner/GoPi5Go/blob/main/systests/apriltags/2024-12-22_Dave_On_Dock_With_New_AprilTag_Dock_Sign.jpg" width="600" />  
 
 
 REF:  https://github.com/AprilRobotics/apriltag  
@@ -17,7 +17,7 @@ REF: april.eecs.umich.edu/pdfs/olson2011tags.pdf
  
 - FIRST robotics competitions use 36h11 April Tags  
 
-<img src="https://github.com/slowrunner/GoPi5Go/blob/main/systests/apriltags/Dave_Looking_For_AprilTag_Marker.jpg" width="400" />  
+<img src="https://github.com/slowrunner/GoPi5Go/blob/main/systests/apriltags/Dave_1m_From_Dock_AprilTag.jpg" width="800" />  
 
 ### Printing April Tags  
 
@@ -76,9 +76,21 @@ cmds/launch_camera.sh
 ros2 launch depthai_ros_driver camera.launch.py camera_model:=OAK-D-W params_file:=/home/pi/GoPi5Go/ros2ws/params/camera.yaml 
 
 
+
 cmds/launch_apriltags.sh
 
-ros2 run apriltag_ros apriltag_node --ros-args -r image_rect:=/oak/rgb/image_raw -r camera_info:=/oak/rgb/camera_info
+ros2 run apriltag_ros apriltag_node --ros-args \
+    -r image_rect:=/oak/rgb/image_raw \
+    -r camera_info:=/oak/rgb/camera_info \
+    --params-file `ros2 pkg prefix apriltag_ros`/share/apriltag_ros/cfg/dave_tags_36h11.yaml
+
+```
+
+Publish static transform from oak to camera_link in the URDF:
+```
+ros2 run tf2_ros static_transform_publisher 0 0 0 0 0 0 camera_link oak
+
+
 
 
 pi@GoPi5Go:DOCKER:~/GoPi5Go/ros2ws $ ros2 topic echo --once /detections
@@ -120,16 +132,23 @@ detections:
 (dave_apriltag.yaml param file sets frame id for id 5 to "dock")
 
 pi@GoPi5Go:DOCKER:~/GoPi5Go/ros2ws $ ros2 run tf2_ros tf2_echo oak dock
-At time 1734834952.30679414
-- Translation: [0.682, 0.046, -0.034]
-- Rotation: in Quaternion [-0.493, -0.487, 0.489, 0.530]
-- Rotation: in RPY (radian) [-1.532, -0.035, 1.523]
-- Rotation: in RPY (degree) [-87.758, -1.980, 87.288]
+At time 1734889316.466526134
+- Translation: [1.007, 0.016, 0.095]                     <<<<< Photo 1m from dock
+- Rotation: in Quaternion [0.687, -0.231, -0.227, 0.651]
+- Rotation: in RPY (radian) [1.621, 0.010, -0.659]
+- Rotation: in RPY (degree) [92.856, 0.573, -37.774]     <<<<< tag pose -38 deg from bot heading
 - Matrix:
-  0.047 -0.037 -0.998  0.682
-  0.998  0.036  0.046  0.046
-  0.035 -0.999  0.039 -0.034
+  0.790 -0.023 -0.612  1.007
+ -0.613 -0.045 -0.789  0.016
+ -0.010  0.999 -0.050  0.095
   0.000  0.000  0.000  1.000
-```  
+
+```
+
+
+
+With camera and apriltag_ros running, Dave is drawing 13.5W  (Camera draws 5W)
+
+
 
 
