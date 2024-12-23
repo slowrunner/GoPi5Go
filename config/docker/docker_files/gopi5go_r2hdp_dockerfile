@@ -11,6 +11,11 @@ RUN sudo apt-get install -y \
     ros-humble-cartographer-ros \
     ros-humble-cartographer-ros-msgs
 
+RUN sudo apt-get install -y \
+    ros-humble-ament-cmake-clang-format \
+    ros-humble-apriltag-msgs \
+    ros-humble-apriltag 
+
 # Install the GoPiGo3 API
 
 COPY 99-com.rules /etc/udev/rules.d
