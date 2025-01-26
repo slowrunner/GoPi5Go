@@ -1,11 +1,11 @@
-# C++ EasyGoPiGo3 for GoPiGo3
+# An Attempt to Use ChatGPT to translate Python to C++ for the EasyGoPiGo3 GoPiGo3 API
 
 The Dexter/ModularRobotics GoPiGo3 robot includes a C++ API in GoPiGo3.h/cpp and libgopigo3.so  
 but does not include an "Easy API" that is available in Python.
 
 This project is a rough implementation of an EasyGoPiGo3 class which includes:
 
-Implemented Methods:
+Implemented Methods (by Alan):
 ```
      set_speed(speed_in_DPS)
      set_speed()  // DEFAULT_SPEED
@@ -17,7 +17,14 @@ Implemented Methods:
      stop(): 
 ```
 
-   TODO Methods:
+Attempted implementation by ChatGPT (Does not compile):
+```
+     target_reached(left_tgt_degrees, right_tgt_degrees):  use to detect when to stop forward(), backward(), right(), left(), spin_right(), spin_left()
+                                                           and for non-blocking drive_cm() or drive_inches()
+```
+
+
+TODO Methods:
 ```
      drive_cm(dist_cm, blocking=true)
      drive_inches(dist_inches, blocking=true)
