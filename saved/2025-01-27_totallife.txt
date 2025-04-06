@@ -1,0 +1,29 @@
+(Cleaning life.log first)
+Read in /home/pi/GoPi5Go/logs/life.log
+lines: 3573
+lastline: 2025-04-05 23:46|lifelogger.dEmain execution: 0.10
+
+removing: 2025-04-05 23:43|lifelogger.dEmain execution: 0.05
+
+Wrote cleaned /home/pi/GoPi5Go/logs/life.log
+lines: 3572
+lastline: 2025-04-05 23:46|lifelogger.dEmain execution: 0.10
+
+ 
+*** GoPi5Go Dave TOTAL LIFE STATISTICS ***
+Total Awake:   6461.85  hrs
+Total Naps:     57.05  hrs
+Total Life:    6518.90  hrs (since Mar 17, 2024)
+GoPi5Go-Dave Playtimes (Undocked-Docked): 1029
+Total Dockings:  :
+New Battery Installed At Docking: 416
+This Battery At Cycle: 
+Average playtime (last three) 2.4 hrs 
+Average docked time (last three) 2.6 hrs 
+Sessions (boot):  122
+Average Session:  52.9 hrs
+Safety Shutdowns:  30
+Total Travel:  1577.3 meters 5174.8 feet
+ 
+Last Undocking String:  2025-01-13 11:33|dave_node.py| ---- GoPi5Go-Dave ROS 2 Undocking, Charge Current 50 mA 12.1v after 2.6 h charging
+Last Docking   String:  2025-01-13 14:03|dave_node.py| ---- GoPi5Go-Dave ROS 2 Docking : failure at battery 10.1v after 2.5 h playtime +
