@@ -137,7 +137,14 @@ controller_server:
       yaw_goal_tolerance: 0.25
     # DWB parameters
     FollowPath:
-      plugin: "dwb_core::DWBLocalPlanner"
+      # default plugin: "dwb_core::DWBLocalPlanner"
+      # plugin: "dwb_core::DWBLocalPlanner"
+      # rotationShim: First rotates to face path, then simple controller to follow path  ref: aa
+      plugin: "nav2_rotation_ship_controller::RotationShimController"
+      # for rotationShim plugin use regulated pure pursuit primary_controller - others do not specify primary_controller key  ref: aa
+      primary_controller: "nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController"
+      # ModelPredictivePathIntegral: simulates possible paths picks best.  cpu intensive but smooth and handles dynamic constraints well
+      # plugin: "nav2_mppi_controller::MPPIController"
       debug_trajectory_details: True
       min_vel_x: 0.0
       min_vel_y: 0.0

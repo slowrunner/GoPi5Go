@@ -9,7 +9,7 @@ This file starts the needed 9 GoPi5Go-Dave nodes (8 python processes in status.s
 - docking_node  publishes /dock_status, offers /dock and /undock services
 - dave_node     calls /dock when vBatt<10v, and calls /undock when charge current < -175mA
 - odometer      records ROS all /cmd_vel movement (does not record dock/undock movement)
-- joy_node      handles wireless F710 joy controller to publish /cmd_vel
+- joy_node      handles wireless F710 or SNES joy controller to publish /cmd_vel
 - say_node      TTS speech server offers /say {"phrase"} service
 - robot_state_publisher
   joint_state_publisher both started by ros2_gopi5go_dave_state_and_joint.launch.py
@@ -68,13 +68,13 @@ sleep 5
 echo -e "\n*** sudo chgrp input /dev/input/event*"
 sudo chgrp input /dev/input/event*
 
-# echo -e "\n*** Start SNES gamepad node"
-# echo '*** ros2 launch teleop_twist_joy teleop-launch.py joy_config:="snes_slow" & '
-# ros2 launch teleop_twist_joy teleop-launch.py joy_config:="snes_slow"  &
+echo -e "\n*** Start SNES gamepad node"
+echo '*** ros2 launch teleop_twist_joy teleop-launch.py joy_config:="snes_slow" & '
+ros2 launch teleop_twist_joy teleop-launch.py joy_config:="snes_slow"  &
 
-echo -e "\n*** Start F710 game controller node"
-echo '*** ros2 launch teleop_twist_joy teleop-launch.py joy_config:="F710" & '
-ros2 launch teleop_twist_joy teleop-launch.py joy_config:="F710" &
+# echo -e "\n*** Start F710 game controller node"
+# echo '*** ros2 launch teleop_twist_joy teleop-launch.py joy_config:="F710" & '
+# ros2 launch teleop_twist_joy teleop-launch.py joy_config:="F710" &
 
 echo -e "\n*** SLEEPING 30 before starting battery node"
 sleep 30
